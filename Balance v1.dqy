@@ -1,0 +1,7 @@
+XLODBC
+1
+DSN=harinas_pc_pb;DATABASE=harinas;SERVER=192.168.1.4;PORT=5432;UID=dba;READONLY=0;PROTOCOL=6.4;FAKEOIDINDEX=0;SHOWOIDCOLUMN=0;ROWVERSIONING=0;SHOWSYSTEMTABLES=0;CONNSETTINGS=
+SELECT b.compania, b.cuenta, a.nombre, b.year, b.periodo, b.balance_inicio, b.debito, b.credito  FROM cglcuentas a, cglsldocuenta b, cglniveles c  WHERE a.cuenta = b.cuenta AND a.nivel = c.nivel AND ((c.recibe='S'))  ORDER BY b.compania, b.year, b.periodo, b.cuenta
+
+
+compania	cuenta	nombre	year	periodo	balance_inicio	debito	credito

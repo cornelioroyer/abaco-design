@@ -1,0 +1,1 @@
+insert into pla_tipos_de_permisos values ('70','70','PERMISO NO PAGADO')

@@ -1,0 +1,2237 @@
+/*==============================================================*/
+/* Database name:  Database                                     */
+/* DBMS name:      PostgreSQL 7                                 */
+/* Created on:     3/17/02 7:55:08 AM                           */
+/*==============================================================*/
+
+
+alter table activos
+   add constraint FK_ACTIVOS_REF_11044_MARCAS foreign key (marca)
+      references marcas (codigo)
+      on delete restrict on update restrict;
+
+alter table activos
+   add constraint FK_ACTIVOS_REF_11046_AFI_GRUP foreign key (grupo)
+      references afi_grupos_1 (codigo)
+      on delete restrict on update restrict;
+
+alter table activos
+   add constraint FK_ACTIVOS_REF_11049_SECCIONE foreign key (seccion, departamento)
+      references secciones (seccion, codigo)
+      on delete restrict on update restrict;
+
+alter table activos
+   add constraint FK_ACTIVOS_REF_11252_AFI_TIPO foreign key (tipo_activo)
+      references afi_tipo_activo (codigo)
+      on delete restrict on update restrict;
+
+alter table activos
+   add constraint FK_ACTIVOS_REF_12214_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table activos
+   add constraint FK_ACTIVOS_REF_12335_ACTIVOS foreign key (act_codigo, compania)
+      references activos (codigo, compania)
+      on delete restrict on update restrict;
+
+alter table afi_depreciacion
+   add constraint FK_AFI_DEPR_REF_12215_ACTIVOS foreign key (codigo, compania)
+      references activos (codigo, compania)
+      on delete restrict on update restrict;
+
+alter table afi_depreciacion
+   add constraint FK_AFI_DEPR_REF_12215_GRALPERI foreign key (compania, aplicacion, year, periodo)
+      references gralperiodos (compania, aplicacion, year, periodo)
+      on delete restrict on update restrict;
+
+alter table afi_grupos_2
+   add constraint FK_AFI_GRUP_REF_11045_AFI_GRUP foreign key (codigo)
+      references afi_grupos_1 (codigo)
+      on delete restrict on update restrict;
+
+alter table afi_listado_depreciacion
+   add constraint FK_AFI_LIST_REFERENCE_AFI_DEPR foreign key (codigo, compania, aplicacion, year, periodo)
+      references afi_depreciacion (codigo, compania, aplicacion, year, periodo)
+      on delete cascade on update cascade;
+
+alter table afi_tipo_activo
+   add constraint FK_AFI_TIPO_REF_11357_CGLTIPOC foreign key (tipo_comp)
+      references cgltipocomp (tipo_comp)
+      on delete restrict on update restrict;
+
+alter table afi_tipo_activo
+   add constraint FK_AFI_TIPO_REF_11774_CGLCUENT foreign key (cuenta_activo)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table afi_tipo_activo
+   add constraint FK_AFI_TIPO_REF_11775_CGLCUENT foreign key (cuenta_depreciacion)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table afi_tipo_activo
+   add constraint FK_AFI_TIPO_REF_11995_CGLCUENT foreign key (cuenta_gasto)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table afi_tipo_trx
+   add constraint FK_AFI_TIPO_REF_11357_CGLTIPOC foreign key (tipo_comp)
+      references cgltipocomp (tipo_comp)
+      on delete restrict on update restrict;
+
+alter table almacen
+   add constraint FK_ALMACEN_REF_13269_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table articulos
+   add constraint FK_ARTICULO_REF_6133_UNIDAD_M foreign key (unidad_medida)
+      references unidad_medida (unidad_medida)
+      on delete restrict on update restrict;
+
+alter table articulos_agrupados
+   add constraint FK_ARTICULO_REF_12550_ARTICULO foreign key (articulo)
+      references articulos (articulo)
+      on delete cascade on update cascade;
+
+alter table articulos_agrupados
+   add constraint FK_ARTICULO_REF_21604_GRAL_VAL foreign key (codigo_valor_grupo)
+      references gral_valor_grupos (codigo_valor_grupo)
+      on delete cascade on update cascade;
+
+alter table articulos_por_almacen
+   add constraint FK_ARTICULO_REF_13275_ARTICULO foreign key (articulo)
+      references articulos (articulo)
+      on delete restrict on update restrict;
+
+alter table articulos_por_almacen
+   add constraint FK_ARTICULO_REF_13279_ALMACEN foreign key (almacen)
+      references almacen (almacen)
+      on delete restrict on update restrict;
+
+alter table articulos_por_almacen
+   add constraint FK_ARTICULO_REF_42015_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table bcobalance
+   add constraint FK_BCOBALAN_REF_31049_BCOCTAS foreign key (cod_ctabco)
+      references bcoctas (cod_ctabco)
+      on delete restrict on update restrict;
+
+alter table bcobalance
+   add constraint FK_BCOBALAN_REF_31053_GRALPERI foreign key (compania, aplicacion, year, periodo)
+      references gralperiodos (compania, aplicacion, year, periodo)
+      on delete restrict on update restrict;
+
+alter table bcocheck1
+   add constraint FK_BCOCHECK_REF_28311_BCOCTAS foreign key (cod_ctabco)
+      references bcoctas (cod_ctabco)
+      on delete restrict on update restrict;
+
+alter table bcocheck1
+   add constraint FK_BCOCHECK_REF_28322_PROVEEDO foreign key (proveedor)
+      references proveedores (proveedor)
+      on delete restrict on update restrict;
+
+alter table bcocheck1
+   add constraint FK_BCOCHECK_REF_28380_BCOMOTIV foreign key (motivo_bco)
+      references bcomotivos (motivo_bco)
+      on delete restrict on update restrict;
+
+alter table bcocheck2
+   add constraint FK_BCOCHECK_REF_28345_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table bcocheck2
+   add constraint FK_BCOCHECK_REF_38797_BCOCHECK foreign key (cod_ctabco, no_cheque, motivo_bco)
+      references bcocheck1 (cod_ctabco, no_cheque, motivo_bco)
+      on delete cascade on update cascade;
+
+alter table bcocheck2
+   add constraint FK_BCOCHECK_REF_44473_CGLAUXIL foreign key (auxiliar1)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table bcocheck2
+   add constraint FK_BCOCHECK_REF_44477_CGLAUXIL foreign key (auxiliar2)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table bcocheck3
+   add constraint FK_BCOCHECK_REF_28367_CXPMOTIV foreign key (motivo_cxp)
+      references cxpmotivos (motivo_cxp)
+      on delete restrict on update restrict;
+
+alter table bcocheck3
+   add constraint FK_BCOCHECK_REF_38804_BCOCHECK foreign key (cod_ctabco, no_cheque, motivo_bco)
+      references bcocheck1 (cod_ctabco, no_cheque, motivo_bco)
+      on delete cascade on update cascade;
+
+alter table bcocheck4
+   add constraint FK_BCOCHECK_REFERENCE_BCOCHECK foreign key (cod_ctabco, no_cheque, motivo_bco)
+      references bcocheck1 (cod_ctabco, no_cheque, motivo_bco)
+      on delete cascade on update cascade;
+
+alter table bcocircula
+   add constraint FK_BCOCIRCU_REF_31026_BCOCTAS foreign key (cod_ctabco)
+      references bcoctas (cod_ctabco)
+      on delete restrict on update restrict;
+
+alter table bcocircula
+   add constraint FK_BCOCIRCU_REF_31032_BCOMOTIV foreign key (motivo_bco)
+      references bcomotivos (motivo_bco)
+      on delete restrict on update restrict;
+
+alter table bcocircula
+   add constraint FK_BCOCIRCU_REF_31042_PROVEEDO foreign key (proveedor)
+      references proveedores (proveedor)
+      on delete restrict on update restrict;
+
+alter table bcoctas
+   add constraint FK_BCOCTAS_REF_27092_BANCOS foreign key (banco)
+      references bancos (banco)
+      on delete restrict on update restrict;
+
+alter table bcoctas
+   add constraint FK_BCOCTAS_REF_27103_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table bcoctas
+   add constraint FK_BCOCTAS_REF_28318_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table bcoctas
+   add constraint FK_BCOCTAS_REF_67703_CGLAUXIL foreign key (auxiliar1)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table bcoctas
+   add constraint FK_BCOCTAS_REF_67707_CGLAUXIL foreign key (auxiliar2)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table bcomotivos
+   add constraint FK_BCOMOTIV_REF_74651_CGLTIPOC foreign key (tipo_comp)
+      references cgltipocomp (tipo_comp)
+      on delete restrict on update restrict;
+
+alter table bcotransac1
+   add constraint FK_BCOTRANS_REF_29665_BCOCTAS foreign key (cod_ctabco)
+      references bcoctas (cod_ctabco)
+      on delete restrict on update restrict;
+
+alter table bcotransac1
+   add constraint FK_BCOTRANS_REF_30995_BCOMOTIV foreign key (motivo_bco)
+      references bcomotivos (motivo_bco)
+      on delete restrict on update restrict;
+
+alter table bcotransac1
+   add constraint FK_BCOTRANS_REF_31008_PROVEEDO foreign key (proveedor)
+      references proveedores (proveedor)
+      on delete restrict on update restrict;
+
+alter table bcotransac2
+   add constraint FK_BCOTRANS_REF_29680_BCOTRANS foreign key (cod_ctabco, sec_transacc)
+      references bcotransac1 (cod_ctabco, sec_transacc)
+      on delete cascade on update cascade;
+
+alter table bcotransac2
+   add constraint FK_BCOTRANS_REF_30991_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table bcotransac2
+   add constraint FK_BCOTRANS_REF_44481_CGLAUXIL foreign key (auxiliar1)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table bcotransac2
+   add constraint FK_BCOTRANS_REF_44485_CGLAUXIL foreign key (auxiliar2)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table bcotransac3
+   add constraint FK_BCOTRANS_REF_29684_BCOTRANS foreign key (cod_ctabco, sec_transacc)
+      references bcotransac1 (cod_ctabco, sec_transacc)
+      on delete cascade on update cascade;
+
+alter table bcotransac3
+   add constraint FK_BCOTRANS_REF_31001_CXPMOTIV foreign key (motivo_cxp)
+      references cxpmotivos (motivo_cxp)
+      on delete restrict on update restrict;
+
+alter table caja_tipo_trx
+   add constraint FK_CAJA_TIP_REF_12967_CGLTIPOC foreign key (tipo_comp)
+      references cgltipocomp (tipo_comp)
+      on delete restrict on update restrict;
+
+alter table caja_trx1
+   add constraint FK_CAJA_TRX_REF_11560_CAJAS foreign key (caja)
+      references cajas (caja)
+      on delete restrict on update restrict;
+
+alter table caja_trx1
+   add constraint FK_CAJA_TRX_REF_11564_CAJA_TIP foreign key (tipo_trx)
+      references caja_tipo_trx (tipo_trx)
+      on delete restrict on update restrict;
+
+alter table caja_trx2
+   add constraint FK_CAJA_TRX_REF_11562_CAJA_TRX foreign key (numero_trx, caja)
+      references caja_trx1 (numero_trx, caja)
+      on delete cascade on update cascade;
+
+alter table caja_trx2
+   add constraint FK_CAJA_TRX_cglaux foreign key (auxiliar_1)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table caja_trx2
+   add constraint FK_CAJA_TRX_REF_11886_CGLAUXIL foreign key (auxiliar_2)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table caja_trx2
+   add constraint FK_CAJA_TRX_REF_12852_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table cajas
+   add constraint FK_CAJAS_REF_11559_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table cajas
+   add constraint FK_CAJAS_REF_11565_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table cajas
+   add constraint FK_CAJAS_REF_14559_CGLAUXIL foreign key (auxiliar_1)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cajas
+   add constraint FK_CAJAS_REF_14560_CGLAUXIL foreign key (auxiliar_2)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cajas_balance
+   add constraint FK_CAJAS_BA_REF_11565_CAJAS foreign key (caja)
+      references cajas (caja)
+      on delete restrict on update restrict;
+
+alter table cajas_balance
+   add constraint FK_CAJAS_BA_REF_11566_GRALPERI foreign key (compania, aplicacion, year, periodo)
+      references gralperiodos (compania, aplicacion, year, periodo)
+      on delete restrict on update restrict;
+
+alter table cglauxxaplicacion
+   add constraint FK_CGLAUXXA_REF_20634_GRALAPLI foreign key (aplicacion)
+      references gralaplicaciones (aplicacion)
+      on delete restrict on update restrict;
+
+alter table cglauxxaplicacion
+   add constraint FK_CGLAUXXA_REF_955_CGLAUXIL foreign key (auxiliar)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cglcomprobante1
+   add constraint FK_CGLCOMPR_REF_8110_CGLTIPOC foreign key (tipo_comp)
+      references cgltipocomp (tipo_comp)
+      on delete restrict on update restrict;
+
+alter table cglcomprobante1
+   add constraint FK_CGLCOMPR_REFERENCE_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table cglcomprobante1
+   add constraint FK_CGLCOMPR_REFERENCE_GRALAPLI foreign key (aplicacion)
+      references gralaplicaciones (aplicacion)
+      on delete restrict on update restrict;
+
+alter table cglcomprobante2
+   add constraint FK_CGLCOMPR_REF_7501_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table cglcomprobante2
+   add constraint FK_CGLCOMPR_REF_763_CGLCOMPR foreign key (secuencia, compania, aplicacion, year, periodo)
+      references cglcomprobante1 (secuencia, compania, aplicacion, year, periodo)
+      on delete cascade on update cascade;
+
+alter table cglcomprobante3
+   add constraint FK_CGLCOMPR_REF_3433_CGLCOMPR foreign key (linea, secuencia, compania, aplicacion, year, periodo)
+      references cglcomprobante2 (linea, secuencia, compania, aplicacion, year, periodo)
+      on delete cascade on update cascade;
+
+alter table cglcomprobante3
+   add constraint FK_CGLCOMPR_REF_7516_CGLAUXIL foreign key (auxiliar)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cglcomprobante4
+   add constraint FK_CGLCOMPR_REF_3414_CGLCOMPR foreign key (linea, secuencia, compania, aplicacion, year, periodo)
+      references cglcomprobante2 (linea, secuencia, compania, aplicacion, year, periodo)
+      on delete cascade on update cascade;
+
+alter table cglcomprobante4
+   add constraint FK_CGLCOMPR_REF_7512_CGLAUXIL foreign key (auxiliar)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cglctasxaplicacion
+   add constraint FK_CGLCTASX_REF_20638_GRALAPLI foreign key (aplicacion)
+      references gralaplicaciones (aplicacion)
+      on delete restrict on update restrict;
+
+alter table cglctasxaplicacion
+   add constraint FK_CGLCTASX_REF_944_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table cglcuentas
+   add constraint cglniveles foreign key (nivel)
+      references cglniveles (nivel)
+      on delete restrict on update restrict;
+
+alter table cglperiodico1
+   add constraint FK_CGLPERIO_REF_7895_CGLTIPOC foreign key (tipo_comp)
+      references cgltipocomp (tipo_comp)
+      on delete restrict on update restrict;
+
+alter table cglperiodico1
+   add constraint FK_CGLPERIO_REFERENCE_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table cglperiodico2
+   add constraint FK_CGLPERIO_REF_7899_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table cglperiodico2
+   add constraint FK_CGLPERIO_REF_9616_CGLPERIO foreign key (compania, secuencia)
+      references cglperiodico1 (compania, secuencia)
+      on delete cascade on update cascade;
+
+alter table cglperiodico3
+   add constraint FK_CGLPERIO_REF_9936_CGLPERIO foreign key (compania, secuencia, linea)
+      references cglperiodico2 (compania, secuencia, linea)
+      on delete cascade on update cascade;
+
+alter table cglperiodico3
+   add constraint FK_CGLPERIO_REF_9946_CGLAUXIL foreign key (auxiliar)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cglperiodico4
+   add constraint FK_CGLPERIO_REF_9957_CGLPERIO foreign key (compania, secuencia, linea)
+      references cglperiodico2 (compania, secuencia, linea)
+      on delete cascade on update cascade;
+
+alter table cglperiodico4
+   add constraint FK_CGLPERIO_REF_9967_CGLAUXIL foreign key (auxiliar)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cglposteo
+   add constraint FK_CGLPOSTE_REF_8363_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table cglposteo
+   add constraint FK_CGLPOSTE_REF_8388_CGLTIPOC foreign key (tipo_comp)
+      references cgltipocomp (tipo_comp)
+      on delete restrict on update restrict;
+
+alter table cglposteo
+   add constraint FK_CGLPOSTE_REFERENCE_GRALPERI foreign key (compania, aplicacion, year, periodo)
+      references gralperiodos (compania, aplicacion, year, periodo)
+      on delete restrict on update restrict;
+
+alter table cglposteo
+   add constraint FK_CGLPOSTE_REFERENCE_CGLCOMPR foreign key (secuencia, compania, aplicacion, year, periodo)
+      references cglcomprobante1 (secuencia, compania, aplicacion, year, periodo)
+      on delete restrict on update restrict;
+
+alter table cglposteoaux1
+   add constraint FK_CGLPOSTE_REF_8370_CGLPOSTE foreign key (consecutivo)
+      references cglposteo (consecutivo)
+      on delete cascade on update cascade;
+
+alter table cglposteoaux1
+   add constraint FK_CGLPOSTE_REF_8382_CGLAUXIL foreign key (auxiliar)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cglposteoaux2
+   add constraint FK_CGLPOSTE_REF_8374_CGLPOSTE foreign key (consecutivo)
+      references cglposteo (consecutivo)
+      on delete cascade on update cascade;
+
+alter table cglposteoaux2
+   add constraint FK_CGLPOSTE_REF_8378_CGLAUXIL foreign key (auxiliar)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cglrecurrente
+   add constraint FK_CGLRECUR_REF_9596_CGLPERIO foreign key (compania, secuencia)
+      references cglperiodico1 (compania, secuencia)
+      on delete restrict on update restrict;
+
+alter table cglrecurrente
+   add constraint FK_CGLRECUR_REFERENCE_GRALAPLI foreign key (aplicacion)
+      references gralaplicaciones (aplicacion)
+      on delete restrict on update restrict;
+
+alter table cglsldoaux1
+   add constraint FK_CGLSLDOA_REF_7300_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table cglsldoaux1
+   add constraint FK_CGLSLDOA_REF_7308_CGLAUXIL foreign key (auxiliar)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cglsldoaux1
+   add constraint FK_CGLSLDOA_REFERENCE_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table cglsldoaux2
+   add constraint FK_CGLSLDOA_REF_7304_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table cglsldoaux2
+   add constraint FK_CGLSLDOA_REF_7312_CGLAUXIL foreign key (auxiliar)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cglsldoaux2
+   add constraint FK_CGLSLDOA_REFERENCE_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table cglsldocuenta
+   add constraint FK_CGLSLDOC_REF_7296_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table cglsldocuenta
+   add constraint FK_CGLSLDOC_REFERENCE_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table clientes
+   add constraint FK_CLIENTES_REF_12001_VENDEDOR foreign key (vendedor)
+      references vendedores (codigo)
+      on delete restrict on update restrict;
+
+alter table clientes
+   add constraint FK_CLIENTES_REF_12572_LISTAS_D foreign key (lista_de_precio)
+      references listas_de_precio_1 (secuencia)
+      on delete restrict on update restrict;
+
+alter table clientes
+   add constraint FK_CLIENTES_REF_32463_GRAL_FOR foreign key (forma_pago)
+      references gral_forma_de_pago (forma_pago)
+      on delete restrict on update restrict;
+
+alter table clientes
+   add constraint FK_CLIENTES_REF_32562_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table clientes
+   add constraint FK_CLIENTES_REF_45637_CLIENTES foreign key (cli_cliente)
+      references clientes (cliente)
+      on delete cascade on update cascade;
+
+alter table clientes_agrupados
+   add constraint FK_CLIENTES_REF_32439_CLIENTES foreign key (cliente)
+      references clientes (cliente)
+      on delete restrict on update restrict;
+
+alter table clientes_agrupados
+   add constraint FK_CLIENTES_REF_32443_GRAL_VAL foreign key (codigo_valor_grupo)
+      references gral_valor_grupos (codigo_valor_grupo)
+      on delete restrict on update restrict;
+
+alter table convmedi
+   add constraint FK_CONVMEDI_REFERENCE_UNIDAD_M foreign key (old_unidad)
+      references unidad_medida (unidad_medida)
+      on delete restrict on update restrict;
+
+alter table convmedi
+   add constraint FK_CONVMEDI_REFERENCE_UNIDAD_M foreign key (new_unidad)
+      references unidad_medida (unidad_medida)
+      on delete restrict on update restrict;
+
+alter table cos_calculo
+   add constraint FK_COS_CALC_REFERENCE_COS_PROD foreign key (secuencia, compania, linea)
+      references cos_produccion (secuencia, compania, linea)
+      on delete cascade on update cascade;
+
+alter table cos_consumo
+   add constraint FK_COS_CONS_REFERENCE_COS_TRX foreign key (secuencia, compania)
+      references cos_trx (secuencia, compania)
+      on delete cascade on update cascade;
+
+alter table cos_consumo
+   add constraint FK_COS_CONS_REFERENCE_UNIDAD_M foreign key (unidad_medida)
+      references unidad_medida (unidad_medida)
+      on delete restrict on update restrict;
+
+alter table cos_consumo
+   add constraint FK_COS_CONS_REFERENCE_ARTICULO foreign key (articulo, almacen)
+      references articulos_por_almacen (articulo, almacen)
+      on delete restrict on update restrict;
+
+alter table cos_consumo_eys2
+   add constraint FK_COS_CONS_REFERENCE_COS_CONS foreign key (secuencia, compania, linea)
+      references cos_consumo (secuencia, compania, linea)
+      on delete cascade on update cascade;
+
+alter table cos_consumo_eys2
+   add constraint FK_COS_CONS_REFERENCE_EYS2 foreign key (articulo, almacen, no_transaccion, eys2_linea)
+      references eys2 (articulo, almacen, no_transaccion, linea)
+      on delete cascade on update cascade;
+
+alter table cos_cuenta_rubro
+   add constraint FK_COS_CUEN_REFERENCE_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table cos_cuenta_rubro
+   add constraint FK_COS_CUEN_REFERENCE_COS_RUBR foreign key (rubro)
+      references cos_rubros (rubro)
+      on delete restrict on update restrict;
+
+alter table cos_produccion
+   add constraint FK_COS_PROD_REFERENCE_COS_TRX foreign key (secuencia, compania)
+      references cos_trx (secuencia, compania)
+      on delete cascade on update cascade;
+
+alter table cos_produccion
+   add constraint FK_COS_PROD_REFERENCE_UNIDAD_M foreign key (unidad_medida)
+      references unidad_medida (unidad_medida)
+      on delete restrict on update restrict;
+
+alter table cos_produccion
+   add constraint FK_COS_PROD_REFERENCE_ARTICULO foreign key (articulo, almacen)
+      references articulos_por_almacen (articulo, almacen)
+      on delete restrict on update restrict;
+
+alter table cos_produccion_eys2
+   add constraint FK_COS_PROD_REFERENCE_COS_PROD foreign key (secuencia, compania, linea)
+      references cos_produccion (secuencia, compania, linea)
+      on delete cascade on update cascade;
+
+alter table cos_produccion_eys2
+   add constraint FK_COS_PROD_REFERENCE_EYS2 foreign key (articulo, almacen, no_transaccion, eys2_linea)
+      references eys2 (articulo, almacen, no_transaccion, linea)
+      on delete cascade on update cascade;
+
+alter table cos_trx
+   add constraint FK_COS_TRX_REFERENCE_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table cxc_estado_de_cuenta
+   add constraint FK_CXC_ESTA_REFERENCE_CXCDOCM foreign key (documento, docmto_aplicar, cliente, motivo_cxc, almacen)
+      references cxcdocm (documento, docmto_aplicar, cliente, motivo_cxc, almacen)
+      on delete restrict on update restrict;
+
+alter table cxc_saldos_iniciales
+   add constraint FK_CXC_SALD_REFERENCE_CLIENTES foreign key (cliente)
+      references clientes (cliente)
+      on delete restrict on update restrict;
+
+alter table cxc_saldos_iniciales
+   add constraint FK_CXC_SALD_REFERENCE_ALMACEN foreign key (almacen)
+      references almacen (almacen)
+      on delete restrict on update restrict;
+
+alter table cxc_saldos_iniciales
+   add constraint FK_CXC_SALD_REFERENCE_CXCMOTIV foreign key (motivo_cxc)
+      references cxcmotivos (motivo_cxc)
+      on delete restrict on update restrict;
+
+alter table cxcbalance
+   add constraint FK_CXCBALAN_REF_32545_CLIENTES foreign key (cliente)
+      references clientes (cliente)
+      on delete restrict on update restrict;
+
+alter table cxcbalance
+   add constraint FK_CXCBALAN_REF_32549_GRALPERI foreign key (compania, aplicacion, year, periodo)
+      references gralperiodos (compania, aplicacion, year, periodo)
+      on delete restrict on update restrict;
+
+alter table cxcdocm
+   add constraint FK_CXCDOCM_REF_37155_CLIENTES foreign key (cliente)
+      references clientes (cliente)
+      on delete restrict on update restrict;
+
+alter table cxcdocm
+   add constraint FK_CXCDOCM_REF_37159_CXCMOTIV foreign key (motivo_cxc)
+      references cxcmotivos (motivo_cxc)
+      on delete restrict on update restrict;
+
+alter table cxcdocm
+   add constraint FK_CXCDOCM_REF_37167_ALMACEN foreign key (almacen)
+      references almacen (almacen)
+      on delete restrict on update restrict;
+
+alter table cxcdocm
+   add constraint FK_CXCDOCM_REF_37303_CXCDOCM foreign key (docmto_aplicar, docmto_ref, cliente, motivo_ref, almacen)
+      references cxcdocm (documento, docmto_aplicar, cliente, motivo_cxc, almacen)
+      on delete restrict on update restrict;
+
+alter table cxcdocm
+   add constraint FK_CXCDOCM_REF_81850_GRALAPLI foreign key (aplicacion_origen)
+      references gralaplicaciones (aplicacion)
+      on delete restrict on update restrict;
+
+alter table cxcfact1
+   add constraint FK_CXCFACT1_REF_34059_CLIENTES foreign key (cliente)
+      references clientes (cliente)
+      on delete restrict on update restrict;
+
+alter table cxcfact1
+   add constraint FK_CXCFACT1_REF_34063_ALMACEN foreign key (almacen)
+      references almacen (almacen)
+      on delete restrict on update restrict;
+
+alter table cxcfact1
+   add constraint FK_CXCFACT1_REF_34067_GRAL_FOR foreign key (forma_pago)
+      references gral_forma_de_pago (forma_pago)
+      on delete restrict on update restrict;
+
+alter table cxcfact1
+   add constraint FK_CXCFACT1_REF_35603_CXCMOTIV foreign key (motivo_cxc)
+      references cxcmotivos (motivo_cxc)
+      on delete restrict on update restrict;
+
+alter table cxcfact2
+   add constraint FK_CXCFACT2_REF_34072_CXCFACT1 foreign key (almacen, no_factura)
+      references cxcfact1 (almacen, no_factura)
+      on delete cascade on update cascade;
+
+alter table cxcfact2
+   add constraint FK_CXCFACT2_REF_35575_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table cxcfact2
+   add constraint FK_CXCFACT2_REF_35592_RUBROS_F foreign key (rubro_fact_cxc)
+      references rubros_fact_cxc (rubro_fact_cxc)
+      on delete restrict on update restrict;
+
+alter table cxcfact2
+   add constraint FK_CXCFACT2_REF_45615_CGLAUXIL foreign key (auxiliar1)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cxcfact2
+   add constraint FK_CXCFACT2_REF_45619_CGLAUXIL foreign key (auxiliar2)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cxcfact3
+   add constraint FK_CXCFACT3_REF_35585_CXCFACT1 foreign key (almacen, no_factura)
+      references cxcfact1 (almacen, no_factura)
+      on delete cascade on update cascade;
+
+alter table cxcfact3
+   add constraint FK_CXCFACT3_REF_38815_CXCMOTIV foreign key (motivo_cxc)
+      references cxcmotivos (motivo_cxc)
+      on delete restrict on update restrict;
+
+alter table cxchdocm
+   add constraint FK_CXCHDOCM_REF_37304_CXCHDOCM foreign key (docmto_aplicar, docmto_ref, cliente, motivo_ref, almacen)
+      references cxchdocm (documento, docmto_aplicar, cliente, motivo_cxc, almacen)
+      on delete cascade on update cascade;
+
+alter table cxchdocm
+   add constraint FK_CXCHDOCM_REFERENCE_CLIENTES foreign key (cliente)
+      references clientes (cliente)
+      on delete restrict on update restrict;
+
+alter table cxchdocm
+   add constraint FK_CXCHDOCM_REFERENCE_CXCMOTIV foreign key (motivo_cxc)
+      references cxcmotivos (motivo_cxc)
+      on delete restrict on update restrict;
+
+alter table cxchdocm
+   add constraint FK_CXCHDOCM_REFERENCE_ALMACEN foreign key (almacen)
+      references almacen (almacen)
+      on delete restrict on update restrict;
+
+alter table cxcmorosidad
+   add constraint FK_CXCMOROS_REF_86413_CLIENTES foreign key (cliente)
+      references clientes (cliente)
+      on delete restrict on update restrict;
+
+alter table cxcmorosidad
+   add constraint FK_CXCMOROS_REF_89780_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table cxcmorosidad
+   add constraint FK_CXCMOROS_REFERENCE_CXCMOTIV foreign key (motivo_cxc)
+      references cxcmotivos (motivo_cxc)
+      on delete restrict on update restrict;
+
+alter table cxcmorosidad
+   add constraint FK_CXCMOROS_REFERENCE_ALMACEN foreign key (almacen)
+      references almacen (almacen)
+      on delete restrict on update restrict;
+
+alter table cxcmotivos
+   add constraint FK_CXCMOTIV_REF_82779_CGLTIPOC foreign key (tipo_comp)
+      references cgltipocomp (tipo_comp)
+      on delete restrict on update restrict;
+
+alter table cxcrecibo1
+   add constraint FK_CXCRECIB_REF_38746_CLIENTES foreign key (cliente)
+      references clientes (cliente)
+      on delete restrict on update restrict;
+
+alter table cxcrecibo1
+   add constraint FK_CXCRECIB_REF_38750_ALMACEN foreign key (almacen)
+      references almacen (almacen)
+      on delete restrict on update restrict;
+
+alter table cxcrecibo1
+   add constraint FK_CXCRECIB_REF_38754_CXCMOTIV foreign key (motivo_cxc)
+      references cxcmotivos (motivo_cxc)
+      on delete restrict on update restrict;
+
+alter table cxcrecibo2
+   add constraint FK_CXCRECIB_REF_38758_CXCRECIB foreign key (no_recibo, almacen)
+      references cxcrecibo1 (no_recibo, almacen)
+      on delete restrict on update restrict;
+
+alter table cxcrecibo2
+   add constraint FK_CXCRECIB_REF_38819_CXCMOTIV foreign key (motivo_cxc)
+      references cxcmotivos (motivo_cxc)
+      on delete restrict on update restrict;
+
+alter table cxctrx1
+   add constraint FK_CXCTRX1_REF_32495_CXCMOTIV foreign key (motivo_cxc)
+      references cxcmotivos (motivo_cxc)
+      on delete restrict on update restrict;
+
+alter table cxctrx1
+   add constraint FK_CXCTRX1_REF_32499_CLIENTES foreign key (cliente)
+      references clientes (cliente)
+      on delete restrict on update restrict;
+
+alter table cxctrx1
+   add constraint FK_CXCTRX1_REF_38779_ALMACEN foreign key (almacen)
+      references almacen (almacen)
+      on delete restrict on update restrict;
+
+alter table cxctrx1
+   add constraint FK_CXCTRX1_REFERENCE_COBRADOR foreign key (cobrador)
+      references cobradores (cobrador)
+      on delete restrict on update restrict;
+
+alter table cxctrx2
+   add constraint FK_CXCTRX2_REF_38790_CXCTRX1 foreign key (sec_ajuste_cxc, almacen)
+      references cxctrx1 (sec_ajuste_cxc, almacen)
+      on delete cascade on update cascade;
+
+alter table cxctrx2
+   add constraint FK_CXCTRX2_REF_38811_CXCMOTIV foreign key (motivo_cxc)
+      references cxcmotivos (motivo_cxc)
+      on delete restrict on update restrict;
+
+alter table cxctrx3
+   add constraint FK_CXCTRX3_REF_32532_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table cxctrx3
+   add constraint FK_CXCTRX3_REF_38783_CXCTRX1 foreign key (sec_ajuste_cxc, almacen)
+      references cxctrx1 (sec_ajuste_cxc, almacen)
+      on delete cascade on update cascade;
+
+alter table cxctrx3
+   add constraint FK_CXCTRX3_REF_45599_CGLAUXIL foreign key (auxiliar1)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cxctrx3
+   add constraint FK_CXCTRX3_REF_45603_CGLAUXIL foreign key (auxiliar2)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cxpajuste1
+   add constraint FK_CXPAJUST_REF_23665_PROVEEDO foreign key (proveedor)
+      references proveedores (proveedor)
+      on delete restrict on update restrict;
+
+alter table cxpajuste1
+   add constraint FK_CXPAJUST_REF_23679_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table cxpajuste1
+   add constraint FK_CXPAJUST_REF_25851_CXPMOTIV foreign key (motivo_cxp)
+      references cxpmotivos (motivo_cxp)
+      on delete restrict on update restrict;
+
+alter table cxpajuste1
+   add constraint FK_CXPAJUST_REF_28363_CXPMOTIV foreign key (motivo_cxp)
+      references cxpmotivos (motivo_cxp)
+      on delete restrict on update restrict;
+
+alter table cxpajuste2
+   add constraint FK_CXPAJUST_REF_25787_CXPAJUST foreign key (compania, sec_ajuste_cxp)
+      references cxpajuste1 (compania, sec_ajuste_cxp)
+      on delete cascade on update cascade;
+
+alter table cxpajuste2
+   add constraint FK_CXPAJUST_REF_38823_CXPMOTIV foreign key (motivo_cxp)
+      references cxpmotivos (motivo_cxp)
+      on delete restrict on update restrict;
+
+alter table cxpajuste3
+   add constraint FK_CXPAJUST_REF_25794_CXPAJUST foreign key (compania, sec_ajuste_cxp)
+      references cxpajuste1 (compania, sec_ajuste_cxp)
+      on delete cascade on update cascade;
+
+alter table cxpajuste3
+   add constraint FK_CXPAJUST_REF_25804_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table cxpajuste3
+   add constraint FK_CXPAJUST_REF_45624_CGLAUXIL foreign key (auxiliar1)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cxpajuste3
+   add constraint FK_CXPAJUST_REF_45628_CGLAUXIL foreign key (auxiliar2)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cxpbalance
+   add constraint FK_CXPBALAN_REF_27041_GRALPERI foreign key (compania, aplicacion, year, periodo)
+      references gralperiodos (compania, aplicacion, year, periodo)
+      on delete restrict on update restrict;
+
+alter table cxpbalance
+   add constraint FK_CXPBALAN_REF_27054_PROVEEDO foreign key (proveedor)
+      references proveedores (proveedor)
+      on delete restrict on update restrict;
+
+alter table cxpdocm
+   add constraint FK_CXPDOCM_REF_25811_PROVEEDO foreign key (proveedor)
+      references proveedores (proveedor)
+      on delete restrict on update restrict;
+
+alter table cxpdocm
+   add constraint FK_CXPDOCM_REF_25815_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table cxpdocm
+   add constraint FK_CXPDOCM_REF_25843_CXPMOTIV foreign key (motivo_cxp)
+      references cxpmotivos (motivo_cxp)
+      on delete restrict on update restrict;
+
+alter table cxpdocm
+   add constraint FK_CXPDOCM_REF_25855_CXPDOCM foreign key (proveedor, compania, docmto_aplicar, docmto_aplicar_ref, motivo_cxp_ref)
+      references cxpdocm (proveedor, compania, documento, docmto_aplicar, motivo_cxp)
+      on delete restrict on update restrict;
+
+alter table cxpdocm
+   add constraint FK_CXPDOCM_REF_25882_CXPMOTIV foreign key (motivo_cxp_ref)
+      references cxpmotivos (motivo_cxp)
+      on delete restrict on update restrict;
+
+alter table cxpdocm
+   add constraint FK_CXPDOCM_REF_41007_GRALAPLI foreign key (aplicacion_origen)
+      references gralaplicaciones (aplicacion)
+      on delete restrict on update restrict;
+
+alter table cxpfact1
+   add constraint FK_CXPFACT1_REF_22592_PROVEEDO foreign key (proveedor)
+      references proveedores (proveedor)
+      on delete restrict on update restrict;
+
+alter table cxpfact1
+   add constraint FK_CXPFACT1_REF_22597_GRAL_FOR foreign key (forma_pago)
+      references gral_forma_de_pago (forma_pago)
+      on delete restrict on update restrict;
+
+alter table cxpfact1
+   add constraint FK_CXPFACT1_REF_22656_OC1 foreign key (numero_oc, oc1_compania)
+      references oc1 (numero_oc, compania)
+      on delete restrict on update restrict;
+
+alter table cxpfact1
+   add constraint FK_CXPFACT1_REF_23669_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table cxpfact1
+   add constraint FK_CXPFACT1_REF_25847_CXPMOTIV foreign key (motivo_cxp)
+      references cxpmotivos (motivo_cxp)
+      on delete restrict on update restrict;
+
+alter table cxpfact1
+   add constraint FK_CXPFACT1_REF_43431_GRALAPLI foreign key (aplicacion_origen)
+      references gralaplicaciones (aplicacion)
+      on delete restrict on update restrict;
+
+alter table cxpfact2
+   add constraint FK_CXPFACT2_REF_22635_CXPFACT1 foreign key (proveedor, fact_proveedor, compania)
+      references cxpfact1 (proveedor, fact_proveedor, compania)
+      on delete cascade on update cascade;
+
+alter table cxpfact2
+   add constraint FK_CXPFACT2_REF_22642_RUBROS_F foreign key (rubro_fact_cxp)
+      references rubros_fact_cxp (rubro_fact_cxp)
+      on delete restrict on update restrict;
+
+alter table cxpfact2
+   add constraint FK_CXPFACT2_REF_54544_CGLAUXIL foreign key (auxiliar1)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cxpfact2
+   add constraint FK_CXPFACT2_REF_54548_CGLAUXIL foreign key (auxiliar2)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table cxpfact2
+   add constraint FK_CXPFACT2_REF_64317_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table cxpfact3
+   add constraint FK_CXPFACT3_REF_22660_CXPFACT1 foreign key (proveedor, fact_proveedor, compania)
+      references cxpfact1 (proveedor, fact_proveedor, compania)
+      on delete cascade on update cascade;
+
+alter table cxpfact3
+   add constraint FK_CXPFACT3_REF_38827_CXPMOTIV foreign key (motivo_cxp)
+      references cxpmotivos (motivo_cxp)
+      on delete restrict on update restrict;
+
+alter table cxpmorosidad
+   add constraint FK_CXPMOROS_REF_91487_PROVEEDO foreign key (proveedor)
+      references proveedores (proveedor)
+      on delete restrict on update restrict;
+
+alter table cxpmorosidad
+   add constraint FK_CXPMOROS_REF_91500_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table cxpmorosidad
+   add constraint FK_CXPMOROS_REF_91503_CXPMOTIV foreign key (motivo_cxp)
+      references cxpmotivos (motivo_cxp)
+      on delete restrict on update restrict;
+
+alter table cxpmotivos
+   add constraint FK_CXPMOTIV_REF_78940_CGLTIPOC foreign key (tipo_comp)
+      references cgltipocomp (tipo_comp)
+      on delete restrict on update restrict;
+
+alter table descuentos_por_articulo
+   add constraint FK_DESCUENT_REF_10470_ARTICULO foreign key (articulo, almacen)
+      references articulos_por_almacen (articulo, almacen)
+      on delete restrict on update restrict;
+
+alter table descuentos_por_articulo
+   add constraint FK_DESCUENT_REF_10471_DESCUENT foreign key (secuencia)
+      references descuentos (secuencia)
+      on delete cascade on update cascade;
+
+alter table descuentos_por_cliente
+   add constraint FK_DESCUENT_REF_10469_DESCUENT foreign key (secuencia)
+      references descuentos (secuencia)
+      on delete cascade on update cascade;
+
+alter table descuentos_por_cliente
+   add constraint FK_DESCUENT_REF_10470_CLIENTES foreign key (cliente)
+      references clientes (cliente)
+      on delete restrict on update restrict;
+
+alter table descuentos_por_grupo
+   add constraint FK_DESCUENT_REF_10468_DESCUENT foreign key (secuencia)
+      references descuentos (secuencia)
+      on delete cascade on update cascade;
+
+alter table descuentos_por_grupo
+   add constraint FK_DESCUENT_REF_10469_GRAL_VAL foreign key (codigo_valor_grupo)
+      references gral_valor_grupos (codigo_valor_grupo)
+      on delete restrict on update restrict;
+
+alter table div_movimientos
+   add constraint FK_DIV_MOVI_REFERENCE_DIV_SOCI foreign key (socio)
+      references div_socios (socio)
+      on delete restrict on update restrict;
+
+alter table div_movimientos
+   add constraint FK_DIV_MOVI_REFERENCE_DIV_PARA foreign key (fecha)
+      references div_parametros_de_pago (fecha)
+      on delete restrict on update restrict;
+
+alter table div_movimientos
+   add constraint FK_DIV_MOVI_REFERENCE_BCOCHECK foreign key (cod_ctabco, no_cheque, motivo_bco)
+      references bcocheck1 (cod_ctabco, no_cheque, motivo_bco)
+      on delete restrict on update cascade;
+
+alter table encuesta
+   add constraint FK_ENCUESTA_REF_13_CANTIDAD foreign key (codigo_de_rango)
+      references cantidad_de_empleados (codigo_de_rango)
+      on delete restrict on update restrict;
+
+alter table encuesta
+   add constraint FK_ENCUESTA_REF_22_ORIGEN_D foreign key (codigo_de_origen)
+      references origen_del_sistema (codigo_de_origen)
+      on delete restrict on update restrict;
+
+alter table encuesta
+   add constraint FK_ENCUESTA_REF_5_TIPO_DE_ foreign key (tipo_empresa)
+      references tipo_de_empresa (tipo_empresa)
+      on delete restrict on update restrict;
+
+alter table eys1
+   add constraint FK_EYS1_REF_13993_ALMACEN foreign key (almacen)
+      references almacen (almacen)
+      on delete restrict on update restrict;
+
+alter table eys1
+   add constraint FK_EYS1_REF_14011_INVMOTIV foreign key (motivo)
+      references invmotivos (motivo)
+      on delete restrict on update restrict;
+
+alter table eys2
+   add constraint FK_EYS2_REF_14746_ARTICULO foreign key (articulo, almacen)
+      references articulos_por_almacen (articulo, almacen)
+      on delete restrict on update restrict;
+
+alter table eys2
+   add constraint FK_EYS2_REF_14753_EYS1 foreign key (almacen, no_transaccion)
+      references eys1 (almacen, no_transaccion)
+      on delete cascade on update cascade;
+
+alter table eys3
+   add constraint FK_EYS3_REF_41979_EYS1 foreign key (almacen, no_transaccion)
+      references eys1 (almacen, no_transaccion)
+      on delete cascade on update cascade;
+
+alter table eys3
+   add constraint FK_EYS3_REF_42010_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table eys3
+   add constraint FK_EYS3_REF_55595_CGLAUXIL foreign key (auxiliar1)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table eys3
+   add constraint FK_EYS3_REF_55599_CGLAUXIL foreign key (auxiliar2)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table eys4
+   add constraint FK_EYS4_REF_17157_EYS2 foreign key (articulo, almacen, no_transaccion, inv_linea)
+      references eys2 (articulo, almacen, no_transaccion, linea)
+      on delete cascade on update cascade;
+
+alter table eys4
+   add constraint FK_EYS4_REF_17158_CXPFACT2 foreign key (proveedor, fact_proveedor, rubro_fact_cxp, cxp_linea, compania)
+      references cxpfact2 (proveedor, fact_proveedor, rubro_fact_cxp, linea, compania)
+      on delete cascade on update cascade;
+
+alter table eys6
+   add constraint FK_EYS6_REFERENCE_EYS2 foreign key (articulo, almacen, no_transaccion, linea)
+      references eys2 (articulo, almacen, no_transaccion, linea)
+      on delete cascade on update cascade;
+
+alter table eys6
+   add constraint FK_EYS6_REFERENCE_EYS2 foreign key (articulo, almacen, compra_no_transaccion, compra_linea)
+      references eys2 (articulo, almacen, no_transaccion, linea)
+      on delete restrict on update restrict;
+
+alter table eys6
+   add constraint FK_EYS6_REFERENCE_EYS2 foreign key (articulo, almacen, compra_no_transaccion, compra_linea)
+      references eys2 (articulo, almacen, no_transaccion, linea)
+      on delete restrict on update restrict;
+
+alter table facparamcgl
+   add constraint FK_FACPARAM_REF_14735_GRAL_VAL foreign key (codigo_valor_grupo)
+      references gral_valor_grupos (codigo_valor_grupo)
+      on delete restrict on update restrict;
+
+alter table facparamcgl
+   add constraint FK_FACPARAM_REF_14735_ALMACEN foreign key (almacen)
+      references almacen (almacen)
+      on delete restrict on update restrict;
+
+alter table facparamcgl
+   add constraint FK_FACPARAM_REF_14735_CGLAUXIL foreign key (auxiliar1_ingreso)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table facparamcgl
+   add constraint FK_FACPARAM_REF_14736_CGLAUXIL foreign key (auxiliar2_ingreso)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table facparamcgl
+   add constraint FK_FACPARAM_REF_14736_CGLCUENT foreign key (cuenta_ingreso)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table facparamcgl
+   add constraint FK_FACPARAM_REF_17908_CGLCUENT foreign key (cuenta_costo)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table facparamcgl
+   add constraint FK_FACPARAM_REF_18025_CGLAUXIL foreign key (auxiliar1_costo)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table facparamcgl
+   add constraint FK_FACPARAM_REF_18026_CGLAUXIL foreign key (auxiliar2_costo)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table fact_informe_ventas
+   add constraint FK_FACT_INF_REFERENCE_ALMACEN foreign key (almacen)
+      references almacen (almacen)
+      on delete restrict on update restrict;
+
+alter table factmotivos
+   add constraint FK_FACTMOTI_REF_15227_CGLTIPOC foreign key (tipo_comp)
+      references cgltipocomp (tipo_comp)
+      on delete restrict on update restrict;
+
+alter table factmotivos
+   add constraint FK_FACTMOTI_REFERENCE_INVMOTIV foreign key (motivo)
+      references invmotivos (motivo)
+      on delete restrict on update restrict;
+
+alter table factsobregiro
+   add constraint FK_FACTSOBR_REFERENCE_CLIENTES foreign key (cliente)
+      references clientes (cliente)
+      on delete restrict on update restrict;
+
+alter table factura1
+   add constraint FK_FACTURA1_REF_10094_VENDEDOR foreign key (codigo_vendedor)
+      references vendedores (codigo)
+      on delete restrict on update restrict;
+
+alter table factura1
+   add constraint FK_FACTURA1_REF_99208_ALMACEN foreign key (almacen)
+      references almacen (almacen)
+      on delete restrict on update restrict;
+
+alter table factura1
+   add constraint FK_FACTURA1_REF_99219_FACTMOTI foreign key (tipo)
+      references factmotivos (tipo)
+      on delete restrict on update restrict;
+
+alter table factura1
+   add constraint FK_FACTURA1_REF_99224_CLIENTES foreign key (cliente)
+      references clientes (cliente)
+      on delete restrict on update restrict;
+
+alter table factura1
+   add constraint FK_FACTURA1_REF_99230_GRAL_FOR foreign key (forma_pago)
+      references gral_forma_de_pago (forma_pago)
+      on delete restrict on update restrict;
+
+alter table factura2
+   add constraint FK_FACTURA2_REF_10268_FACTURA1 foreign key (almacen, tipo, num_documento)
+      references factura1 (almacen, tipo, num_documento)
+      on delete cascade on update cascade;
+
+alter table factura2
+   add constraint FK_FACTURA2_REF_10269_ARTICULO foreign key (articulo, almacen)
+      references articulos_por_almacen (articulo, almacen)
+      on delete restrict on update restrict;
+
+alter table factura2_eys2
+   add constraint FK_FACTURA2_REF_17353_EYS2 foreign key (articulo, almacen, no_transaccion, eys2_linea)
+      references eys2 (articulo, almacen, no_transaccion, linea)
+      on delete cascade on update cascade;
+
+alter table factura2_eys2
+   add constraint FK_FACTURA2_REF_17355_FACTURA2 foreign key (almacen, tipo, num_documento, factura2_linea)
+      references factura2 (almacen, tipo, num_documento, linea)
+      on delete cascade on update cascade;
+
+alter table factura3
+   add constraint FK_FACTURA3_REF_10271_FACTURA2 foreign key (almacen, tipo, num_documento, linea)
+      references factura2 (almacen, tipo, num_documento, linea)
+      on delete cascade on update cascade;
+
+alter table factura3
+   add constraint FK_FACTURA3_REF_10273_IMPUESTO foreign key (impuesto)
+      references impuestos_facturacion (impuesto)
+      on delete restrict on update restrict;
+
+alter table factura4
+   add constraint FK_FACTURA4_REF_10274_FACTURA1 foreign key (almacen, tipo, num_documento)
+      references factura1 (almacen, tipo, num_documento)
+      on delete cascade on update cascade;
+
+alter table factura4
+   add constraint FK_FACTURA4_REF_10275_RUBROS_F foreign key (rubro_fact_cxc)
+      references rubros_fact_cxc (rubro_fact_cxc)
+      on delete restrict on update restrict;
+
+alter table factura5
+   add constraint FK_FACTURA5_REF_10849_FACTURA1 foreign key (almacen, tipo, num_documento)
+      references factura1 (almacen, tipo, num_documento)
+      on delete cascade on update cascade;
+
+alter table factura5
+   add constraint FK_FACTURA5_REF_10850_BANCOS foreign key (banco)
+      references bancos (banco)
+      on delete restrict on update restrict;
+
+alter table factura6
+   add constraint FK_FACTURA6_REF_10850_FACTURA1 foreign key (almacen, tipo, num_documento)
+      references factura1 (almacen, tipo, num_documento)
+      on delete cascade on update cascade;
+
+alter table factura6
+   add constraint FK_FACTURA6_REF_10851_BANCOS foreign key (banco)
+      references bancos (banco)
+      on delete restrict on update restrict;
+
+alter table factura7
+   add constraint FK_FACTURA7_REF_13516_FACTURA1 foreign key (almacen, tipo, num_documento)
+      references factura1 (almacen, tipo, num_documento)
+      on delete cascade on update cascade;
+
+alter table fisico1
+   add constraint FK_FISICO1_REF_16179_ALMACEN foreign key (almacen)
+      references almacen (almacen)
+      on delete restrict on update restrict;
+
+alter table fisico2
+   add constraint FK_FISICO2_REF_16183_ARTICULO foreign key (articulo, almacen)
+      references articulos_por_almacen (articulo, almacen)
+      on delete restrict on update restrict;
+
+alter table fisico2
+   add constraint FK_FISICO2_REF_16194_FISICO1 foreign key (almacen, fecha, secuencia)
+      references fisico1 (almacen, fecha, secuencia)
+      on delete restrict on update restrict;
+
+alter table funcionarios_cliente
+   add constraint FK_FUNCIONA_REF_32454_CLIENTES foreign key (cliente)
+      references clientes (cliente)
+      on delete restrict on update restrict;
+
+alter table funcionarios_proveedor
+   add constraint FK_FUNCIONA_REF_19659_PROVEEDO foreign key (proveedor)
+      references proveedores (proveedor)
+      on delete restrict on update restrict;
+
+alter table gral_grupos_aplicacion
+   add constraint FK_GRAL_GRU_REF_20647_GRALAPLI foreign key (aplicacion)
+      references gralaplicaciones (aplicacion)
+      on delete restrict on update restrict;
+
+alter table gral_impuestos
+   add constraint FK_GRAL_IMP_REF_60450_CGLAUXIL foreign key (auxiliar1)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table gral_impuestos
+   add constraint FK_GRAL_IMP_REF_60454_CGLAUXIL foreign key (auxiliar2)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table gral_impuestos
+   add constraint FK_GRAL_IMP_REF_60462_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table gral_valor_grupos
+   add constraint FK_GRAL_VAL_REF_20651_GRAL_GRU foreign key (grupo, aplicacion)
+      references gral_grupos_aplicacion (grupo, aplicacion)
+      on delete cascade on update cascade;
+
+alter table gral_valor_grupos
+   add constraint FK_GRAL_VAL_REF_50384_GRAL_VAL foreign key (gra_codigo_valor_grupo)
+      references gral_valor_grupos (codigo_valor_grupo)
+      on delete cascade on update cascade;
+
+alter table gralparametros
+   add constraint FK_GRALPARA_REF_20626_GRALAPLI foreign key (aplicacion)
+      references gralaplicaciones (aplicacion)
+      on delete restrict on update restrict;
+
+alter table gralparaxapli
+   add constraint FK_GRALPARA_REF_68724_GRALPARA foreign key (parametro, aplicacion)
+      references gralparametros (parametro, aplicacion)
+      on delete restrict on update restrict;
+
+alter table gralparaxcia
+   add constraint FK_GRALPARA_REF_692_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table gralparaxcia
+   add constraint FK_GRALPARA_REF_697_GRALPARA foreign key (parametro, aplicacion)
+      references gralparametros (parametro, aplicacion)
+      on delete restrict on update restrict;
+
+alter table gralperiodos
+   add constraint FK_GRALPERI_REF_15380_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table gralperiodos
+   add constraint FK_GRALPERI_REFERENCE_GRALAPLI foreign key (aplicacion)
+      references gralaplicaciones (aplicacion)
+      on delete restrict on update restrict;
+
+alter table gralsecuencias
+   add constraint FK_GRALSECU_REF_20630_GRALAPLI foreign key (aplicacion)
+      references gralaplicaciones (aplicacion)
+      on delete restrict on update restrict;
+
+alter table gralsecxcia
+   add constraint FK_GRALSECX_REF_15383_GRALPERI foreign key (compania, aplicacion, year, periodo)
+      references gralperiodos (compania, aplicacion, year, periodo)
+      on delete restrict on update restrict;
+
+alter table gralsecxcia
+   add constraint FK_GRALSECX_REF_714_GRALSECU foreign key (aplicacion, parametro)
+      references gralsecuencias (aplicacion, parametro)
+      on delete restrict on update restrict;
+
+alter table imp_oc
+   add constraint FK_IMP_OC_REF_62804_GRAL_IMP foreign key (impuesto)
+      references gral_impuestos (impuesto)
+      on delete restrict on update restrict;
+
+alter table imp_oc
+   add constraint FK_IMP_OC_REF_62808_RUBROS_F foreign key (rubro_fact_cxp)
+      references rubros_fact_cxp (rubro_fact_cxp)
+      on delete restrict on update restrict;
+
+alter table impuestos_facturacion
+   add constraint FK_IMPUESTO_REF_10272_GRAL_IMP foreign key (impuesto)
+      references gral_impuestos (impuesto)
+      on delete restrict on update restrict;
+
+alter table impuestos_facturacion
+   add constraint FK_IMPUESTO_REF_10273_RUBROS_F foreign key (rubro_fact_cxc)
+      references rubros_fact_cxc (rubro_fact_cxc)
+      on delete restrict on update restrict;
+
+alter table impuestos_por_grupo
+   add constraint FK_IMPUESTO_REF_14223_GRAL_VAL foreign key (codigo_valor_grupo)
+      references gral_valor_grupos (codigo_valor_grupo)
+      on delete restrict on update restrict;
+
+alter table impuestos_por_grupo
+   add constraint FK_IMPUESTO_REF_14224_GRAL_IMP foreign key (impuesto)
+      references gral_impuestos (impuesto)
+      on delete restrict on update restrict;
+
+alter table inv_conversion
+   add constraint FK_INV_CONV_REFERENCE_UNIDAD_M foreign key (convertir_d)
+      references unidad_medida (unidad_medida)
+      on delete restrict on update restrict;
+
+alter table inv_conversion
+   add constraint FK_INV_CONV_REFERENCE_UNIDAD_M foreign key (convertir_a)
+      references unidad_medida (unidad_medida)
+      on delete restrict on update restrict;
+
+alter table inv_fifo_lifo
+   add constraint FK_INV_FIFO_REFERENCE_ARTICULO foreign key (articulo, almacen)
+      references articulos_por_almacen (articulo, almacen)
+      on delete cascade on update cascade;
+
+alter table invbalance
+   add constraint FK_INVBALAN_REF_15405_GRALPERI foreign key (compania, aplicacion, year, periodo)
+      references gralperiodos (compania, aplicacion, year, periodo)
+      on delete restrict on update restrict;
+
+alter table invbalance
+   add constraint FK_INVBALAN_REF_27065_ARTICULO foreign key (articulo, almacen)
+      references articulos_por_almacen (articulo, almacen)
+      on delete restrict on update restrict;
+
+alter table invmotivos
+   add constraint FK_INVMOTIV_REF_80481_CGLTIPOC foreign key (tipo_comp)
+      references cgltipocomp (tipo_comp)
+      on delete restrict on update restrict;
+
+alter table invparal
+   add constraint FK_INVPARAL_REF_38767_ALMACEN foreign key (almacen)
+      references almacen (almacen)
+      on delete restrict on update restrict;
+
+alter table invparal
+   add constraint FK_INVPARAL_REF_38771_GRALPARA foreign key (parametro, aplicacion)
+      references gralparametros (parametro, aplicacion)
+      on delete restrict on update restrict;
+
+alter table invparal
+   add constraint FK_INVPARAL_REFERENCE_GRALPARA foreign key (parametro, aplicacion)
+      references gralparametros (parametro, aplicacion)
+      on delete restrict on update restrict;
+
+alter table invparal
+   add constraint FK_INVPARAL_REFERENCE_ALMACEN foreign key (almacen)
+      references almacen (almacen)
+      on delete restrict on update restrict;
+
+alter table listas_de_precio_2
+   add constraint FK_LISTAS_D_REF_10655_LISTAS_D foreign key (secuencia)
+      references listas_de_precio_1 (secuencia)
+      on delete restrict on update restrict;
+
+alter table listas_de_precio_2
+   add constraint FK_LISTAS_D_REF_10656_ARTICULO foreign key (articulo, almacen)
+      references articulos_por_almacen (articulo, almacen)
+      on delete restrict on update restrict;
+
+alter table nom_ajuste_pagos_acreedores
+   add constraint FK_NOM_AJUS_REFERENCE_NOMACREM foreign key (numero_documento, codigo_empleado, cod_concepto_planilla, compania)
+      references nomacrem (numero_documento, codigo_empleado, cod_concepto_planilla, compania)
+      on delete restrict on update cascade;
+
+alter table nom_conceptos_para_calculo
+   add constraint FK_NOM_CONC_REF_21365_NOMCONCE foreign key (cod_concepto_planilla)
+      references nomconce (cod_concepto_planilla)
+      on delete cascade on update cascade;
+
+alter table nom_conceptos_para_calculo
+   add constraint FK_NOM_CONC_REF_657_NOMCONCE foreign key (concepto_aplica)
+      references nomconce (cod_concepto_planilla)
+      on delete cascade on update cascade;
+
+alter table nom_otros_ingresos
+   add constraint FK_NOM_OTRO_REF_21621_NOM_TIPO foreign key (tipo_calculo)
+      references nom_tipo_de_calculo (tipo_calculo)
+      on delete restrict on update restrict;
+
+alter table nom_otros_ingresos
+   add constraint FK_NOM_OTRO_REF_21622_NOMTPLA2 foreign key (tipo_planilla, numero_planilla, year)
+      references nomtpla2 (tipo_planilla, numero_planilla, year)
+      on delete restrict on update restrict;
+
+alter table nom_otros_ingresos
+   add constraint FK_NOM_OTRO_REF_21623_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table nom_otros_ingresos
+   add constraint FK_NOM_OTRO_REF_21624_NOMCONCE foreign key (cod_concepto_planilla)
+      references nomconce (cod_concepto_planilla)
+      on delete restrict on update restrict;
+
+alter table nomacrem
+   add constraint FK_NOMACREM_REF_19291_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table nomacrem
+   add constraint FK_NOMACREM_REF_19292_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table nomacrem
+   add constraint FK_NOMACREM_REF_19292_RHUACRE foreign key (cod_acreedores)
+      references rhuacre (cod_acreedores)
+      on delete restrict on update restrict;
+
+alter table nomacrem
+   add constraint FK_NOMACREM_REF_19293_NOMCONCE foreign key (cod_concepto_planilla)
+      references nomconce (cod_concepto_planilla)
+      on delete restrict on update restrict;
+
+alter table nomconce
+   add constraint FK_NOMCONCE_REFERENCE_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table nomconce
+   add constraint FK_NOMCONCE_REFERENCE_NOMTIPOD foreign key (tipodeconcepto)
+      references nomtipodeconcepto (tipodeconcepto)
+      on delete restrict on update restrict;
+
+alter table nomctrac
+   add constraint FK_NOMCTRAC_REF_20713_NOMTPLA2 foreign key (tipo_planilla, numero_planilla, year)
+      references nomtpla2 (tipo_planilla, numero_planilla, year)
+      on delete restrict on update restrict;
+
+alter table nomctrac
+   add constraint FK_NOMCTRAC_REFERENCE_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table nomctrac
+   add constraint FK_NOMCTRAC_REFERENCE_NOMCONCE foreign key (cod_concepto_planilla)
+      references nomconce (cod_concepto_planilla)
+      on delete restrict on update restrict;
+
+alter table nomctrac
+   add constraint FK_NOMCTRAC_REFERENCE_NOM_TIPO foreign key (tipo_calculo)
+      references nom_tipo_de_calculo (tipo_calculo)
+      on delete restrict on update restrict;
+
+alter table nomctrac
+   add constraint FK_NOMCTRAC_REFERENCE_BCOCHECK foreign key (cod_ctabco, no_cheque, motivo_bco)
+      references bcocheck1 (cod_ctabco, no_cheque, motivo_bco)
+      on delete restrict on update cascade;
+
+alter table nomctrac
+   add constraint FK_NOMCTRAC_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table nomdedu
+   add constraint FK_NOMDEDU_REF_20965_NOMACREM foreign key (numero_documento, codigo_empleado, cod_concepto_planilla, compania)
+      references nomacrem (numero_documento, codigo_empleado, cod_concepto_planilla, compania)
+      on delete cascade on update cascade;
+
+alter table nomdedu
+   add constraint FK_NOMDEDU_REF_20966_NOMPERIO foreign key (periodo)
+      references nomperiodos (periodo)
+      on delete restrict on update restrict;
+
+alter table nomdescuentos
+   add constraint FK_NOMDESCU_REFERENCE_NOMCTRAC foreign key (codigo_empleado, compania, tipo_calculo, cod_concepto_planilla, tipo_planilla, numero_planilla, year, numero_documento)
+      references nomctrac (codigo_empleado, compania, tipo_calculo, cod_concepto_planilla, tipo_planilla, numero_planilla, year, numero_documento)
+      on delete cascade on update cascade;
+
+alter table nomdescuentos
+   add constraint FK_NOMDESCU_REFERENCE_NOMACREM foreign key (numero_documento, codigo_empleado, cod_concepto_planilla, compania)
+      references nomacrem (numero_documento, codigo_empleado, cod_concepto_planilla, compania)
+      on delete restrict on update cascade;
+
+alter table nomdescuentos
+   add constraint FK_NOMDESCU_REFERENCE_BCOCHECK foreign key (cod_ctabco, no_cheque, motivo_bco)
+      references bcocheck1 (cod_ctabco, no_cheque, motivo_bco)
+      on delete restrict on update cascade;
+
+alter table nomdfer
+   add constraint FK_NOMDFER_REFERENCE_NOMTIPOD foreign key (tipodhora)
+      references nomtipodehoras (tipodhora)
+      on delete restrict on update restrict;
+
+alter table nomhoras
+   add constraint FK_NOMHORAS_REF_19301_NOMHRTRA foreign key (fecha_laborable, codigo_empleado, compania, tipo_planilla, numero_planilla, fecha_salida)
+      references nomhrtrab (fecha_laborable, codigo_empleado, compania, tipo_planilla, numero_planilla, fecha_salida)
+      on delete cascade on update cascade;
+
+alter table nomhoras
+   add constraint FK_NOMHORAS_REFERENCE_NOMTIPOD foreign key (tipodhora)
+      references nomtipodehoras (tipodhora)
+      on delete restrict on update restrict;
+
+alter table nomhoras
+   add constraint FK_NOMHORAS_REFERENCE_NOMTPLA2 foreign key (tipo_planilla, numero_planilla, year)
+      references nomtpla2 (tipo_planilla, numero_planilla, year)
+      on delete restrict on update restrict;
+
+alter table nomhrtrab
+   add constraint FK_NOMHRTRA_REF_19299_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table nomhrtrab
+   add constraint FK_NOMHRTRA_REF_19300_RHUTURNO foreign key (cod_id_turnos)
+      references rhuturno (cod_id_turnos)
+      on delete restrict on update restrict;
+
+alter table nomhrtrab
+   add constraint FK_NOMHRTRA_REF_20711_NOMTPLA2 foreign key (tipo_planilla, numero_planilla, year)
+      references nomtpla2 (tipo_planilla, numero_planilla, year)
+      on delete restrict on update restrict;
+
+alter table nomrelac
+   add constraint FK_NOMRELAC_REF_19294_NOM_TIPO foreign key (tipo_calculo)
+      references nom_tipo_de_calculo (tipo_calculo)
+      on delete restrict on update restrict;
+
+alter table nomrelac
+   add constraint FK_NOMRELAC_REF_19294_NOMCONCE foreign key (cod_concepto_planilla)
+      references nomconce (cod_concepto_planilla)
+      on delete restrict on update restrict;
+
+alter table nomtpla2
+   add constraint FK_NOMTPLA2_REF_20710_NOMTPLA foreign key (tipo_planilla)
+      references nomtpla (tipo_planilla)
+      on delete cascade on update cascade;
+
+alter table nomtpla2
+   add constraint FK_NOMTPLA2_REF_20965_NOMPERIO foreign key (periodo)
+      references nomperiodos (periodo)
+      on delete restrict on update restrict;
+
+alter table oc1
+   add constraint FK_OC1_REF_17828_PROVEEDO foreign key (proveedor)
+      references proveedores (proveedor)
+      on delete restrict on update restrict;
+
+alter table oc1
+   add constraint FK_OC1_REF_17840_GRAL_FOR foreign key (forma_pago)
+      references gral_forma_de_pago (forma_pago)
+      on delete restrict on update restrict;
+
+alter table oc1
+   add constraint FK_OC1_REF_61603_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table oc2
+   add constraint FK_OC2_REF_17848_ARTICULO foreign key (articulo)
+      references articulos (articulo)
+      on delete restrict on update restrict;
+
+alter table oc2
+   add constraint FK_OC2_REF_97841_OC1 foreign key (numero_oc, compania)
+      references oc1 (numero_oc, compania)
+      on delete cascade on update cascade;
+
+alter table oc3
+   add constraint FK_OC3_REF_96514_IMP_OC foreign key (impuesto)
+      references imp_oc (impuesto)
+      on delete restrict on update restrict;
+
+alter table oc3
+   add constraint FK_OC3_REF_97834_OC1 foreign key (numero_oc, compania)
+      references oc1 (numero_oc, compania)
+      on delete cascade on update cascade;
+
+alter table oc4
+   add constraint FK_OC4_REF_17874_OTROS_CA foreign key (tipo_de_cargo)
+      references otros_cargos (tipo_de_cargo)
+      on delete restrict on update restrict;
+
+alter table oc4
+   add constraint FK_OC4_REF_97827_OC1 foreign key (numero_oc, compania)
+      references oc1 (numero_oc, compania)
+      on delete cascade on update cascade;
+
+alter table otros_cargos
+   add constraint FK_OTROS_CA_REF_62799_RUBROS_F foreign key (rubro_fact_cxp)
+      references rubros_fact_cxp (rubro_fact_cxp)
+      on delete restrict on update restrict;
+
+alter table pat
+   add constraint FK_PAT_REFERENCE_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table pat_listado
+   add constraint FK_PAT_LIST_REFERENCE_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table periodos_depre
+   add constraint FK_PERIODOS_REFERENCE_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table pla_afectacion_contable
+   add constraint FK_PLA_AFEC_REFERENCE_DEPARTAM foreign key (departamento)
+      references departamentos (codigo)
+      on delete restrict on update restrict;
+
+alter table pla_afectacion_contable
+   add constraint FK_PLA_AFEC_REFERENCE_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table pla_afectacion_contable
+   add constraint FK_PLA_AFEC_REFERENCE_NOMCONCE foreign key (cod_concepto_planilla)
+      references nomconce (cod_concepto_planilla)
+      on delete restrict on update restrict;
+
+alter table pla_anexo03
+   add constraint FK_PLA_ANEX_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update restrict;
+
+alter table pla_balance_acreedores
+   add constraint FK_PLA_BALA_REFERENCE_NOMACREM foreign key (numero_documento, codigo_empleado, cod_concepto_planilla, compania)
+      references nomacrem (numero_documento, codigo_empleado, cod_concepto_planilla, compania)
+      on delete cascade on update cascade;
+
+alter table pla_constancias
+   add constraint FK_PLA_CONS_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update restrict;
+
+alter table pla_desgloce_horas
+   add constraint FK_PLA_DESG_REFERENCE_NOMHORAS foreign key (fecha_laborable, codigo_empleado, compania, tipo_planilla, numero_planilla, fecha_salida, tipodhora, year, acumula)
+      references nomhoras (fecha_laborable, codigo_empleado, compania, tipo_planilla, numero_planilla, fecha_salida, tipodhora, year, acumula)
+      on delete cascade on update cascade;
+
+alter table pla_desgloce_planilla
+   add constraint FK_PLA_DESG_REFERENCE_NOMCTRAC foreign key (codigo_empleado, compania, tipo_calculo, cod_concepto_planilla, tipo_planilla, numero_planilla, year, numero_documento)
+      references nomctrac (codigo_empleado, compania, tipo_calculo, cod_concepto_planilla, tipo_planilla, numero_planilla, year, numero_documento)
+      on delete cascade on update cascade;
+
+alter table pla_estructura_listado
+   add constraint FK_PLA_ESTR_REFERENCE_NOMCONCE foreign key (cod_concepto_planilla)
+      references nomconce (cod_concepto_planilla)
+      on delete restrict on update restrict;
+
+alter table pla_estructura_listado
+   add constraint FK_PLA_ESTR_REFERENCE_PLA_TIPO foreign key (tipo_de_columna)
+      references pla_tipo_de_columna (tipo_de_columna)
+      on delete restrict on update restrict;
+
+alter table pla_fondo_de_cesantia
+   add constraint FK_PLA_FOND_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table pla_fondo_de_cesantia
+   add constraint FK_PLA_FOND_REFERENCE_BCOCHECK foreign key (cod_ctabco, no_cheque, motivo_bco)
+      references bcocheck1 (cod_ctabco, no_cheque, motivo_bco)
+      on delete restrict on update cascade;
+
+alter table pla_historial_descuentos
+   add constraint FK_PLA_HIST_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table pla_historial_descuentos
+   add constraint FK_PLA_HIST_REFERENCE_RHUACRE foreign key (cod_acreedores)
+      references rhuacre (cod_acreedores)
+      on delete restrict on update restrict;
+
+alter table pla_historial_pagos
+   add constraint FK_PLA_HIST_REFERENCE_NOMCONCE foreign key (cod_concepto_planilla)
+      references nomconce (cod_concepto_planilla)
+      on delete restrict on update restrict;
+
+alter table pla_historial_pagos
+   add constraint FK_PLA_HIST_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table pla_informe
+   add constraint FK_PLA_INFO_REF_23421_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table pla_informe
+   add constraint FK_PLA_INFO_REFERENCE_PLA_TIPO foreign key (tipo_de_columna)
+      references pla_tipo_de_columna (tipo_de_columna)
+      on delete restrict on update restrict;
+
+alter table pla_preelaborada
+   add constraint FK_PLA_PREE_REFERENCE_NOMCONCE foreign key (cod_concepto_planilla)
+      references nomconce (cod_concepto_planilla)
+      on delete restrict on update restrict;
+
+alter table pla_preelaborada
+   add constraint FK_PLA_PREE_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table pla_riesgos_profesionales
+   add constraint FK_PLA_RIES_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update restrict;
+
+alter table pla_saldo_acreedores
+   add constraint FK_PLA_SALD_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table pla_saldo_acreedores
+   add constraint FK_PLA_SALD_REFERENCE_NOMACREM foreign key (numero_documento, codigo_empleado, cod_concepto_planilla, compania)
+      references nomacrem (numero_documento, codigo_empleado, cod_concepto_planilla, compania)
+      on delete restrict on update restrict;
+
+alter table pla_vacacion1
+   add constraint FK_PLA_VACA_REF_23155_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table pla_vacacion2
+   add constraint FK_PLA_VACA_REF_23156_PLA_VACA foreign key (codigo_empleado, compania, legal_desde)
+      references pla_vacacion1 (codigo_empleado, compania, legal_desde)
+      on delete cascade on update cascade;
+
+alter table placertificadosmedico
+   add constraint FK_PLACERTI_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table pladeduccionesadicionales
+   add constraint FK_PLADEDUC_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table pladeduccionesadicionales
+   add constraint FK_PLADEDUC_REFERENCE_PLATIPOD foreign key (tipo)
+      references platipodeduccion (tipo)
+      on delete restrict on update restrict;
+
+alter table plapermisos
+   add constraint FK_PLAPERMI_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table plapermisos
+   add constraint FK_PLAPERMI_REFERENCE_PLATIPOD foreign key (tipodepermiso)
+      references platipodepermiso (tipodepermiso)
+      on delete restrict on update restrict;
+
+alter table plapermisosindical
+   add constraint FK_PLAPERMI_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table plareemplazos
+   add constraint FK_PLAREEMP_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table plareemplazos
+   add constraint FK_PLAREEMP_REFERENCE_RHUEMPL foreign key (reemplazo, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table platipodepermiso
+   add constraint FK_PLATIPOD_REFERENCE_NOMTIPOD foreign key (tipodhora)
+      references nomtipodehoras (tipodhora)
+      on delete restrict on update restrict;
+
+alter table precios_por_cliente_1
+   add constraint FK_PRECIOS__REF_10658_CLIENTES foreign key (cliente)
+      references clientes (cliente)
+      on delete restrict on update restrict;
+
+alter table precios_por_cliente_2
+   add constraint FK_PRECIOS__REF_10659_PRECIOS_ foreign key (secuencia)
+      references precios_por_cliente_1 (secuencia)
+      on delete restrict on update restrict;
+
+alter table precios_por_cliente_2
+   add constraint FK_PRECIOS__REF_10660_ARTICULO foreign key (articulo, almacen)
+      references articulos_por_almacen (articulo, almacen)
+      on delete restrict on update restrict;
+
+alter table preventas
+   add constraint FK_PREVENTA_REFERENCE_ARTICULO foreign key (articulo, almacen)
+      references articulos_por_almacen (articulo, almacen)
+      on delete restrict on update restrict;
+
+alter table preventas
+   add constraint FK_PREVENTA_REFERENCE_CLIENTES foreign key (cliente)
+      references clientes (cliente)
+      on delete restrict on update restrict;
+
+alter table preventas
+   add constraint FK_PREVENTA_REFERENCE_GRALPERI foreign key (compania, aplicacion, year, periodo)
+      references gralperiodos (compania, aplicacion, year, periodo)
+      on delete restrict on update restrict;
+
+alter table productos_sustitutos
+   add constraint FK_PRODUCTO_REF_16981_ARTICULO foreign key (articulo)
+      references articulos (articulo)
+      on delete restrict on update restrict;
+
+alter table productos_sustitutos
+   add constraint FK_PRODUCTO_REF_16985_ARTICULO foreign key (art_articulo)
+      references articulos (articulo)
+      on delete restrict on update restrict;
+
+alter table proveedores
+   add constraint FK_PROVEEDO_REF_22587_GRAL_FOR foreign key (forma_pago)
+      references gral_forma_de_pago (forma_pago)
+      on delete restrict on update restrict;
+
+alter table proveedores
+   add constraint FK_PROVEEDO_REF_22652_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table proveedores_agrupados
+   add constraint FK_PROVEEDO_REF_21626_PROVEEDO foreign key (proveedor)
+      references proveedores (proveedor)
+      on delete restrict on update restrict;
+
+alter table proveedores_agrupados
+   add constraint FK_PROVEEDO_REF_51470_GRAL_VAL foreign key (codigo_valor_grupo)
+      references gral_valor_grupos (codigo_valor_grupo)
+      on delete cascade on update cascade;
+
+alter table rela_afi_cglposteo
+   add constraint FK_RELA_AFI_REF_12218_AFI_DEPR foreign key (codigo, compania, aplicacion, year, periodo)
+      references afi_depreciacion (codigo, compania, aplicacion, year, periodo)
+      on delete restrict on update restrict;
+
+alter table rela_afi_cglposteo
+   add constraint FK_RELA_AFI_REF_12219_CGLPOSTE foreign key (consecutivo)
+      references cglposteo (consecutivo)
+      on delete cascade on update cascade;
+
+alter table rela_bcocheck1_cglposteo
+   add constraint FK_RELA_BCO_REF_70271_BCOCHECK foreign key (cod_ctabco, no_cheque, motivo_bco)
+      references bcocheck1 (cod_ctabco, no_cheque, motivo_bco)
+      on delete cascade on update cascade;
+
+alter table rela_bcocheck1_cglposteo
+   add constraint FK_RELA_BCO_REF_70281_CGLPOSTE foreign key (consecutivo)
+      references cglposteo (consecutivo)
+      on delete cascade on update cascade;
+
+alter table rela_bcotransac1_cglposteo
+   add constraint FK_RELA_BCO_REF_70286_BCOTRANS foreign key (cod_ctabco, sec_transacc)
+      references bcotransac1 (cod_ctabco, sec_transacc)
+      on delete restrict on update restrict;
+
+alter table rela_bcotransac1_cglposteo
+   add constraint FK_RELA_BCO_REF_70293_CGLPOSTE foreign key (consecutivo)
+      references cglposteo (consecutivo)
+      on delete cascade on update cascade;
+
+alter table rela_caja_trx1_cglposteo
+   add constraint FK_RELA_CAJ_REF_11997_CGLPOSTE foreign key (consecutivo)
+      references cglposteo (consecutivo)
+      on delete cascade on update cascade;
+
+alter table rela_caja_trx1_cglposteo
+   add constraint FK_RELA_CAJ_REF_11998_CAJA_TRX foreign key (numero_trx, caja)
+      references caja_trx1 (numero_trx, caja)
+      on delete restrict on update restrict;
+
+alter table rela_cxcfact1_cglposteo
+   add constraint FK_RELA_CXC_REF_70298_CGLPOSTE foreign key (consecutivo)
+      references cglposteo (consecutivo)
+      on delete cascade on update cascade;
+
+alter table rela_cxcfact1_cglposteo
+   add constraint FK_RELA_CXC_REF_70302_CXCFACT1 foreign key (almacen, no_factura)
+      references cxcfact1 (almacen, no_factura)
+      on delete restrict on update restrict;
+
+alter table rela_cxctrx1_cglposteo
+   add constraint FK_RELA_CXC_REF_71933_CGLPOSTE foreign key (consecutivo)
+      references cglposteo (consecutivo)
+      on delete cascade on update cascade;
+
+alter table rela_cxctrx1_cglposteo
+   add constraint FK_RELA_CXC_REF_71937_CXCTRX1 foreign key (sec_ajuste_cxc, almacen)
+      references cxctrx1 (sec_ajuste_cxc, almacen)
+      on delete restrict on update restrict;
+
+alter table rela_cxpajuste1_cglposteo
+   add constraint FK_RELA_CXP_REF_70325_CGLPOSTE foreign key (consecutivo)
+      references cglposteo (consecutivo)
+      on delete cascade on update cascade;
+
+alter table rela_cxpajuste1_cglposteo
+   add constraint FK_RELA_CXP_REF_70329_CXPAJUST foreign key (compania, sec_ajuste_cxp)
+      references cxpajuste1 (compania, sec_ajuste_cxp)
+      on delete restrict on update restrict;
+
+alter table rela_cxpfact1_cglposteo
+   add constraint FK_RELA_CXP_REF_70310_CGLPOSTE foreign key (consecutivo)
+      references cglposteo (consecutivo)
+      on delete cascade on update cascade;
+
+alter table rela_cxpfact1_cglposteo
+   add constraint FK_RELA_CXP_REF_70314_CXPFACT1 foreign key (proveedor, fact_proveedor, compania)
+      references cxpfact1 (proveedor, fact_proveedor, compania)
+      on delete restrict on update restrict;
+
+alter table rela_eys1_cglposteo
+   add constraint FK_RELA_EYS_REF_71945_CGLPOSTE foreign key (consecutivo)
+      references cglposteo (consecutivo)
+      on delete cascade on update cascade;
+
+alter table rela_eys1_cglposteo
+   add constraint FK_RELA_EYS_REF_71949_EYS1 foreign key (almacen, no_transaccion)
+      references eys1 (almacen, no_transaccion)
+      on delete restrict on update restrict;
+
+alter table rela_factura1_cglposteo
+   add constraint FK_RELA_FAC_REF_11999_CGLPOSTE foreign key (consecutivo)
+      references cglposteo (consecutivo)
+      on delete cascade on update cascade;
+
+alter table rela_factura1_cglposteo
+   add constraint FK_RELA_FAC_REF_11999_FACTURA1 foreign key (almacen, tipo, num_documento)
+      references factura1 (almacen, tipo, num_documento)
+      on delete restrict on update restrict;
+
+alter table rhu_horas_adicionales
+   add constraint FK_RHU_HORA_REFERENCE_NOMTIPOD foreign key (tipodhora)
+      references nomtipodehoras (tipodhora)
+      on delete restrict on update restrict;
+
+alter table rhu_horas_adicionales
+   add constraint FK_RHU_HORA_REFERENCE_RHUTURNO foreign key (cod_id_turnos)
+      references rhuturno (cod_id_turnos)
+      on delete restrict on update restrict;
+
+alter table rhuempl
+   add constraint FK_RHUEMPL_REF_19059_RHUCARGO foreign key (codigo_cargo)
+      references rhucargo (codigo_cargo)
+      on delete restrict on update restrict;
+
+alter table rhuempl
+   add constraint FK_RHUEMPL_REF_19060_RHUTURNO foreign key (cod_id_turnos)
+      references rhuturno (cod_id_turnos)
+      on delete restrict on update restrict;
+
+alter table rhuempl
+   add constraint FK_RHUEMPL_REF_19061_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table rhuempl
+   add constraint FK_RHUEMPL_REF_19295_GRALCOMP foreign key (compania)
+      references gralcompanias (compania)
+      on delete restrict on update restrict;
+
+alter table rhuempl
+   add constraint FK_RHUEMPL_REF_19550_NOMTPLA foreign key (tipo_planilla)
+      references nomtpla (tipo_planilla)
+      on delete restrict on update restrict;
+
+alter table rhuempl
+   add constraint FK_RHUEMPL_REF_20441_RHUCLVIM foreign key (grup_impto_renta, num_dependiente)
+      references rhuclvim (grup_impto_renta, num_dependiente)
+      on delete restrict on update restrict;
+
+alter table rhuempl
+   add constraint FK_RHUEMPL_REFERENCE_DEPARTAM foreign key (departamento)
+      references departamentos (codigo)
+      on delete restrict on update restrict;
+
+alter table rhuempl
+   add constraint FK_RHUEMPL_REFERENCE_RHUTURNO foreign key (turnosabado)
+      references rhuturno (cod_id_turnos)
+      on delete restrict on update restrict;
+
+alter table rhuempl
+   add constraint FK_RHUEMPL_REFERENCE_CGLAUXIL foreign key (auxiliar)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table rhugremp
+   add constraint FK_RHUGREMP_REF_19061_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table rhugremp
+   add constraint FK_RHUGREMP_REF_19061_GRAL_VAL foreign key (codigo_valor_grupo)
+      references gral_valor_grupos (codigo_valor_grupo)
+      on delete restrict on update restrict;
+
+alter table rhuturno_x_dia
+   add constraint FK_RHUTURNO_REFERENCE_RHUTURNO foreign key (cod_id_turnos)
+      references rhuturno (cod_id_turnos)
+      on delete restrict on update restrict;
+
+alter table rhuturno_x_dia
+   add constraint FK_RHUTURNO_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table rubros_fact_cxc
+   add constraint FK_RUBROS_F_REF_35579_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table rubros_fact_cxc
+   add constraint FK_RUBROS_F_REF_45607_CGLAUXIL foreign key (auxiliar1)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table rubros_fact_cxc
+   add constraint FK_RUBROS_F_REF_45611_CGLAUXIL foreign key (auxiliar2)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table rubros_fact_cxp
+   add constraint FK_RUBROS_F_REF_22631_CGLCUENT foreign key (cuenta)
+      references cglcuentas (cuenta)
+      on delete restrict on update restrict;
+
+alter table rubros_fact_cxp
+   add constraint FK_RUBROS_F_REF_52526_CGLAUXIL foreign key (auxiliar1)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table rubros_fact_cxp
+   add constraint FK_RUBROS_F_REF_52530_CGLAUXIL foreign key (auxiliar2)
+      references cglauxiliares (auxiliar)
+      on delete restrict on update cascade;
+
+alter table saldo_de_proveedores
+   add constraint FK_SALDO_DE_REFERENCE_PROVEEDO foreign key (proveedor)
+      references proveedores (proveedor)
+      on delete restrict on update restrict;
+
+alter table secciones
+   add constraint FK_SECCIONE_REF_11048_DEPARTAM foreign key (codigo)
+      references departamentos (codigo)
+      on delete restrict on update restrict;
+
+alter table sobre_acumulados
+   add constraint FK_SOBRE_AC_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table sobre_deducciones
+   add constraint FK_SOBRE_DE_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table sobre_desgloce
+   add constraint FK_SOBRE_DE_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table sobre_ingresos
+   add constraint FK_SOBRE_IN_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table sobre_ingresos
+   add constraint FK_SOBRE_IN_REFERENCE_NOMTPLA2 foreign key (tipo_planilla, numero_planilla, year)
+      references nomtpla2 (tipo_planilla, numero_planilla, year)
+      on delete restrict on update restrict;
+
+alter table sobre_totales
+   add constraint FK_SOBRE_TO_REFERENCE_RHUEMPL foreign key (codigo_empleado, compania)
+      references rhuempl (codigo_empleado, compania)
+      on delete restrict on update cascade;
+
+alter table tipo_transacc
+   add constraint FK_TIPO_TRA_REF_22603_GRALAPLI foreign key (aplicacion)
+      references gralaplicaciones (aplicacion)
+      on delete restrict on update restrict;
+

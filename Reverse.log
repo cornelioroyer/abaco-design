@@ -1,0 +1,22 @@
+
+Reverse Engineering
+Reverse engineers the database ...
+
+Reversing users...
+   1 object(s) have been reversed.
+
+Reversing tables...
+   Table tmp_terceros
+   1 object(s) have been reversed.
+
+Reversing references...
+Unable to list the references.
+ERROR:  Function 'dumpref(bytea, int4)' does not exist
+	Unable to identify a function that satisfies the given argument types
+	You may need to add explicit typecasts
+SQLSTATE = S1000
+
+   0 object(s) have been reversed.
+
+
+The database has been partially reverse engineered: 1 error(s) occured.

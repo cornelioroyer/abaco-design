@@ -1,0 +1,7 @@
+XLODBC
+1
+DSN=abaco_local;Start=C:\ARCHIVOS DE PROGRAMA\SYBASE\SQL ANYWHERE 5.0\WIN32\dbeng50.exe;DatabaseFile=D:\ABACO\Data\abaco.db;DatabaseName=abaco;EngineName=winsoft;AutoStop=yes
+SELECT origen_del_sistema.Descripcion_del_Origen, Count(*)  FROM DBA.encuesta encuesta, DBA.origen_del_sistema origen_del_sistema  WHERE (origen_del_sistema.Codigo_de_Origen=encuesta.codigo_de_origen)  GROUP BY origen_del_sistema.Descripcion_del_Origen  ORDER BY origen_del_sistema.Descripcion_del_Origen
+
+
+Descripcion_del_Origen	Contar(*)

@@ -1,0 +1,7 @@
+XLODBC
+1
+DSN=abaco_local;Start=C:\ARCHIVOS DE PROGRAMA\SYBASE\SQL ANYWHERE 5.0\WIN32\dbeng50.exe;DatabaseFile=D:\ABACO\Data\abaco.db;DatabaseName=Abaco;EngineName=winsoft;AutoStop=yes
+  SELECT "dba"."cglsldocuenta"."cuenta",              "dba"."cglcuentas"."nombre",              debito-credito ,              "dba"."gralperiodos"."descripcion",              "dba"."cglsldocuenta"."year",              "dba"."cglsldocuenta"."periodo"        FROM "dba"."cglcuentas",              "dba"."cglsldocuenta",              "dba"."gralperiodos"       WHERE ( "dba"."cglsldocuenta"."cuenta" = "dba"."cglcuentas"."cuenta" ) and             ( "dba"."cglsldocuenta"."compania" = "dba"."gralperiodos"."compania" ) and             ( "dba"."cglsldocuenta"."year" = "dba"."gralperiodos"."year" ) and             ( "dba"."cglsldocuenta"."periodo" = "dba"."gralperiodos"."periodo" ) and             ( ( "dba"."cglcuentas"."nivel" = '3' ) AND                          ( "dba"."cglsldocuenta"."periodo" <> 13 ) AND             ( "dba"."cglcuentas"."tipo_cuenta" = 'R' ) )     ORDER BY "dba"."cglsldocuenta"."cuenta" ASC,              "dba"."cglsldocuenta"."year" ASC,              "dba"."cglsldocuenta"."periodo" ASC     
+
+
+cuenta	nombre	debito-credito	descripcion	year	periodo

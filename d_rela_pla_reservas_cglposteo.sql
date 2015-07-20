@@ -1,0 +1,12 @@
+delete from rela_pla_reservas_cglposteo
+where not exists
+(select * from pla_reservas
+where pla_reservas.codigo_empleado = rela_pla_reservas_cglposteo.codigo_empleado
+and pla_reservas.compania = rela_pla_reservas_cglposteo.compania
+and pla_reservas.tipo_calculo = rela_pla_reservas_cglposteo.tipo_calculo
+and pla_reservas.cod_concepto_planilla = rela_pla_reservas_cglposteo.cod_concepto_planilla
+and pla_reservas.tipo_planilla = rela_pla_reservas_cglposteo.tipo_planilla
+and pla_reservas.numero_planilla = rela_pla_reservas_cglposteo.numero_planilla
+and pla_reservas.year = rela_pla_reservas_cglposteo.year
+and pla_reservas.numero_documento = rela_pla_reservas_cglposteo.numero_documento
+and pla_reservas.concepto_reserva = rela_pla_reservas_cglposteo.concepto_reserva)

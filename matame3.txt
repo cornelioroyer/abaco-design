@@ -1,0 +1,26 @@
+SELECT D.id_periodos as "id_periodos", HV.fecha as "fecha", 
+D.tipo_de_calculo as "tipo_de_calculo", E.tasa_por_hora as "tph", 
+CO.tipo_de_concepto as "tipoc", (E.grupo || E.dependientes) as "cren", E.cedula as "ced", 
+E.ss as "ss", CA.descripcion as "cargo", DE.descripcion as "dpto", 
+(E.nombre || ' ' || E.apellido) as "nem", 
+E.codigo_empleado as "cem", TRIM(D.concepto) as "concepto", 
+HV.tipo_de_hora as "tipo_de_hora", TH.descripcion as "thdes", 
+TH.sobretiempo as "sobretiempo", D.descripcion as "des", 
+HV.descripcion as des2, (D.monto*CO.signo*100) as "monto", HV.monto*100 as "monto2", 
+ROUND( ((HV.minutos*CO.signo)/60),5) as "horas", (HV.minutos*CO.signo) as "Minutos" 
+FROM pla_dinero D INNER JOIN pla_empleados E ON (E.compania=D.compania 
+AND TRIM(E.codigo_empleado)=TRIM(D.codigo_empleado)) 
+INNER JOIN pla_departamentos DE ON (DE.id = E.departamento AND DE.compania=E.compania) 
+INNER JOIN pla_cargos CA ON (CA.id = E.cargo AND CA.compania=E.compania) 
+INNER JOIN pla_tipos_de_calculo TC ON 
+(TRIM(TC.tipo_de_calculo)=TRIM(D.tipo_de_calculo)) 
+INNER JOIN pla_conceptos CO 
+ON (TRIM(CO.concepto)=TRIM(D.concepto)) 
+LEFT JOIN v_pla_horas_valorizadas HV ON (HV.compania=D.compania 
+AND TRIM(HV.codigo_empleado)=TRIM(D.codigo_empleado) AND HV.id_periodos=D.id_periodos 
+AND TRIM(HV.concepto)=TRIM(D.concepto)) LEFT JOIN pla_tipos_de_horas TH 
+ON (TRIM(TH.tipo_de_hora)=TRIM(HV.tipo_de_hora)) 
+WHERE (D.compania=606)AND(D.id_periodos=0) 
+ORDER BY D.tipo_de_calculo, E.codigo_empleado, HV.fecha ASC, TH.sobretiempo ASC, 
+HV.tipo_de_hora ASC, CO.tipo_de_concepto, CO.prioridad_impresion LIMIT 5000
+

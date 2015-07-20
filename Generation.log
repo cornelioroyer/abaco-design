@@ -1,0 +1,667 @@
+
+Database Generation
+Generation starting...
+Sorting objects...
+Sort completed.
+Dropping Indexes...
+-> Index : i1 cxc estado d cta airsea (i1_cxc_estado_d_cta_airsea)
+-> Index : i1 cxc saldos iniciales (i1_cxc_saldos_iniciales)
+-> Index : i2 cxc saldos iniciales (i2_cxc_saldos_iniciales)
+-> Index : i1_cxcdocm (i1_cxcdocm)
+-> Index : i2 cxcdocm (i2_cxcdocm)
+-> Index : i1_cxcfact1 (i1_cxcfact1)
+-> Index : i2 cxcfact1 (i2_cxcfact1)
+-> Index : i1_cxcfact2 (i1_cxcfact2)
+-> Index : i2_cxcfact2 (i2_cxcfact2)
+-> Index : i1 cxchdocm (i1_cxchdocm)
+-> Index : i2 cxchdocm (i2_cxchdocm)
+-> Index : i1_cxctrx1 (i1_cxctrx1)
+-> Index : i2_cxctrx1 (i2_cxctrx1)
+-> Index : i3 cxctrx1 (i3_cxctrx1)
+-> Index : i1_cxctrx2 (i1_cxctrx2)
+-> Index : i2_cxctrx2 (i2_cxctrx2)
+-> Index : i1_cxctrx3 (i1_cxctrx3)
+-> Index : i2_cxctrx3 (i2_cxctrx3)
+-> Index : iu_cxpajuste1 (iu_cxpajuste1)
+-> Index : i1_cxpajuste2 (i1_cxpajuste2)
+-> Index : i2_cxpajuste2 (i2_cxpajuste2)
+-> Index : i3_cxpajuste2 (i3_cxpajuste2)
+-> Index : i1_cxpdocm (i1_cxpdocm)
+-> Index : i2_cxpdocm (i2_cxpdocm)
+-> Index : i1_cxphdocm (i1_cxphdocm)
+-> Index : i2_cxphdocm (i2_cxphdocm)
+-> Index : i_pla_historial_pagos (i_pla_historial_pagos)
+-> Index : i1 rela bcocheck1 cglposteo (i1_rela_bcocheck1_cglposteo)
+-> Index : i2_rela_bcocheck1_cglposteo (i2_rela_bcocheck1_cglposteo)
+-> Index : i3_rela_bcocheck1_cglposteo (i3_rela_bcocheck1_cglposteo)
+-> Index : i1_rela_bcotransac1_cglposteo (i1_rela_bcotransac1_cglposteo)
+-> Index : i2_rela_bcotransac1_cglposteo (i2_rela_bcotransac1_cglposteo)
+-> Index : i3 rela bcotransac1 cglposteo (i3_rela_bcotransac1_cglposteo)
+-> Index : i1 rela cxcfact1 cglposteo (i1_rela_cxcfact1_cglposteo)
+-> Index : i2 rela cxcfact1 cglposteo (i2_rela_cxcfact1_cglposteo)
+-> Index : i3 rela cxcfact1 cglposteo (i3_rela_cxcfact1_cglposteo)
+-> Index : i1 rela cxctrx1 cglposteo (i1_rela_cxctrx1_cglposteo)
+-> Index : i2 rela cxctrx1 cglposteo (i2_rela_cxctrx1_cglposteo)
+-> Index : i3 rela cxctrx1 cglposteo (i3_rela_cxctrx1_cglposteo)
+-> Index : i1_rela_factura1_cglposteo (i1_rela_factura1_cglposteo)
+-> Index : i2_rela_factura1_cglposteo (i2_rela_factura1_cglposteo)
+-> Index : i3_rela_factura1_cglposteo (i3_rela_factura1_cglposteo)
+-> Index : i1 rela nomctrac cglposteo (i1_rela_nomctrac_cglposteo)
+-> Index : i2 rela nomctrac cglposteo (i2_rela_nomctrac_cglposteo)
+-> Index : i3 rela nomctrac cglposteo (i3_rela_nomctrac_cglposteo)
+-> Index : i1_rubros_fact_cxc (i1_rubros_fact_cxc)
+Dropping Tables...
+-> Table : comparacion ventas (comparacion_ventas)
+-> Table : convmedi (convmedi)
+-> Table : corredores (corredores)
+-> Table : cos calculo (cos_calculo)
+-> Table : cos consumo (cos_consumo)
+-> Table : cos consumo eys2 (cos_consumo_eys2)
+-> Table : cos cuenta rubro (cos_cuenta_rubro)
+-> Table : cos produccion (cos_produccion)
+-> Table : cos produccion eys2 (cos_produccion_eys2)
+-> Table : cos rubros (cos_rubros)
+-> Table : cos trx (cos_trx)
+-> Table : cxc balance clientes (cxc_balance_clientes)
+-> Table : cxc estado d cta airsea (cxc_estado_d_cta_airsea)
+-> Table : cxc estado de cuenta (cxc_estado_de_cuenta)
+-> Table : cxc recibo (cxc_recibo)
+-> Table : cxc recibo detalle (cxc_recibo_detalle)
+-> Table : cxc saldos iniciales (cxc_saldos_iniciales)
+-> Table : balance de clientes por periodo (cxcbalance)
+-> Table : cxc documentos (cxcdocm)
+-> Table : facturas de clientes (cxcfact1)
+-> Table : detalle de rubros de facturas de cxc (cxcfact2)
+-> Table : aplica adelantos cxc (cxcfact3)
+-> Table : cxchdocm (cxchdocm)
+-> Table : cxcmorosidad (cxcmorosidad)
+-> Table : motivo de ajustes de cxc (cxcmotivos)
+-> Table : recibos cxc (cxcrecibo1)
+-> Table : detalle de recibo (cxcrecibo2)
+-> Table : ajustes cxc (cxctrx1)
+-> Table : documento aplicar en ajuste2 (cxctrx2)
+-> Table : detalle contable del ajuste cxc (cxctrx3)
+-> Table : cxp comprobante (cxp_comprobante)
+-> Table : cxp saldos iniciales (cxp_saldos_iniciales)
+-> Table : ajustes cxp (cxpajuste1)
+-> Table : documento aplicar en ajuste (cxpajuste2)
+-> Table : detalle contable del ajuste (cxpajuste3)
+-> Table : balance de proveedores por periodo (cxpbalance)
+-> Table : cxp documentos (cxpdocm)
+-> Table : cxphdocm (cxphdocm)
+-> Table : cxpmorosidad (cxpmorosidad)
+-> Table : descuentos (descuentos)
+-> Table : descuentos por articulo (descuentos_por_articulo)
+-> Table : descuentos por cliente (descuentos_por_cliente)
+-> Table : descuentos por grupo (descuentos_por_grupo)
+-> Table : pla_afectacion_contable (pla_afectacion_contable)
+-> Table : pla ajuste renta (pla_ajuste_renta)
+-> Table : pla anexo03 (pla_anexo03)
+-> Table : pla balance acreedores (pla_balance_acreedores)
+-> Table : pla bonos proyectado (pla_bonos_proyectado)
+-> Table : pla carta ayt (pla_carta_ayt)
+-> Table : pla comprobante conceptos (pla_comprobante_conceptos)
+-> Table : pla comprobante de pago (pla_comprobante_de_pago)
+-> Table : pla comprobante horas (pla_comprobante_horas)
+-> Table : pla constancias (pla_constancias)
+-> Table : pla datalog (pla_datalog)
+-> Table : pla desgloce horas (pla_desgloce_horas)
+-> Table : pla desgloce planilla (pla_desgloce_planilla)
+-> Table : pla estructura listado (pla_estructura_listado)
+-> Table : pla extemporaneo (pla_extemporaneo)
+-> Table : pla fdc desde hasta (pla_fdc_desde_hasta)
+-> Table : pla fondo de cesantia (pla_fondo_de_cesantia)
+-> Table : pla_historial_descuentos (pla_historial_descuentos)
+-> Table : pla_historial_pagos (pla_historial_pagos)
+-> Table : pla indemnizacion (pla_indemnizacion)
+-> Table : pla_informe (pla_informe)
+-> Table : pla_informe_nomdedu (pla_informe_nomdedu)
+-> Table : pla liquidacion (pla_liquidacion)
+-> Table : pla preelaborada (pla_preelaborada)
+-> Table : pla rela horas conceptos (pla_rela_horas_conceptos)
+-> Table : pla reloj (pla_reloj)
+-> Table : pla resumen planilla (pla_resumen_planilla)
+-> Table : pla riesgos profesionales (pla_riesgos_profesionales)
+-> Table : pla saldo acreedores (pla_saldo_acreedores)
+-> Table : pla tipo de columna (pla_tipo_de_columna)
+-> Table : pla vacacion (pla_vacacion)
+-> Table : pla_vacacion1 (pla_vacacion1)
+-> Table : pla_vacacion2 (pla_vacacion2)
+-> Table : pla work1 (pla_work1)
+-> Table : pla_xiii (pla_xiii)
+-> Table : placertificadosmedico (placertificadosmedico)
+-> Table : pladeduccionesadicionales (pladeduccionesadicionales)
+-> Table : plapermisos (plapermisos)
+-> Table : plapermisosindical (plapermisosindical)
+-> Table : plareemplazos (plareemplazos)
+-> Table : platipodeduccion (platipodeduccion)
+-> Table : platipodepermiso (platipodepermiso)
+-> Table : porcentaje manejo (porcentaje_manejo)
+-> Table : precios por cliente 1 (precios_por_cliente_1)
+-> Table : precios por cliente 2 (precios_por_cliente_2)
+-> Table : preventas (preventas)
+-> Table : productos sustitutos (productos_sustitutos)
+-> Table : rela_afi_cglposteo (rela_afi_cglposteo)
+-> Table : rela_bcocheck1_cglposteo (rela_bcocheck1_cglposteo)
+-> Table : rela_bcotransac1_cglposteo (rela_bcotransac1_cglposteo)
+-> Table : rela_caja_trx1_cglposteo (rela_caja_trx1_cglposteo)
+-> Table : rela_cxcfact1_cglposteo (rela_cxcfact1_cglposteo)
+-> Table : rela_cxctrx1_cglposteo (rela_cxctrx1_cglposteo)
+-> Table : rela_cxpajuste1_cglposteo (rela_cxpajuste1_cglposteo)
+-> Table : rela_cxpfact1_cglposteo (rela_cxpfact1_cglposteo)
+-> Table : rela_eys1_cglposteo (rela_eys1_cglposteo)
+-> Table : rela_factura1_cglposteo (rela_factura1_cglposteo)
+-> Table : rela nomctrac cglposteo (rela_nomctrac_cglposteo)
+-> Table : rhu_horas_adicionales (rhu_horas_adicionales)
+-> Table : tablas de acreedores (rhuacre)
+-> Table : tablas de acreedores2 (rhuacre2)
+-> Table : definición de cargos (rhucargo)
+-> Table : tabla de clave de impuesto sobre la renta (rhuclvim)
+-> Table : direccion del empleado (rhudirec)
+-> Table : archivo del empleado (rhuempl)
+-> Table : agrupacion de empleados (rhugremp)
+-> Table : turnos o jornadas de trabajo (rhuturno)
+-> Table : rhuturno_x_dia (rhuturno_x_dia)
+-> Table : rubros de facturas de cxc (rubros_fact_cxc)
+-> Table : saldo de proveedores (saldo_de_proveedores)
+-> Table : sobre acumulados (sobre_acumulados)
+-> Table : sobre_deducciones (sobre_deducciones)
+-> Table : sobre desgloce (sobre_desgloce)
+-> Table : sobre_ingresos (sobre_ingresos)
+-> Table : sobre totales (sobre_totales)
+Creating Tables...
+-> Table : comparacion ventas (comparacion_ventas)
+-> Creating indexes of the table comparacion ventas (comparacion_ventas)...
+-> Table : convmedi (convmedi)
+-> Creating indexes of the table convmedi (convmedi)...
+-> Table : corredores (corredores)
+-> Creating indexes of the table corredores (corredores)...
+-> Table : cos calculo (cos_calculo)
+-> Creating indexes of the table cos calculo (cos_calculo)...
+-> Table : cos consumo (cos_consumo)
+-> Creating indexes of the table cos consumo (cos_consumo)...
+-> Table : cos consumo eys2 (cos_consumo_eys2)
+-> Creating indexes of the table cos consumo eys2 (cos_consumo_eys2)...
+-> Table : cos cuenta rubro (cos_cuenta_rubro)
+-> Creating indexes of the table cos cuenta rubro (cos_cuenta_rubro)...
+-> Table : cos produccion (cos_produccion)
+-> Creating indexes of the table cos produccion (cos_produccion)...
+-> Table : cos produccion eys2 (cos_produccion_eys2)
+-> Creating indexes of the table cos produccion eys2 (cos_produccion_eys2)...
+-> Table : cos rubros (cos_rubros)
+-> Creating indexes of the table cos rubros (cos_rubros)...
+-> Table : cos trx (cos_trx)
+-> Creating indexes of the table cos trx (cos_trx)...
+-> Table : cxc balance clientes (cxc_balance_clientes)
+-> Creating indexes of the table cxc balance clientes (cxc_balance_clientes)...
+-> Table : cxc estado d cta airsea (cxc_estado_d_cta_airsea)
+-> Creating indexes of the table cxc estado d cta airsea (cxc_estado_d_cta_airsea)...
+-> Index : i1 cxc estado d cta airsea (i1_cxc_estado_d_cta_airsea)
+-> Table : cxc estado de cuenta (cxc_estado_de_cuenta)
+-> Creating indexes of the table cxc estado de cuenta (cxc_estado_de_cuenta)...
+-> Table : cxc recibo (cxc_recibo)
+-> Creating indexes of the table cxc recibo (cxc_recibo)...
+-> Table : cxc recibo detalle (cxc_recibo_detalle)
+-> Creating indexes of the table cxc recibo detalle (cxc_recibo_detalle)...
+-> Table : cxc saldos iniciales (cxc_saldos_iniciales)
+-> Creating indexes of the table cxc saldos iniciales (cxc_saldos_iniciales)...
+-> Index : i1 cxc saldos iniciales (i1_cxc_saldos_iniciales)
+-> Index : i2 cxc saldos iniciales (i2_cxc_saldos_iniciales)
+-> Table : balance de clientes por periodo (cxcbalance)
+-> Creating indexes of the table balance de clientes por periodo (cxcbalance)...
+-> Table : cxc documentos (cxcdocm)
+-> Creating indexes of the table cxc documentos (cxcdocm)...
+-> Index : i1_cxcdocm (i1_cxcdocm)
+-> Index : i2 cxcdocm (i2_cxcdocm)
+-> Table : facturas de clientes (cxcfact1)
+-> Creating indexes of the table facturas de clientes (cxcfact1)...
+-> Index : i1_cxcfact1 (i1_cxcfact1)
+-> Index : i2 cxcfact1 (i2_cxcfact1)
+-> Table : detalle de rubros de facturas de cxc (cxcfact2)
+-> Creating indexes of the table detalle de rubros de facturas de cxc (cxcfact2)...
+-> Index : i1_cxcfact2 (i1_cxcfact2)
+-> Index : i2_cxcfact2 (i2_cxcfact2)
+-> Table : aplica adelantos cxc (cxcfact3)
+-> Creating indexes of the table aplica adelantos cxc (cxcfact3)...
+-> Table : cxchdocm (cxchdocm)
+-> Creating indexes of the table cxchdocm (cxchdocm)...
+-> Index : i1 cxchdocm (i1_cxchdocm)
+-> Index : i2 cxchdocm (i2_cxchdocm)
+-> Table : cxcmorosidad (cxcmorosidad)
+-> Creating indexes of the table cxcmorosidad (cxcmorosidad)...
+-> Table : motivo de ajustes de cxc (cxcmotivos)
+-> Creating indexes of the table motivo de ajustes de cxc (cxcmotivos)...
+-> Table : recibos cxc (cxcrecibo1)
+-> Creating indexes of the table recibos cxc (cxcrecibo1)...
+-> Table : detalle de recibo (cxcrecibo2)
+-> Creating indexes of the table detalle de recibo (cxcrecibo2)...
+-> Table : ajustes cxc (cxctrx1)
+-> Creating indexes of the table ajustes cxc (cxctrx1)...
+-> Index : i1_cxctrx1 (i1_cxctrx1)
+-> Index : i2_cxctrx1 (i2_cxctrx1)
+-> Index : i3 cxctrx1 (i3_cxctrx1)
+-> Table : documento aplicar en ajuste2 (cxctrx2)
+-> Creating indexes of the table documento aplicar en ajuste2 (cxctrx2)...
+-> Index : i1_cxctrx2 (i1_cxctrx2)
+-> Index : i2_cxctrx2 (i2_cxctrx2)
+-> Table : detalle contable del ajuste cxc (cxctrx3)
+-> Creating indexes of the table detalle contable del ajuste cxc (cxctrx3)...
+-> Index : i1_cxctrx3 (i1_cxctrx3)
+-> Index : i2_cxctrx3 (i2_cxctrx3)
+-> Table : cxp comprobante (cxp_comprobante)
+-> Creating indexes of the table cxp comprobante (cxp_comprobante)...
+-> Table : cxp saldos iniciales (cxp_saldos_iniciales)
+-> Creating indexes of the table cxp saldos iniciales (cxp_saldos_iniciales)...
+-> Table : ajustes cxp (cxpajuste1)
+-> Creating indexes of the table ajustes cxp (cxpajuste1)...
+-> Index : iu_cxpajuste1 (iu_cxpajuste1)
+-> Table : documento aplicar en ajuste (cxpajuste2)
+-> Creating indexes of the table documento aplicar en ajuste (cxpajuste2)...
+-> Index : i1_cxpajuste2 (i1_cxpajuste2)
+-> Index : i2_cxpajuste2 (i2_cxpajuste2)
+-> Index : i3_cxpajuste2 (i3_cxpajuste2)
+-> Table : detalle contable del ajuste (cxpajuste3)
+-> Creating indexes of the table detalle contable del ajuste (cxpajuste3)...
+-> Table : balance de proveedores por periodo (cxpbalance)
+-> Creating indexes of the table balance de proveedores por periodo (cxpbalance)...
+-> Table : cxp documentos (cxpdocm)
+-> Creating indexes of the table cxp documentos (cxpdocm)...
+-> Index : i1_cxpdocm (i1_cxpdocm)
+-> Index : i2_cxpdocm (i2_cxpdocm)
+-> Table : cxphdocm (cxphdocm)
+-> Creating indexes of the table cxphdocm (cxphdocm)...
+-> Index : i1_cxphdocm (i1_cxphdocm)
+-> Index : i2_cxphdocm (i2_cxphdocm)
+-> Table : cxpmorosidad (cxpmorosidad)
+-> Creating indexes of the table cxpmorosidad (cxpmorosidad)...
+-> Table : descuentos (descuentos)
+-> Creating indexes of the table descuentos (descuentos)...
+-> Table : descuentos por articulo (descuentos_por_articulo)
+-> Creating indexes of the table descuentos por articulo (descuentos_por_articulo)...
+-> Table : descuentos por cliente (descuentos_por_cliente)
+-> Creating indexes of the table descuentos por cliente (descuentos_por_cliente)...
+-> Table : descuentos por grupo (descuentos_por_grupo)
+-> Creating indexes of the table descuentos por grupo (descuentos_por_grupo)...
+-> Table : pla_afectacion_contable (pla_afectacion_contable)
+-> Creating indexes of the table pla_afectacion_contable (pla_afectacion_contable)...
+-> Table : pla ajuste renta (pla_ajuste_renta)
+-> Creating indexes of the table pla ajuste renta (pla_ajuste_renta)...
+-> Table : pla anexo03 (pla_anexo03)
+-> Creating indexes of the table pla anexo03 (pla_anexo03)...
+-> Table : pla balance acreedores (pla_balance_acreedores)
+-> Creating indexes of the table pla balance acreedores (pla_balance_acreedores)...
+-> Table : pla bonos proyectado (pla_bonos_proyectado)
+-> Creating indexes of the table pla bonos proyectado (pla_bonos_proyectado)...
+-> Table : pla carta ayt (pla_carta_ayt)
+-> Creating indexes of the table pla carta ayt (pla_carta_ayt)...
+-> Table : pla comprobante conceptos (pla_comprobante_conceptos)
+-> Creating indexes of the table pla comprobante conceptos (pla_comprobante_conceptos)...
+-> Table : pla comprobante de pago (pla_comprobante_de_pago)
+-> Creating indexes of the table pla comprobante de pago (pla_comprobante_de_pago)...
+-> Table : pla comprobante horas (pla_comprobante_horas)
+-> Creating indexes of the table pla comprobante horas (pla_comprobante_horas)...
+-> Table : pla constancias (pla_constancias)
+-> Creating indexes of the table pla constancias (pla_constancias)...
+-> Table : pla datalog (pla_datalog)
+-> Creating indexes of the table pla datalog (pla_datalog)...
+-> Table : pla desgloce horas (pla_desgloce_horas)
+-> Creating indexes of the table pla desgloce horas (pla_desgloce_horas)...
+-> Table : pla desgloce planilla (pla_desgloce_planilla)
+-> Creating indexes of the table pla desgloce planilla (pla_desgloce_planilla)...
+-> Table : pla estructura listado (pla_estructura_listado)
+-> Creating indexes of the table pla estructura listado (pla_estructura_listado)...
+-> Table : pla extemporaneo (pla_extemporaneo)
+-> Creating indexes of the table pla extemporaneo (pla_extemporaneo)...
+-> Table : pla fdc desde hasta (pla_fdc_desde_hasta)
+-> Creating indexes of the table pla fdc desde hasta (pla_fdc_desde_hasta)...
+-> Table : pla fondo de cesantia (pla_fondo_de_cesantia)
+-> Creating indexes of the table pla fondo de cesantia (pla_fondo_de_cesantia)...
+-> Table : pla_historial_descuentos (pla_historial_descuentos)
+-> Creating indexes of the table pla_historial_descuentos (pla_historial_descuentos)...
+-> Table : pla_historial_pagos (pla_historial_pagos)
+-> Creating indexes of the table pla_historial_pagos (pla_historial_pagos)...
+-> Index : i_pla_historial_pagos (i_pla_historial_pagos)
+-> Table : pla indemnizacion (pla_indemnizacion)
+-> Creating indexes of the table pla indemnizacion (pla_indemnizacion)...
+-> Table : pla_informe (pla_informe)
+-> Creating indexes of the table pla_informe (pla_informe)...
+-> Table : pla_informe_nomdedu (pla_informe_nomdedu)
+-> Creating indexes of the table pla_informe_nomdedu (pla_informe_nomdedu)...
+-> Table : pla liquidacion (pla_liquidacion)
+-> Creating indexes of the table pla liquidacion (pla_liquidacion)...
+-> Table : pla preelaborada (pla_preelaborada)
+-> Creating indexes of the table pla preelaborada (pla_preelaborada)...
+-> Table : pla rela horas conceptos (pla_rela_horas_conceptos)
+-> Creating indexes of the table pla rela horas conceptos (pla_rela_horas_conceptos)...
+-> Table : pla reloj (pla_reloj)
+-> Creating indexes of the table pla reloj (pla_reloj)...
+-> Table : pla resumen planilla (pla_resumen_planilla)
+-> Creating indexes of the table pla resumen planilla (pla_resumen_planilla)...
+-> Table : pla riesgos profesionales (pla_riesgos_profesionales)
+-> Creating indexes of the table pla riesgos profesionales (pla_riesgos_profesionales)...
+-> Table : pla saldo acreedores (pla_saldo_acreedores)
+-> Creating indexes of the table pla saldo acreedores (pla_saldo_acreedores)...
+-> Table : pla tipo de columna (pla_tipo_de_columna)
+-> Creating indexes of the table pla tipo de columna (pla_tipo_de_columna)...
+-> Table : pla vacacion (pla_vacacion)
+-> Creating indexes of the table pla vacacion (pla_vacacion)...
+-> Table : pla_vacacion1 (pla_vacacion1)
+-> Creating indexes of the table pla_vacacion1 (pla_vacacion1)...
+-> Table : pla_vacacion2 (pla_vacacion2)
+-> Creating indexes of the table pla_vacacion2 (pla_vacacion2)...
+-> Table : pla work1 (pla_work1)
+-> Creating indexes of the table pla work1 (pla_work1)...
+-> Table : pla_xiii (pla_xiii)
+-> Creating indexes of the table pla_xiii (pla_xiii)...
+-> Table : placertificadosmedico (placertificadosmedico)
+-> Creating indexes of the table placertificadosmedico (placertificadosmedico)...
+-> Table : pladeduccionesadicionales (pladeduccionesadicionales)
+-> Creating indexes of the table pladeduccionesadicionales (pladeduccionesadicionales)...
+-> Table : plapermisos (plapermisos)
+-> Creating indexes of the table plapermisos (plapermisos)...
+-> Table : plapermisosindical (plapermisosindical)
+-> Creating indexes of the table plapermisosindical (plapermisosindical)...
+-> Table : plareemplazos (plareemplazos)
+-> Creating indexes of the table plareemplazos (plareemplazos)...
+-> Table : platipodeduccion (platipodeduccion)
+-> Creating indexes of the table platipodeduccion (platipodeduccion)...
+-> Table : platipodepermiso (platipodepermiso)
+-> Creating indexes of the table platipodepermiso (platipodepermiso)...
+-> Table : porcentaje manejo (porcentaje_manejo)
+-> Creating indexes of the table porcentaje manejo (porcentaje_manejo)...
+-> Table : precios por cliente 1 (precios_por_cliente_1)
+-> Creating indexes of the table precios por cliente 1 (precios_por_cliente_1)...
+-> Table : precios por cliente 2 (precios_por_cliente_2)
+-> Creating indexes of the table precios por cliente 2 (precios_por_cliente_2)...
+-> Table : preventas (preventas)
+-> Creating indexes of the table preventas (preventas)...
+-> Table : productos sustitutos (productos_sustitutos)
+-> Creating indexes of the table productos sustitutos (productos_sustitutos)...
+-> Table : rela_afi_cglposteo (rela_afi_cglposteo)
+-> Creating indexes of the table rela_afi_cglposteo (rela_afi_cglposteo)...
+-> Table : rela_bcocheck1_cglposteo (rela_bcocheck1_cglposteo)
+-> Creating indexes of the table rela_bcocheck1_cglposteo (rela_bcocheck1_cglposteo)...
+-> Index : i1 rela bcocheck1 cglposteo (i1_rela_bcocheck1_cglposteo)
+-> Index : i2_rela_bcocheck1_cglposteo (i2_rela_bcocheck1_cglposteo)
+-> Index : i3_rela_bcocheck1_cglposteo (i3_rela_bcocheck1_cglposteo)
+-> Table : rela_bcotransac1_cglposteo (rela_bcotransac1_cglposteo)
+-> Creating indexes of the table rela_bcotransac1_cglposteo (rela_bcotransac1_cglposteo)...
+-> Index : i1_rela_bcotransac1_cglposteo (i1_rela_bcotransac1_cglposteo)
+-> Index : i2_rela_bcotransac1_cglposteo (i2_rela_bcotransac1_cglposteo)
+-> Index : i3 rela bcotransac1 cglposteo (i3_rela_bcotransac1_cglposteo)
+-> Table : rela_caja_trx1_cglposteo (rela_caja_trx1_cglposteo)
+-> Creating indexes of the table rela_caja_trx1_cglposteo (rela_caja_trx1_cglposteo)...
+-> Table : rela_cxcfact1_cglposteo (rela_cxcfact1_cglposteo)
+-> Creating indexes of the table rela_cxcfact1_cglposteo (rela_cxcfact1_cglposteo)...
+-> Index : i1 rela cxcfact1 cglposteo (i1_rela_cxcfact1_cglposteo)
+-> Index : i2 rela cxcfact1 cglposteo (i2_rela_cxcfact1_cglposteo)
+-> Index : i3 rela cxcfact1 cglposteo (i3_rela_cxcfact1_cglposteo)
+-> Table : rela_cxctrx1_cglposteo (rela_cxctrx1_cglposteo)
+-> Creating indexes of the table rela_cxctrx1_cglposteo (rela_cxctrx1_cglposteo)...
+-> Index : i1 rela cxctrx1 cglposteo (i1_rela_cxctrx1_cglposteo)
+-> Index : i2 rela cxctrx1 cglposteo (i2_rela_cxctrx1_cglposteo)
+-> Index : i3 rela cxctrx1 cglposteo (i3_rela_cxctrx1_cglposteo)
+-> Table : rela_cxpajuste1_cglposteo (rela_cxpajuste1_cglposteo)
+-> Creating indexes of the table rela_cxpajuste1_cglposteo (rela_cxpajuste1_cglposteo)...
+-> Table : rela_cxpfact1_cglposteo (rela_cxpfact1_cglposteo)
+-> Creating indexes of the table rela_cxpfact1_cglposteo (rela_cxpfact1_cglposteo)...
+-> Table : rela_eys1_cglposteo (rela_eys1_cglposteo)
+-> Creating indexes of the table rela_eys1_cglposteo (rela_eys1_cglposteo)...
+-> Table : rela_factura1_cglposteo (rela_factura1_cglposteo)
+-> Creating indexes of the table rela_factura1_cglposteo (rela_factura1_cglposteo)...
+-> Index : i1_rela_factura1_cglposteo (i1_rela_factura1_cglposteo)
+-> Index : i2_rela_factura1_cglposteo (i2_rela_factura1_cglposteo)
+-> Index : i3_rela_factura1_cglposteo (i3_rela_factura1_cglposteo)
+-> Table : rela nomctrac cglposteo (rela_nomctrac_cglposteo)
+-> Creating indexes of the table rela nomctrac cglposteo (rela_nomctrac_cglposteo)...
+-> Index : i1 rela nomctrac cglposteo (i1_rela_nomctrac_cglposteo)
+-> Index : i2 rela nomctrac cglposteo (i2_rela_nomctrac_cglposteo)
+-> Index : i3 rela nomctrac cglposteo (i3_rela_nomctrac_cglposteo)
+-> Table : rhu_horas_adicionales (rhu_horas_adicionales)
+-> Creating indexes of the table rhu_horas_adicionales (rhu_horas_adicionales)...
+-> Table : tablas de acreedores (rhuacre)
+-> Creating indexes of the table tablas de acreedores (rhuacre)...
+-> Table : tablas de acreedores2 (rhuacre2)
+-> Creating indexes of the table tablas de acreedores2 (rhuacre2)...
+-> Table : definición de cargos (rhucargo)
+-> Creating indexes of the table definición de cargos (rhucargo)...
+-> Table : tabla de clave de impuesto sobre la renta (rhuclvim)
+-> Creating indexes of the table tabla de clave de impuesto sobre la renta (rhuclvim)...
+-> Table : direccion del empleado (rhudirec)
+-> Creating indexes of the table direccion del empleado (rhudirec)...
+-> Table : archivo del empleado (rhuempl)
+-> Creating indexes of the table archivo del empleado (rhuempl)...
+-> Table : agrupacion de empleados (rhugremp)
+-> Creating indexes of the table agrupacion de empleados (rhugremp)...
+-> Table : turnos o jornadas de trabajo (rhuturno)
+-> Creating indexes of the table turnos o jornadas de trabajo (rhuturno)...
+-> Table : rhuturno_x_dia (rhuturno_x_dia)
+-> Creating indexes of the table rhuturno_x_dia (rhuturno_x_dia)...
+-> Table : rubros de facturas de cxc (rubros_fact_cxc)
+-> Creating indexes of the table rubros de facturas de cxc (rubros_fact_cxc)...
+-> Index : i1_rubros_fact_cxc (i1_rubros_fact_cxc)
+-> Table : saldo de proveedores (saldo_de_proveedores)
+-> Creating indexes of the table saldo de proveedores (saldo_de_proveedores)...
+-> Table : sobre acumulados (sobre_acumulados)
+-> Creating indexes of the table sobre acumulados (sobre_acumulados)...
+-> Table : sobre_deducciones (sobre_deducciones)
+-> Creating indexes of the table sobre_deducciones (sobre_deducciones)...
+-> Table : sobre desgloce (sobre_desgloce)
+-> Creating indexes of the table sobre desgloce (sobre_desgloce)...
+-> Table : sobre_ingresos (sobre_ingresos)
+-> Creating indexes of the table sobre_ingresos (sobre_ingresos)...
+-> Table : sobre totales (sobre_totales)
+-> Creating indexes of the table sobre totales (sobre_totales)...
+Creating References...
+-> Reference : reference_456 (reference_480)
+-> Reference : reference_457 (reference_481)
+-> Reference : reference_388 (reference_393)
+-> Reference : reference_389 (reference_394)
+-> Reference : reference_442 (reference_466)
+-> Reference : reference_451 (reference_475)
+-> Reference : reference_419 (reference_442)
+-> Reference : reference_421 (reference_444)
+-> Reference : reference_423 (reference_446)
+-> Reference : reference_450 (reference_474)
+-> Reference : reference_429 (reference_448)
+-> Reference : reference_430 (reference_449)
+-> Reference : reference_427 (reference_450)
+-> Reference : reference_428 (reference_451)
+-> Reference : reference_420 (reference_443)
+-> Reference : reference_422 (reference_445)
+-> Reference : reference_424 (reference_447)
+-> Reference : reference_431 (reference_454)
+-> Reference : reference_432 (reference_455)
+-> Reference : reference_418 (reference_441)
+-> Reference : reference_387 (reference_392)
+-> Reference : reference_475 (reference_497)
+-> Reference : reference_513 (reference_544)
+-> Reference : reference_438 (reference_462)
+-> Reference : reference_439 (reference_463)
+-> Reference : reference_440 (reference_464)
+-> Reference : ref_32545 (ref_32545)
+-> Reference : ref_32549 (ref_32549)
+-> Reference : ref_37155 (ref_37155)
+-> Reference : ref_37159 (ref_37159)
+-> Reference : ref_37167 (ref_37167)
+-> Reference : ref_37303 (ref_37303)
+-> Reference : ref_81850 (ref_81850)
+-> Reference : ref_34059 (ref_34059)
+-> Reference : ref_34063 (ref_34063)
+-> Reference : ref_34067 (ref_34067)
+-> Reference : ref_35603 (ref_35603)
+-> Reference : reference_486 (reference_511)
+-> Reference : ref_34072 (ref_34072)
+-> Reference : ref_35575 (ref_35575)
+-> Reference : ref_35592 (ref_35592)
+-> Reference : ref_45615 (ref_45615)
+-> Reference : ref_45619 (ref_45619)
+-> Reference : ref_35585 (ref_35585)
+-> Reference : ref_38815 (ref_38815)
+-> Reference : ref_37303 (ref_37304)
+-> Reference : reference_381 (reference_384)
+-> Reference : reference_382 (reference_385)
+-> Reference : reference_383 (reference_386)
+-> Reference : ref_82779 (ref_82779)
+-> Reference : ref_38746 (ref_38746)
+-> Reference : ref_38750 (ref_38750)
+-> Reference : ref_38754 (ref_38754)
+-> Reference : ref_38758 (ref_38758)
+-> Reference : ref_38819 (ref_38819)
+-> Reference : ref_32495 (ref_32495)
+-> Reference : ref_32499 (ref_32499)
+-> Reference : ref_38779 (ref_38779)
+-> Reference : reference_343 (reference_345)
+-> Reference : reference_480 (reference_505)
+-> Reference : ref_38790 (ref_38790)
+-> Reference : ref_38811 (ref_38811)
+-> Reference : ref_32532 (ref_32532)
+-> Reference : ref_38783 (ref_38783)
+-> Reference : ref_45599 (ref_45599)
+-> Reference : ref_45603 (ref_45603)
+-> Reference : reference_455 (reference_479)
+-> Reference : reference_487 (reference_512)
+-> Reference : reference_488 (reference_513)
+-> Reference : ref_23665 (ref_23665)
+-> Reference : ref_23679 (ref_23679)
+-> Reference : ref_25851 (ref_25851)
+-> Reference : ref_28363 (ref_28363)
+-> Reference : reference_483 (reference_508)
+-> Reference : ref_25787 (ref_25787)
+-> Reference : ref_38823 (ref_38823)
+-> Reference : ref_25794 (ref_25794)
+-> Reference : ref_25804 (ref_25804)
+-> Reference : ref_45624 (ref_45624)
+-> Reference : ref_45628 (ref_45628)
+-> Reference : ref_27041 (ref_27041)
+-> Reference : ref_27054 (ref_27054)
+-> Reference : ref_25811 (ref_25811)
+-> Reference : ref_25815 (ref_25815)
+-> Reference : ref_25843 (ref_25843)
+-> Reference : ref_25855 (ref_25855)
+-> Reference : ref_25882 (ref_25882)
+-> Reference : ref_41007 (ref_41007)
+-> Reference : reference_515 (reference_546)
+-> Reference : ref_91487 (ref_91487)
+-> Reference : ref_91500 (ref_91500)
+-> Reference : ref_91503 (ref_91503)
+-> Reference : ref_104707 (ref_104707)
+-> Reference : ref_104714 (ref_104714)
+-> Reference : ref_104698 (ref_104698)
+-> Reference : ref_104702 (ref_104702)
+-> Reference : ref_104689 (ref_104689)
+-> Reference : ref_104693 (ref_104693)
+-> Reference : reference_390 (reference_396)
+-> Reference : reference_391 (reference_397)
+-> Reference : reference_392 (reference_398)
+-> Reference : reference_462 (reference_486)
+-> Reference : reference_435 (reference_459)
+-> Reference : reference_433 (reference_456)
+-> Reference : reference_508 (reference_533)
+-> Reference : reference_454 (reference_478)
+-> Reference : reference_510 (reference_532)
+-> Reference : reference_514 (reference_540)
+-> Reference : reference_511 (reference_535)
+-> Reference : reference_512 (reference_536)
+-> Reference : reference_433 (reference_457)
+-> Reference : reference_430 (reference_453)
+-> Reference : reference_429 (reference_452)
+-> Reference : reference_399 (reference_422)
+-> Reference : reference_400 (reference_423)
+-> Reference : reference_494 (reference_519)
+-> Reference : reference_496 (reference_521)
+-> Reference : reference_436 (reference_460)
+-> Reference : reference_437 (reference_461)
+-> Reference : reference_378 (reference_378)
+-> Reference : reference_379 (reference_379)
+-> Reference : reference_377 (reference_377)
+-> Reference : reference_380 (reference_380)
+-> Reference : ref_234210 (ref_234210)
+-> Reference : reference_403 (reference_426)
+-> Reference : reference_512 (reference_543)
+-> Reference : reference_382 (reference_405)
+-> Reference : reference_383 (reference_406)
+-> Reference : reference_511 (reference_534)
+-> Reference : reference_512 (reference_537)
+-> Reference : reference_447 (reference_471)
+-> Reference : reference_463 (reference_487)
+-> Reference : reference_464 (reference_488)
+-> Reference : reference_434 (reference_458)
+-> Reference : reference_410 (reference_433)
+-> Reference : reference_411 (reference_434)
+-> Reference : reference_453 (reference_476)
+-> Reference : ref_231556 (ref_231556)
+-> Reference : ref_231566 (ref_231566)
+-> Reference : reference_466 (reference_491)
+-> Reference : reference_388 (reference_411)
+-> Reference : reference_387 (reference_410)
+-> Reference : reference_389 (reference_412)
+-> Reference : reference_414 (reference_437)
+-> Reference : reference_416 (reference_439)
+-> Reference : reference_392 (reference_415)
+-> Reference : reference_385 (reference_408)
+-> Reference : reference_386 (reference_409)
+-> Reference : reference_415 (reference_438)
+-> Reference : reference_481 (reference_506)
+-> Reference : ref_106584 (ref_106584)
+-> Reference : ref_106597 (ref_106597)
+-> Reference : ref_106601 (ref_106601)
+-> Reference : reference_338 (reference_338)
+-> Reference : reference_339 (reference_341)
+-> Reference : reference_340 (reference_342)
+-> Reference : ref_16981 (ref_16981)
+-> Reference : ref_16985 (ref_16985)
+-> Reference : ref_122180 (ref_122180)
+-> Reference : ref_122196 (ref_122196)
+-> Reference : ref_70271 (ref_70271)
+-> Reference : ref_70281 (ref_70281)
+-> Reference : ref_70286 (ref_70286)
+-> Reference : ref_70293 (ref_70293)
+-> Reference : ref_119979 (ref_119979)
+-> Reference : ref_119983 (ref_119983)
+-> Reference : ref_70298 (ref_70298)
+-> Reference : ref_70302 (ref_70302)
+-> Reference : ref_71933 (ref_71933)
+-> Reference : ref_71937 (ref_71937)
+-> Reference : ref_70325 (ref_70325)
+-> Reference : ref_70329 (ref_70329)
+-> Reference : ref_70310 (ref_70310)
+-> Reference : ref_70314 (ref_70314)
+-> Reference : ref_71945 (ref_71945)
+-> Reference : ref_71949 (ref_71949)
+-> Reference : ref_119991 (ref_119991)
+-> Reference : ref_119995 (ref_119995)
+-> Reference : reference_496 (reference_520)
+-> Reference : reference_497 (reference_522)
+-> Reference : reference_380 (reference_382)
+-> Reference : reference_394 (reference_400)
+-> Reference : ref_190599 (ref_190599)
+-> Reference : ref_190603 (ref_190603)
+-> Reference : ref_190610 (ref_190610)
+-> Reference : ref_192958 (ref_192958)
+-> Reference : ref_195509 (ref_195509)
+-> Reference : ref_204414 (ref_204414)
+-> Reference : reference_390 (reference_395)
+-> Reference : reference_393 (reference_416)
+-> Reference : reference_413 (reference_436)
+-> Reference : ref_190614 (ref_190614)
+-> Reference : ref_190618 (ref_190618)
+-> Reference : reference_391 (reference_401)
+-> Reference : reference_392 (reference_402)
+-> Reference : ref_35579 (ref_35579)
+-> Reference : ref_45607 (ref_45607)
+-> Reference : ref_45611 (ref_45611)
+-> Reference : reference_342 (reference_344)
+-> Reference : reference_397 (reference_420)
+-> Reference : reference_395 (reference_418)
+-> Reference : reference_412 (reference_435)
+-> Reference : reference_394 (reference_417)
+-> Reference : reference_398 (reference_421)
+-> Reference : reference_396 (reference_419)
+Generation successful
+
+Usage:
+  (1) Go to the directory C:\pgsql\tmp\
+  (2) Start the SQL interpreter
+  (3) Run the database creation script:
+        crebas.sql

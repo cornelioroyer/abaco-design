@@ -1,0 +1,7 @@
+XLODBC
+1
+DSN=harinas_pb;DATABASE=harinas;SERVER=192.168.1.1;PORT=5432;UID=dba;READONLY=0;PROTOCOL=6.4;FAKEOIDINDEX=0;SHOWOIDCOLUMN=0;ROWVERSIONING=0;SHOWSYSTEMTABLES=0;CONNSETTINGS=
+SELECT a.compania, a.year, a.periodo, b.d_fila, Sum(a.balance_inicio+a.debito-a.credito)  FROM cglsldocuenta a, cgl_financiero b  WHERE a.cuenta = b.cuenta AND ((b.no_informe=1))  GROUP BY a.compania, a.year, a.periodo, b.d_fila  ORDER BY a.compania, a.year, a.periodo, b.d_fila
+
+
+compania	year	periodo	d_fila	Suma(a.balance_inicio+a.debito-a.credito)

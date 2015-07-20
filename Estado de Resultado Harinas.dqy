@@ -1,0 +1,7 @@
+XLODBC
+1
+DSN=harinas_pb;DATABASE=harinas;SERVER=192.168.1.1;PORT=5432;UID=dba;READONLY=0;PROTOCOL=6.4;FAKEOIDINDEX=0;SHOWOIDCOLUMN=0;ROWVERSIONING=0;SHOWSYSTEMTABLES=0;CONNSETTINGS=
+SELECT d.compania, d.year, b.cuenta, b.nombre, d.periodo, c.descripcion, d.debito-d.credito  FROM cglniveles a, cglcuentas b, gralperiodos c, cglsldocuenta d  WHERE a.nivel = b.nivel AND b.cuenta = d.cuenta AND ((c.aplicacion='CGL') AND (c.compania=d.compania) AND (c.year=d.year) AND (c.periodo=d.periodo) AND (b.tipo_cuenta='R') AND (a.recibe='S'))  ORDER BY d.compania, d.year, b.cuenta, d.periodo
+
+
+compania	year	cuenta	nombre	periodo	descripcion	d.debito-d.credito

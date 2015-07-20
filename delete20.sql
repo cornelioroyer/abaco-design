@@ -1,0 +1,10 @@
+update eys1 set status = 'R';
+delete from rela_eys1_cglposteo;
+update factura1 set status = 'R';
+delete from rela_factura1_cglposteo;
+delete from eys1 where motivo = 'VT';
+delete from eys1 where motivo = 'DE';
+delete from cglposteo;
+delete from cglcomprobante1;
+delete from factura2_eys2;
+commit;

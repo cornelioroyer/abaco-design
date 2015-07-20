@@ -1,0 +1,14 @@
+begin work;
+delete from rela_bcocheck1_cglposteo;
+delete from rela_bcotransac1_cglposteo;
+delete from cglcomprobante1 where aplicacion_origen = 'BCO';
+update cglcomprobante1 set estado = 'R';
+delete from bcocircula where fecha_posteo >= '2001-4-1' and status <> 'C';
+delete from cglposteo where aplicacion_origen in ('BCO','CGL');
+delete from cglsldocuenta;
+delete from cglsldoaux1;
+delete from cglsldoaux2;
+update bcocheck1 set status = 'R' where (status = 'U' or status = 'P');
+update bcotransac1 set status = 'R';
+delete from cxpdocm where motivo_cxp = 'PA';
+commit work;

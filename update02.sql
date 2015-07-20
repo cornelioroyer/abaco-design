@@ -1,0 +1,13 @@
+delete from rela_caja_trx1_cglposteo;
+delete from rela_bcocheck1_cglposteo;
+delete from rela_bcotransac1_cglposteo;
+delete from cglposteo where aplicacion_origen = 'BCO' or aplicacion_origen = 'CAJ';
+delete from cglcomprobante1 where aplicacion_origen = 'BCO' or aplicacion_origen = 'CAJ';
+delete from cglsldocuenta where compania = '03' and year = 2000 and periodo >= 7;
+delete from cglsldoaux1 where compania = '03' and year = 2000 and periodo >= 7;
+delete from cglsldoaux2 where compania = '03' and year = 2000 and periodo >= 7;
+update cglcomprobante1 set estado = 'R' where compania = '03' and year = 2000 and periodo >= 7;
+update bcocheck1 set status = 'R';
+update bcotransac1 set status = 'R';
+update caja_trx1 set status = 'R' where caja in (select caja from cajas where compania = '03');
+delete from bcocircula;

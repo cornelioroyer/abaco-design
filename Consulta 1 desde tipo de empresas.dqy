@@ -1,0 +1,7 @@
+XLODBC
+1
+DSN=abaco_local;Start=C:\ARCHIVOS DE PROGRAMA\SYBASE\SQL ANYWHERE 5.0\WIN32\dbeng50.exe;DatabaseFile=D:\ABACO\Data\abaco.db;DatabaseName=abaco;EngineName=winsoft;AutoStop=yes
+SELECT tipo_de_empresa.descripcion, cantidad_de_empleados.Descripcion, Count(*)  FROM DBA.cantidad_de_empleados cantidad_de_empleados, DBA.encuesta encuesta, DBA.tipo_de_empresa tipo_de_empresa  WHERE (encuesta.Codigo_de_Rango=cantidad_de_empleados.codigo_de_rango) AND (tipo_de_empresa.tipo_empresa=encuesta.tipo_empresa)  GROUP BY tipo_de_empresa.descripcion, cantidad_de_empleados.Descripcion  ORDER BY tipo_de_empresa.descripcion, cantidad_de_empleados.Descripcion
+
+
+descripcion	Descripcion	Contar(*)

@@ -1,0 +1,7 @@
+XLODBC
+1
+DSN=abaco_local;Start=C:\ARCHIVOS DE PROGRAMA\SYBASE\SQL ANYWHERE 5.0\WIN32\dbeng50.exe;DatabaseFile=D:\ABACO\Data\abaco.db;DatabaseName=abaco;EngineName=winsoft;AutoStop=yes
+SELECT encuesta.compraria, Count(*)  FROM DBA.encuesta encuesta  GROUP BY encuesta.compraria  ORDER BY encuesta.compraria
+
+
+compraria	Contar(*)

@@ -1,0 +1,7 @@
+XLODBC
+1
+DSN=abaco;Description=abaco;DatabaseFile=C:\ABACO\Data\abaco.db;AutoStop=Yes;Integrated=No
+SELECT cglsldocuenta.compania, cglsldocuenta.year, cglsldocuenta.periodo, cglcuentas.cuenta, cglcuentas.nombre, cglsldocuenta.debito-cglsldocuenta.credito, gralperiodos.descripcion, gralperiodos.aplicacion  FROM DBA.cglcuentas cglcuentas, DBA.cglniveles cglniveles, DBA.cglsldocuenta cglsldocuenta, DBA.gralperiodos gralperiodos  WHERE cglcuentas.cuenta = cglsldocuenta.cuenta AND cglsldocuenta.compania = gralperiodos.compania AND cglsldocuenta.year = gralperiodos.year AND cglsldocuenta.periodo = gralperiodos.periodo AND cglcuentas.nivel = cglniveles.nivel AND ((cglcuentas.tipo_cuenta='R') AND (gralperiodos.aplicacion='CGL') AND (cglniveles.recibe='S'))  ORDER BY cglsldocuenta.compania, cglsldocuenta.year, cglsldocuenta.periodo
+
+
+compania	year	periodo	cuenta	nombre	cglsldocuenta.debito-cglsldocuenta.credito	descripcion	aplicacion

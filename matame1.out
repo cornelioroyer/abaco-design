@@ -1,0 +1,323 @@
+
+CREATE FUNCTION f_pla_reclamos_after_update() RETURNS trigger
+    AS $$
+declare
+    i integer;
+    r_pla_periodos record;
+    r_pla_empleados record;
+    r_pla_tipos_de_horas record;
+begin
+    select into r_pla_periodos *
+    from pla_periodos
+    where compania = old.compania
+    and year = old.year
+    and numero_planilla = old.numero_planilla
+    and tipo_de_planilla = old.tipo_de_planilla;
+    if not found then
+        raise exception 'Numero de Planilla % no existe',new.numero_planilla;
+    end if;
+
+    if r_pla_periodos.status = 'C' then
+        Raise Exception 'Numero de Planilla % esta cerrado no se puede modificar',new.numero_planilla;
+    end if;
+
+
+    select into r_pla_empleados *
+    from pla_empleados
+    where compania = new.compania
+    and codigo_empleado = new.codigo_empleado;
+    if not found then
+        raise exception 'Codigo de Empleado % no Existe',new.codigo_empleado;
+    end if;
+    
+    new.tipo_de_planilla = r_pla_empleados.tipo_de_planilla;
+    
+    select into r_pla_periodos *
+    from pla_periodos
+    where compania = new.compania
+    and year = new.year
+    and numero_planilla = new.numero_planilla
+    and tipo_de_planilla = new.tipo_de_planilla;
+    if not found then
+        raise exception 'Numero de Planilla % no existe',new.numero_planilla;
+    end if;
+
+    if r_pla_periodos.status = 'C' then
+        Raise Exception 'Numero de Planilla % esta cerrado',new.numero_planilla;
+    end if;
+
+    i   =   f_pla_reclamos_pla_dinero(new.compania, new.codigo_empleado, new.tipo_de_planilla, new.year, new.numero_planilla);
+    i   =   f_pla_seguro_social(new.compania, new.codigo_empleado, r_pla_periodos.id, '5');
+    i   =   f_pla_seguro_educativo(new.compania, new.codigo_empleado, r_pla_periodos.id, '5');
+    return new;
+end;
+$$
+    LANGUAGE plpgsql;
+
+
+ALTER FUNCTION planilla.f_pla_reclamos_after_update() OWNER TO planilla;
+
+--
+-- Name: f_pla_reclamos_before_delete(); Type: FUNCTION; Schema: planilla; Owner: planilla
+--
+
+CREATE FUNCTION f_pla_reclamos_before_delete() RETURNS trigger
+    AS $$
+declare
+    i integer;
+    r_pla_periodos record;
+    r_pla_empleados record;
+    r_pla_tipos_de_horas record;
+begin
+    select into r_pla_empleados *
+    from pla_empleados
+    where compania = old.compania
+    and codigo_empleado = old.codigo_empleado;
+    if not found then
+        raise exception 'Codigo de Empleado % no Existe', old.codigo_empleado;
+    end if;
+    
+    select into r_pla_periodos *
+    from pla_periodos
+    where compania = old.compania
+    and year = old.year
+    and numero_planilla = old.numero_planilla
+    and tipo_de_planilla = old.tipo_de_planilla;
+
+    if r_pla_periodos.status = 'C' then
+        Raise Exception 'Numero de Planilla % esta cerrado', old.numero_planilla;
+    end if;
+    
+    return old;
+end;
+$$
+    LANGUAGE plpgsql;
+
+
+ALTER FUNCTION planilla.f_pla_reclamos_before_delete() OWNER TO planilla;
+
+--
+-- Name: f_pla_reclamos_before_insert(); Type: FUNCTION; Schema: planilla; Owner: planilla
+--
+
+CREATE FUNCTION f_pla_reclamos_before_insert() RETURNS trigger
+    AS $$
+declare
+    i integer;
+    r_pla_periodos record;
+    r_pla_empleados record;
+    r_pla_tipos_de_horas record;
+    r_pla_proyectos record;
+begin
+    select into r_pla_tipos_de_horas *
+    from pla_tipos_de_horas
+    where tipo_de_hora = new.tipo_de_hora;
+    if not found then
+        raise exception 'Tipo de Horas % no existe',new.tipo_de_hora;
+    end if;
+    
+    select into r_pla_empleados *
+    from pla_empleados
+    where compania = new.compania
+    and codigo_empleado = new.codigo_empleado;
+    if not found then
+        raise exception 'Codigo de Empleado % no Existe',new.codigo_empleado;
+    end if;
+    
+    new.tipo_de_planilla        =   r_pla_empleados.tipo_de_planilla;
+    new.tasa_por_hora           =   r_pla_empleados.tasa_por_hora;
+    new.id_pla_proyectos        =   r_pla_empleados.id_pla_proyectos;
+    new.id_pla_departamentos    =   r_pla_empleados.departamento;
+    
+    if new.id_pla_proyectos is null then
+        for r_pla_proyectos in
+            select * from pla_proyectos
+            where compania = new.compania
+            order by id
+        loop
+            new.id_pla_proyectos    =   r_pla_proyectos.id;
+            exit;
+        end loop;
+    end if;
+    
+    select into r_pla_periodos *
+    from pla_periodos
+    where compania = new.compania
+    and year = new.year
+    and numero_planilla = new.numero_planilla
+    and tipo_de_planilla = new.tipo_de_planilla;
+    if not found then
+        raise exception 'Numero de Planilla % no existe',new.numero_planilla;
+    end if;
+
+    if r_pla_periodos.status = 'C' then
+        Raise Exception 'Numero de Planilla % esta cerrado',new.numero_planilla;
+    end if;
+    
+    return new;
+end;
+$$
+    LANGUAGE plpgsql;
+
+
+ALTER FUNCTION planilla.f_pla_reclamos_before_insert() OWNER TO planilla;
+
+--
+-- Name: f_pla_reclamos_before_update(); Type: FUNCTION; Schema: planilla; Owner: planilla
+--
+
+CREATE FUNCTION f_pla_reclamos_before_update() RETURNS trigger
+    AS $$
+declare
+    i integer;
+    r_pla_periodos record;
+    r_pla_empleados record;
+    r_pla_tipos_de_horas record;
+begin
+    select into r_pla_empleados *
+    from pla_empleados
+    where compania = old.compania
+    and codigo_empleado = old.codigo_empleado;
+    if not found then
+        raise exception 'Codigo de Empleado % no Existe', old.codigo_empleado;
+    end if;
+    
+    select into r_pla_periodos *
+    from pla_periodos
+    where compania = old.compania
+    and year = old.year
+    and numero_planilla = old.numero_planilla
+    and tipo_de_planilla = old.tipo_de_planilla;
+
+    if r_pla_periodos.status = 'C' then
+        Raise Exception 'Numero de Planilla % esta cerrado', old.numero_planilla;
+    end if;
+    
+
+    select into r_pla_tipos_de_horas *
+    from pla_tipos_de_horas
+    where tipo_de_hora = new.tipo_de_hora;
+    if not found then
+        raise exception 'Tipo de Horas % no existe',new.tipo_de_hora;
+    end if;
+    
+    select into r_pla_empleados *
+    from pla_empleados
+    where compania = new.compania
+    and codigo_empleado = new.codigo_empleado;
+    if not found then
+        raise exception 'Codigo de Empleado % no Existe',new.codigo_empleado;
+    end if;
+    
+    new.tipo_de_planilla        =   r_pla_empleados.tipo_de_planilla;
+    new.tasa_por_hora           =   r_pla_empleados.tasa_por_hora;
+    new.id_pla_proyectos        =   r_pla_empleados.id_pla_proyectos;
+    new.id_pla_departamentos    =   r_pla_empleados.departamento;
+    
+    select into r_pla_periodos *
+    from pla_periodos
+    where compania = new.compania
+    and year = new.year
+    and numero_planilla = new.numero_planilla
+    and tipo_de_planilla = new.tipo_de_planilla;
+    if not found then
+        raise exception 'Numero de Planilla % no existe',new.numero_planilla;
+    end if;
+
+    if r_pla_periodos.status = 'C' then
+        Raise Exception 'Numero de Planilla % esta cerrado',new.numero_planilla;
+    end if;
+    
+    return new;
+end;
+$$
+    LANGUAGE plpgsql;
+
+
+ALTER FUNCTION planilla.f_pla_reclamos_before_update() OWNER TO planilla;
+
+--
+-- Name: f_pla_reclamos_pla_dinero(integer, character, character, integer, integer); Type: FUNCTION; Schema: planilla; Owner: planilla
+--
+
+CREATE FUNCTION f_pla_reclamos_pla_dinero(integer, character, character, integer, integer) RETURNS integer
+    AS $_$
+declare
+    ai_cia alias for $1;
+    as_codigo_empleado alias for $2;
+    as_tipo_de_planilla alias for $3;
+    ai_year alias for $4;
+    ai_numero_planilla alias for $5;
+    r_pla_periodos record;
+    r_pla_reclamos record;
+    r_pla_dinero record;
+    r_work record;
+begin
+    select into r_pla_periodos * from pla_periodos
+    where compania = ai_cia
+    and tipo_de_planilla = as_tipo_de_planilla
+    and year = ai_year
+    and numero_planilla = ai_numero_planilla;
+    if not found then
+        raise exception 'Numero de planilla % no existe',ai_numero_planilla;
+    else
+        if r_pla_periodos.status = 'C' then
+            raise exception 'Numero de planilla % esta cerrado',ai_numero_planilla;
+        end if;
+    end if;
+    
+    for r_pla_dinero in
+        select * from pla_dinero
+        where compania = ai_cia
+        and codigo_empleado = as_codigo_empleado
+        and id_periodos = r_pla_periodos.id
+        and tipo_de_calculo = '5'
+        and id_pla_cheques_1 is not null
+    loop
+        raise exception 'Este reclamo ya tiene cheque impreso...Verifique';
+    end loop;
+    
+    delete from pla_dinero
+    where compania = ai_cia
+    and codigo_empleado = as_codigo_empleado
+    and id_periodos = r_pla_periodos.id
+    and tipo_de_calculo = '5'
+    and forma_de_registro = 'A';
+    
+    for r_work in
+        select pla_rela_horas_conceptos.concepto, pla_conceptos.descripcion,
+        sum(pla_reclamos.tasa_por_hora*pla_tipos_de_horas.recargo*pla_reclamos.horas) as monto
+        from pla_reclamos, pla_empleados, pla_rela_horas_conceptos, pla_tipos_de_horas, pla_conceptos
+        where pla_conceptos.concepto = pla_rela_horas_conceptos.concepto
+        and pla_rela_horas_conceptos.tipo_de_hora = pla_tipos_de_horas.tipo_de_hora
+        and pla_reclamos.compania = pla_empleados.compania
+        and pla_reclamos.codigo_empleado = pla_empleados.codigo_empleado
+        and pla_reclamos.tipo_de_hora = pla_rela_horas_conceptos.tipo_de_hora
+        and pla_reclamos.compania = ai_cia
+        and pla_reclamos.codigo_empleado = as_codigo_empleado
+        and pla_reclamos.tipo_de_planilla = as_tipo_de_planilla
+        and pla_reclamos.year = ai_year
+        and pla_reclamos.numero_planilla = ai_numero_planilla
+        group by 1, 2
+        order by 1, 2
+    loop
+        select into r_pla_dinero *
+        from pla_dinero
+        where compania = ai_cia
+        and codigo_empleado = as_codigo_empleado
+        and tipo_de_calculo = '5'
+        and id_periodos = r_pla_periodos.id
+        and concepto = r_work.concepto;
+        if not found then
+            insert into pla_dinero(id_periodos, compania, codigo_empleado, tipo_de_calculo,
+                concepto, forma_de_registro, descripcion, mes, monto)
+            values (r_pla_periodos.id, ai_cia, as_codigo_empleado, '5',
+                r_work.concepto, 'A', r_work.descripcion, Mes(r_pla_periodos.dia_d_pago),
+                r_work.monto);
+        end if;
+    end loop;
+    return 1;
+end;
+$_$
+    LANGUAGE plpgsql;
+

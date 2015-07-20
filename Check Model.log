@@ -1,0 +1,56 @@
+
+Checking package ...
+Checking table ...
+-	Table name uniqueness
+-	Table code uniqueness
+-	Table name maximum length
+-	Table code maximum length
+-	Existence of column
+-	Existence of index
+-	Existence of key
+-	Number of auto-incremented columns
+-	Existence of reference
+Checking column of table
+-	Column name uniqueness
+-	Column code uniqueness
+-	Column code maximum length
+-	Domain divergence
+-	Column mandatory
+-	Detect inconsistencies between default values and check parameters
+-	Detect inconsistencies between check parameters
+-	Precision > Maximum Length
+-	Check for undefined data types
+-	Foreign key column data type divergence
+-	Constraint name uniqueness
+-	Column with sequence not in a key
+-	Auto-incremented column with data type not numeric
+-	Missing computed column expression
+Checking index of table
+-	Index name uniqueness
+-	Index code uniqueness
+-	Index code maximum length
+-	Existence of index column
+-	Index inclusion
+Checking key of table
+-	Key name uniqueness
+-	Key code uniqueness
+-	Key code maximum length
+-	Existence of column
+-	Key inclusion
+-	Multi-column key has sequence column
+Checking trigger of table
+Checking view ...
+Checking reference ...
+-	Reference name uniqueness
+-	Reference code uniqueness
+-	Reflexive and mandatory reference
+-	Existence of reference join
+-	Reference code maximum length
+-	Incomplete join
+-	Join order
+Checking domain ...
+Checking user ...
+Checking procedure ...
+Checking file ...
+0 error(s),  0 warning(s).
+The Physical Data Model is correct, no errors were found.

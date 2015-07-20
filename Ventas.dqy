@@ -1,0 +1,7 @@
+XLODBC
+1
+DSN=abaco;Description=abaco;Integrated=No
+SELECT a.num_documento, Sum(precio*cantidad)  FROM DBA.factura1 a, DBA.factura2 b  WHERE a.almacen = b.almacen AND a.tipo = b.tipo AND a.num_documento = b.num_documento  GROUP BY a.num_documento  ORDER BY a.num_documento
+
+
+num_documento	Suma(precio*cantidad)

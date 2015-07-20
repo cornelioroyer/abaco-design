@@ -1,0 +1,15 @@
+        select factura2.*, eys2.*, eys2.costo/eys2.cantidad
+        from factura2, factura2_eys2, eys2
+        where factura2.almacen = factura2_eys2.almacen
+        and factura2.tipo = factura2_eys2.tipo
+        and factura2.num_documento = factura2_eys2.num_documento
+        and factura2.linea = factura2_eys2.factura2_linea
+        and factura2_eys2.articulo = eys2.articulo
+        and factura2_eys2.almacen = eys2.almacen
+        and factura2_eys2.no_transaccion = eys2.no_transaccion
+        and factura2_eys2.eys2_linea = eys2.linea
+        and factura2.almacen = '01'
+        and factura2.articulo = 'CLK60'
+        and eys2.articulo = 'CLK60'
+        and factura2.caja = '02'
+        and factura2.num_documento = 4392

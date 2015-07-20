@@ -1,0 +1,7 @@
+XLODBC
+1
+DSN=universo;DATABASE=universo;SERVER=192.168.1.1;PORT=5432;UID=dba;ReadOnly=0;Protocol=6.4;FakeOidIndex=1;ShowOidColumn=1;RowVersioning=1;ShowSystemTables=0;ConnSettings=;Fetch=100;Socket=4096;UnknownSizes=0;MaxVarcharSize=254;MaxLongVarcharSize=8190;Debug=0;CommLog=0;Optimizer=1;Ksqo=1;UseDeclareFetch=0;TextAsLongVarchar=1;UnknownsAsLongVarchar=0;BoolsAsChar=1;Parse=0;CancelAsFreeStmt=0;ExtraSysTablePrefixes=dd_;;LFConversion=1;UpdatableCursors=1;DisallowPremature=0;TrueIsMinus1=0
+SELECT b.compania, c.no_informe, b.year, b.periodo, c.d_fila, (b.debito-b.credito), (b.balance_inicio+b.debito-b.credito)  FROM cglcuentas a, cglsldocuenta b, cgl_financiero c, cglniveles d  WHERE a.cuenta = b.cuenta AND a.cuenta = c.cuenta AND a.nivel = d.nivel AND ((d.recibe='S'))  ORDER BY b.compania, c.no_informe, b.year, b.periodo, c.d_fila
+
+
+compania	no_informe	year	periodo	d_fila	(b.debito-b.credito)	(b.balance_inicio+b.debito-b.credito)

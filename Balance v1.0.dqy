@@ -1,0 +1,7 @@
+XLODBC
+1
+DSN=harinas_pc_pb;DATABASE=harinas;SERVER=192.168.1.4;PORT=5432;UID=dba;READONLY=0;PROTOCOL=6.4;FAKEOIDINDEX=0;SHOWOIDCOLUMN=0;ROWVERSIONING=0;SHOWSYSTEMTABLES=0;CONNSETTINGS=
+SELECT a.nombre, b.compania, b.year, b.periodo, b.cuenta, b.balance_inicio, b.debito, b.credito  FROM cglcuentas a, cglsldocuenta b  WHERE a.cuenta = b.cuenta
+
+
+nombre	compania	year	periodo	cuenta	balance_inicio	debito	credito

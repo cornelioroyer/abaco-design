@@ -1,0 +1,7 @@
+XLODBC
+1
+DSN=abaco_real;UID=dba;PWD=sql;Description=abaco_real;DatabaseFile=C:\abaco\data_real\abaco.db;AutoStop=Yes;Integrated=No
+SELECT cglcuentas.cuenta, cglcuentas.nombre, cglcuentas.nivel, cglcuentas.naturaleza, cglcuentas.auxiliar_1, cglcuentas.auxiliar_2, cglcuentas.efectivo, cglcuentas.tipo_cuenta, cglsldocuenta.compania, cglsldocuenta.year, cglsldocuenta.periodo, cglsldocuenta.cuenta, cglsldocuenta.balance_inicio, cglsldocuenta.debito, cglsldocuenta.credito  FROM DBA.cglcuentas cglcuentas, DBA.cglsldocuenta cglsldocuenta  WHERE cglcuentas.cuenta = cglsldocuenta.cuenta
+
+
+cuenta	nombre	nivel	naturaleza	auxiliar_1	auxiliar_2	efectivo	tipo_cuenta	compania	year	periodo	cuenta	balance_inicio	debito	credito
