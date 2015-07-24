@@ -1,3 +1,7 @@
+
+set search_path to 'planilla';
+
+
 drop function f_pp_usuario_after_insert() cascade;
 drop function f_pp_horarios_before_update() cascade;
 drop function f_att_punches_after_insert() cascade;

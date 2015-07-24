@@ -889,7 +889,7 @@ begin
         return 0;
     end if;
     
-    
+                
 -- aqui poner una condicion para que solo aplique a empleados de salario fijo.
 
     if r_pla_marcaciones_work.status = ''F'' 
@@ -4125,7 +4125,7 @@ begin
     end if;
 
 
-    if trim(lc_computa_descanso_en_base_al_turno) = ''N'' then
+    if trim(lc_computa_descanso_en_base_al_turno) = ''S'' then
         if r_pla_turnos.tolerancia_descanso is not null and r_pla_marcaciones.entrada_descanso is not null then
             ldt_entrada_descanso = f_timestamp(date(r_pla_marcaciones.entrada_descanso),r_pla_turnos.tolerancia_descanso);
             if r_pla_marcaciones.entrada_descanso > ldt_entrada_descanso then

@@ -5,7 +5,13 @@ from nomctrac, nomtpla2
 where nomctrac.tipo_planilla = nomtpla2.tipo_planilla
 and nomctrac.numero_planilla = nomtpla2.numero_planilla
 and nomctrac.year = nomtpla2.year
-and nomtpla2.dia_d_pago >= '2015-01-01'
+and nomtpla2.dia_d_pago >= '2015-02-01';
+
+
+delete from cglposteo
+where aplicacion_origen = 'PLA'
+and fecha_comprobante >= '2015-02-01';
+
 
 /*
 and nomctrac.compania = '03'
