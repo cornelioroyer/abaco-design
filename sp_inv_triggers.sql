@@ -1,3 +1,4 @@
+
 drop function f_articulos_after_insert() cascade;
 drop function f_articulos_before_insert() cascade;
 
@@ -129,10 +130,10 @@ begin
     end if;
 
 
-    i := f_valida_fecha(r_almacen.compania, ''INV'', old.fecha);
-    i := f_valida_fecha(r_almacen.compania, ''CGL'', old.fecha);
+    i = f_valida_fecha(r_almacen.compania, ''INV'', old.fecha);
+    i = f_valida_fecha(r_almacen.compania, ''CGL'', old.fecha);
 
-    
+/*    
     delete from cglposteo
     where consecutivo in 
     (select consecutivo from rela_eys1_cglposteo
@@ -142,6 +143,7 @@ begin
     delete from rela_eys1_cglposteo
     where almacen = old.almacen
     and no_transaccion = old.no_transaccion;
+*/    
     
     return old;
 end;
@@ -278,10 +280,11 @@ begin
         
     end if;
     
+/*
     delete from rela_eys1_cglposteo
     where almacen = old.almacen
     and no_transaccion = old.no_transaccion;
-
+*/
     
     if old.proveedor is not null and f_invparal(old.almacen, ''valida_existencias'') = ''S'' then    
         select into r_work * from eys1, eys2, invmotivos
@@ -304,9 +307,11 @@ end;
 
 create function f_eys2_before_update() returns trigger as '
 begin
+/*
     delete from rela_eys1_cglposteo
     where almacen = old.almacen
     and no_transaccion = old.no_transaccion;
+*/    
     return new;
 end;
 ' language plpgsql;
@@ -451,9 +456,11 @@ begin
             Raise Exception ''No se puede eliminar registros con fecha % el ultimo inventario fisico fue %'',r_eys1.fecha, ld_uif;
         end if;
 
+/*
         delete from rela_eys1_cglposteo
         where almacen = old.almacen
         and no_transaccion = old.no_transaccion;
+*/
         
     end if;        
     return old;
@@ -486,9 +493,12 @@ begin
         Raise Exception ''No se puede eliminar registros con fecha % el ultimo inventario fisico fue %'',r_eys1.fecha, ld_uif;
     end if;
 
+/*
     delete from rela_eys1_cglposteo
     where almacen = old.almacen
     and no_transaccion = old.no_transaccion;
+*/
+    
     return new;
 end;
 ' language plpgsql;
@@ -522,8 +532,10 @@ end;
 
 create function f_rela_eys1_cglposteo_before_delete() returns trigger as '
 begin
+/*
     delete from cglposteo
     where consecutivo = old.consecutivo;
+*/    
     return old;
 end;
 ' language plpgsql;

@@ -391,7 +391,6 @@ begin
         i = f_tal_ot2_inventario(r_tal_ot2.almacen, r_tal_ot2.no_orden, r_tal_ot2.tipo, r_tal_ot2.linea, r_tal_ot2.articulo);
     end loop;
 
-
 /*    
     for r_factura1 in select factura1.almacen, factura1.tipo, factura1.num_documento 
                         from factura1, factura2, articulos, factmotivos, almacen

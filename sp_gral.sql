@@ -1,3 +1,7 @@
+
+
+set search_path to dba;
+
 drop function f_gralparaxcia(char(2), char(3), char(20));
 drop function f_gralparaxapli(char(3), char(20));
 drop function f_abrir_periodos(char(2), int4, int4);

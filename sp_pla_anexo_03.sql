@@ -1,3 +1,6 @@
+
+set search_path to dba;
+
 drop function f_to_date(integer, integer, integer) cascade;
 drop function f_acumulado(char(2), char(7), int4, char(3)) cascade;
 drop function f_acumulado_para(char(2), char(7), int4, char(3)) cascade;

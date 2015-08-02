@@ -601,6 +601,7 @@ create function f_adc_manifiesto_before_insert_update() returns trigger as '
 declare
     i integer;
     r_fact_referencias record;
+    r_adc_parametros_contables record;
 begin
 
     if new.puerto_descarga is null then
@@ -628,6 +629,24 @@ begin
         Raise Exception ''Fecha del Lote % Debe ser igual o mayor a fecha de llegada %'',new.fecha, new.fecha_arrive;
     end if;    
 */
+
+    select into r_adc_parametros_contables *
+    from adc_parametros_contables
+    where referencia = new.referencia
+    and ciudad = new.ciudad_origen;
+    if not found then
+        Raise Exception ''Ciudad Origen % no tiene afectacion contable'', new.ciudad_origen;
+    end if;
+
+    select into r_adc_parametros_contables *
+    from adc_parametros_contables
+    where referencia = new.referencia
+    and ciudad = new.ciudad_destino;
+    if not found then
+        Raise Exception ''Ciudad Destino % no tiene afectacion contable'', new.ciudad_destino;
+    end if;
+    
+    
     
     return new;
 end;
@@ -1191,6 +1210,7 @@ declare
     r_factura1 record;
     r_navieras record;
     r_adc_master record;
+    r_adc_parametros_contables record;
     r_cxpmotivos record;
 begin
 
@@ -1225,6 +1245,24 @@ begin
         and trim(docmto_aplicar) = trim(r_adc_master.container)
         and motivo_cxp = r_cxpmotivos.motivo_cxp;
     end loop;    
+    
+    select into r_adc_parametros_contables *
+    from adc_parametros_contables
+    where referencia = new.referencia
+    and ciudad = new.ciudad_origen;
+    if not found then
+        Raise Exception ''Ciudad Origen % no tiene afectacion contable'', new.ciudad_origen;
+    end if;
+
+    select into r_adc_parametros_contables *
+    from adc_parametros_contables
+    where referencia = new.referencia
+    and ciudad = new.ciudad_destino;
+    if not found then
+        Raise Exception ''Ciudad Destino % no tiene afectacion contable'', new.ciudad_destino;
+    end if;
+    
+    
     
     return new;
 end;

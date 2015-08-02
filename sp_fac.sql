@@ -1,5 +1,5 @@
 
-set search_path to dba;
+--set search_path to dba;
 
 
 drop function f_factura1_cglposteo(char(2), char(3), int4, char(3)) cascade;

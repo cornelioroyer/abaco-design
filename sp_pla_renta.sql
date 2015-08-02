@@ -1,3 +1,6 @@
+
+set search_path to dba;
+
 drop function f_renta_exacta_2010(char(2), char(7), char(2), decimal) cascade;
 drop function f_renta_causada(char(2), char(7), integer) cascade;
 drop function f_periodos_pagos(char(2), char(7), integer) cascade;

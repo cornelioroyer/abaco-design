@@ -1,5 +1,7 @@
 set search_path to 'planilla';
 
+rollback work;
+
 drop function f_pla_marcaciones_before_insert() cascade;
 drop function f_pla_marcaciones_before_update() cascade;
 drop function f_pla_marcaciones_before_delete() cascade;
@@ -1198,7 +1200,7 @@ begin
         new.codigo_reloj    =   trim(to_char(li_work, ''0009''));
     end if;
     
-    if new.compania = 1261 then
+    if new.compania = 1261 or new.compania = 1357 or new.compania = 1363 then
         if Length(Trim(new.codigo_reloj)) = 3 then
             new.codigo_reloj    =   ''0''||Trim(new.codigo_reloj);
         end if;
@@ -2477,7 +2479,10 @@ begin
         values (new.compania, new.codigo_empleado);
     end if;
 
-    i = f_zktime_hr_employee(new.compania, new.codigo_empleado);    
+--    i = f_zktime_hr_employee(new.compania, new.codigo_empleado);    
+    if new.compania <> 1362 then
+        i = f_zktime_hr_employee(new.compania, new.codigo_empleado);    
+    end if;        
     
     return new;
 end;
@@ -3362,7 +3367,9 @@ begin
     insert into pla_auxiliares(compania, codigo_empleado)
     values(new.compania, new.codigo_empleado);
 
-    i = f_zktime_hr_employee(new.compania, new.codigo_empleado);    
+    if new.compania <> 1362 then
+        i = f_zktime_hr_employee(new.compania, new.codigo_empleado);    
+    end if;        
     
     return new;
 end;

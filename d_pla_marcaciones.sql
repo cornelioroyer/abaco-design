@@ -10,11 +10,11 @@ and pla_marcaciones.id_tarjeta_de_tiempo = pla_tarjeta_tiempo.id
 and pla_tarjeta_tiempo.compania = pla_empleados.compania
 and pla_tarjeta_tiempo.codigo_empleado = pla_empleados.codigo_empleado
 and pla_empleados.departamento = pla_departamentos.id
-and pla_periodos.compania in (1360)
+and pla_periodos.compania in (1362)
 and pla_periodos.year = 2015
 and pla_periodos.tipo_de_planilla = '2'
-and pla_periodos.numero_planilla = 14
-and f_to_date(pla_marcaciones.entrada) >= '2015-01-02';
+and pla_periodos.numero_planilla = 13
+and f_to_date(pla_marcaciones.entrada) >= '2015-05-31';
 
 -- select f_pla_crear_tarjetas_de_tiempo(754, '2')
 

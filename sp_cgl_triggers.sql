@@ -91,7 +91,7 @@ begin
     select into r_cglposteo * from cglposteo
     where consecutivo = old.consecutivo;
     if found then
-       i := f_cglsldoaux2(r_cglposteo.compania, r_cglposteo.cuenta, new.auxiliar, r_cglposteo.year, r_cglposteo.periodo, old.credito, old.debito);
+--       i := f_cglsldoaux2(r_cglposteo.compania, r_cglposteo.cuenta, new.auxiliar, r_cglposteo.year, r_cglposteo.periodo, old.credito, old.debito);
     end if;
 
     return new;
@@ -530,18 +530,23 @@ end;
 
 create function f_cgl_comprobante1_before_delete() returns trigger as '
 begin
+/*
     delete from rela_cgl_comprobante1_cglposteo
     where compania = old.compania
     and secuencia = old.secuencia;
+*/    
     return old;
 end;
 ' language plpgsql;
 
+
 create function f_cgl_comprobante1_before_update() returns trigger as '
 begin
+/*
     delete from rela_cgl_comprobante1_cglposteo
     where compania = old.compania
     and secuencia = old.secuencia;
+*/    
     return new;
 end;
 ' language plpgsql;
@@ -750,6 +755,7 @@ begin
                             or (year = old.year and periodo > old.periodo)))
                             order by year, periodo
     loop
+/*    
         update cglsldocuenta
         set balance_inicio = ldc_balance_inicio
         where compania = r_cglsldocuenta.compania
@@ -757,6 +763,7 @@ begin
         and year = r_cglsldocuenta.year
         and periodo = r_cglsldocuenta.periodo;
         ldc_balance_inicio = ldc_balance_inicio + r_cglsldocuenta.debito - r_cglsldocuenta.credito;
+*/        
     end loop;
     return new;
 end;
@@ -778,6 +785,7 @@ begin
                             or (year = old.year and periodo > old.periodo)))
                             order by year, periodo
     loop
+/*    
         update cglsldocuenta
         set balance_inicio = ldc_balance_inicio
         where compania = r_cglsldocuenta.compania
@@ -785,6 +793,7 @@ begin
         and year = r_cglsldocuenta.year
         and periodo = r_cglsldocuenta.periodo;
         ldc_balance_inicio = ldc_balance_inicio + r_cglsldocuenta.debito - r_cglsldocuenta.credito;
+*/        
     end loop;
     return old;
 end;

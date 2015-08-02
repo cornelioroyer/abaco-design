@@ -1,3 +1,5 @@
+set search_path to 'planilla';
+
 
 rollback work;
 
@@ -137,6 +139,7 @@ delete from pla_dias_feriados where compania in (select compania from tmp_cias_e
 
 delete from pla_companias where compania in (select compania from tmp_cias_expiradas);
 
+
 /*
 
 
@@ -145,3 +148,4 @@ delete from pla_companias where compania in (select compania from tmp_cias_expir
 
 
 */
+

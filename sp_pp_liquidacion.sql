@@ -279,6 +279,9 @@ begin
     ld_hasta    =   r_pla_liquidacion.fecha_indemnizacion;
 
 
+--    raise exception ''%'', ld_desde;
+
+/*    
     ld_ultimo_xiii = null;
     select into ld_ultimo_xiii Max(acum_hasta) 
     from pla_xiii
@@ -291,6 +294,7 @@ begin
     if ld_ultimo_xiii < ld_desde then
         ld_desde = ld_ultimo_xiii+1;
     end if;        
+*/
 
     select into r_pla_periodos *
     from pla_periodos
@@ -1399,7 +1403,20 @@ begin
         and dia_d_pago = ld_ultimo_xiii;
         if found then
             if r_pla_empleados.fecha_inicio > r_pla_xiii.acum_hasta then
-                return r_pla_empleados.fecha_inicio;
+                ld_ultimo_xiii_mes_cobrado = null;
+                select into ld_ultimo_xiii_mes_cobrado Max(dia_d_pago)
+                from pla_dinero, pla_periodos
+                where pla_dinero.id_periodos = pla_periodos.id
+                and pla_dinero.compania = r_pla_empleados.compania
+                and monto <> 0
+                and pla_dinero.concepto in (''109'')
+                and pla_dinero.tipo_de_calculo = ''7''
+                and pla_dinero.codigo_empleado = r_pla_empleados.codigo_empleado;
+                if ld_ultimo_xiii_mes_cobrado is null then
+                    return r_pla_empleados.fecha_inicio;
+                else
+                    return ld_ultimo_xiii_mes_cobrado + 1;
+                end if;                    
             else                
                 return r_pla_xiii.acum_hasta + 1;
             end if;

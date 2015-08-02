@@ -3,6 +3,385 @@ set search_path to planilla;
 drop function f_cargar_tmp_empleados(int4);
 drop function f_cargar_tmp_empleados_fiesta(int4);
 drop function f_cargar_tmp_acumulados(int4);
+drop function f_cargar_tmp_empleados_golden(int4);
+drop function f_cargar_tmp_empleados_itas(int4);
+
+
+create function f_cargar_tmp_empleados_itas(int4) returns integer as '
+declare
+    ai_cia alias for $1;
+    r_tmp_empleados record;
+    r_pla_departamentos record;
+    r_pla_acreedores record;
+    r_pla_cargos record;
+    r_pla_proyectos record;
+    r_pla_empleados record;
+    r_tmp_proyectos record;
+    r_pla_retener record;
+    r_pla_retenciones record;
+    r_tmp_descuentos record;
+    r_pla_companias record;
+    r_pla_bancos record;
+    lc_tipo_de_contrato char(1);
+    lc_forma_de_pago char(1);
+    lc_sexo char(1);
+    lc_codigo_empleado char(7);
+    lc_departamento char(3);
+    lc_cargo char(3);
+    lc_proyecto char(20);
+    lc_grupo char(1);
+    lc_estado_civil char(1);
+    lc_tipo_descuento char(1);
+    lc_tipo_de_salario char(1);
+    lc_status char(1);
+    lc_dv char(2);
+    lc_tipo_de_planilla char(2);
+    lc_acreedor char(10);
+    lc_email char(100);
+    lc_numero_documento char(30);
+    li_dependientes int4;
+    li_compania int4;
+    ldc_salario_bruto decimal;
+    ldc_porcentaje decimal;
+    ldc_letra decimal;
+    ldc_monto decimal;
+    ldc_saldo decimal;
+    ldc_tasa_por_hora decimal;
+    ld_fecha_nacimiento date;
+    ld_fecha_terminacion_real date;
+    ld_fecha_inicio date;
+    lc_sindicalizado char(1);
+begin
+
+    
+    lc_sindicalizado = ''N'';
+    
+    lc_tipo_de_salario = ''F'';
+    
+    select into r_pla_companias * from pla_companias
+    where compania = ai_cia;
+    if not found then
+        return 0;
+    end if;
+
+    
+    for r_tmp_empleados in
+        select * from tmp_empleados
+        where compania = ai_cia
+        and codigo_empleado is not null
+        order by codigo_empleado
+    loop
+        lc_sindicalizado = ''N'';
+        ldc_tasa_por_hora = 0;        
+        
+        select into r_pla_departamentos *
+        from pla_departamentos
+        where compania = ai_cia
+        order by id;
+
+        ld_fecha_nacimiento =   ''2015-01-01'';
+
+
+        select into r_pla_cargos *
+        from pla_cargos
+        where compania = ai_cia
+        order by id;
+
+        select into r_pla_proyectos * 
+        from pla_proyectos
+        where compania = ai_cia
+        order by id;
+
+        select into r_pla_bancos *
+        from pla_bancos
+        where compania = ai_cia
+        order by id;
+
+        ldc_salario_bruto = 500;            
+
+        
+        if ldc_salario_bruto <= 0 then
+            ldc_salario_bruto = 0.01;
+        end if;            
+        
+        
+        lc_tipo_de_contrato =   ''P'';
+        ld_fecha_nacimiento =   ''2015-01-01'';
+        lc_forma_de_pago    =   ''T'';
+
+
+        lc_sexo             =   ''M'';
+        lc_dv               =   ''00'';
+        ld_fecha_inicio     =   r_tmp_empleados.fecha_inicio;
+
+        ld_fecha_inicio     =   ''2015-01-01'';
+
+
+        lc_codigo_empleado  =   trim(r_tmp_empleados.codigo_empleado);
+
+            lc_email = trim(r_pla_companias.e_mail);
+
+                lc_estado_civil =   ''S'';
+        
+
+        
+            ldc_tasa_por_hora   =   ldc_salario_bruto/104;
+        
+        lc_grupo        =   ''A'';
+        li_dependientes =   0;
+
+        lc_status       =   ''A'';
+        
+
+            lc_dv = ''00'';
+
+        
+        select into r_pla_empleados *
+        from pla_empleados
+        where compania = r_tmp_empleados.compania
+        and Trim(codigo_empleado) = trim(lc_codigo_empleado);
+        if not found then
+            insert into pla_empleados(compania, codigo_empleado,
+                tipo_de_planilla, grupo, dependientes, nombre, apellido,
+                tipo_contrato, estado_civil, fecha_inicio, 
+                fecha_nacimiento, tipo_de_salario, forma_de_pago, tipo_calculo_ir, status,
+                sexo, cedula, dv, declarante, ss, direccion1, direccion2, tasa_por_hora, salario_bruto, email,
+                cargo, departamento, id_pla_proyectos, telefono_1, telefono_2, direccion4, direccion3,
+                tipo_cta_bco, id_pla_bancos, cta_bco_empleado, fecha_terminacion_real, sindicalizado)
+            values(ai_cia, trim(lc_codigo_empleado), ''2'' , 
+                lc_grupo, li_dependientes, 
+                Trim(r_tmp_empleados.nombre), ''apellido'',
+                lc_tipo_de_contrato, lc_estado_civil, ld_fecha_inicio,
+                ld_fecha_nacimiento, lc_tipo_de_salario, lc_forma_de_pago, ''R'', lc_status,
+                lc_sexo,
+                trim(lc_codigo_empleado), lc_dv, ''1'', trim(lc_codigo_empleado),
+                null, 
+                null, 
+                ldc_tasa_por_hora, ldc_salario_bruto, trim(lc_email), r_pla_cargos.id, r_pla_departamentos.id,
+                r_pla_proyectos.id, ''123'', null, null, null, ''04'',
+                null, null, null, lc_sindicalizado);
+        else
+            update pla_empleados
+            set cedula = trim(r_tmp_empleados.cedula)
+            where compania = r_tmp_empleados.compania
+            and Trim(codigo_empleado) = trim(lc_codigo_empleado);
+        end if;            
+    end loop;            
+
+    return 1;
+end;
+' language plpgsql;
+
+
+
+
+
+create function f_cargar_tmp_empleados_golden(int4) returns integer as '
+declare
+    ai_cia alias for $1;
+    r_tmp_empleados record;
+    r_pla_departamentos record;
+    r_pla_acreedores record;
+    r_pla_cargos record;
+    r_pla_proyectos record;
+    r_pla_empleados record;
+    r_tmp_proyectos record;
+    r_pla_retener record;
+    r_pla_retenciones record;
+    r_tmp_descuentos record;
+    r_pla_companias record;
+    r_pla_bancos record;
+    lc_tipo_de_contrato char(1);
+    lc_forma_de_pago char(1);
+    lc_sexo char(1);
+    lc_codigo_empleado char(7);
+    lc_departamento char(3);
+    lc_cargo char(3);
+    lc_proyecto char(20);
+    lc_grupo char(1);
+    lc_estado_civil char(1);
+    lc_tipo_descuento char(1);
+    lc_tipo_de_salario char(1);
+    lc_status char(1);
+    lc_dv char(2);
+    lc_tipo_de_planilla char(2);
+    lc_acreedor char(10);
+    lc_email char(100);
+    lc_numero_documento char(30);
+    li_dependientes int4;
+    li_compania int4;
+    ldc_salario_bruto decimal;
+    ldc_porcentaje decimal;
+    ldc_letra decimal;
+    ldc_monto decimal;
+    ldc_saldo decimal;
+    ldc_tasa_por_hora decimal;
+    ld_fecha_nacimiento date;
+    ld_fecha_terminacion_real date;
+    ld_fecha_inicio date;
+    lc_sindicalizado char(1);
+begin
+
+    
+    lc_sindicalizado = ''N'';
+    
+    lc_tipo_de_salario = ''F'';
+    
+    select into r_pla_companias * from pla_companias
+    where compania = ai_cia;
+    if not found then
+        return 0;
+    end if;
+
+    
+    for r_tmp_empleados in
+        select * from tmp_empleados
+        where compania = ai_cia
+        and codigo_empleado is not null
+        and salario is not null
+        order by codigo_empleado
+    loop
+        lc_sindicalizado = ''N'';
+        ldc_tasa_por_hora = 0;        
+        
+        select into r_pla_departamentos *
+        from pla_departamentos
+        where compania = ai_cia
+        order by id;
+
+
+        if r_tmp_empleados.cargo is null then
+            select into r_pla_cargos *
+            from pla_cargos
+            where compania = ai_cia
+            order by id;
+        else
+            select into r_pla_cargos *
+            from pla_cargos
+            where compania = ai_cia
+            and trim(descripcion) = trim(r_tmp_empleados.cargo);
+            if not found then
+                insert into pla_cargos(compania, cargo, 
+                    descripcion, status, monto)
+                values(ai_cia, substring(trim(r_tmp_empleados.codigo_empleado) from 2 for 3),
+                    trim(r_tmp_empleados.cargo), 1, 0);
+            end if;
+
+
+            select into r_pla_cargos *
+            from pla_cargos
+            where compania = ai_cia
+            and trim(descripcion) = trim(r_tmp_empleados.cargo);
+
+                            
+        end if;
+
+        if r_tmp_empleados.proyecto is null then
+            select into r_pla_proyectos * 
+            from pla_proyectos
+            where compania = ai_cia
+            order by id;
+        else
+            select into r_pla_proyectos *
+            from pla_proyectos
+            where compania = ai_cia
+            and trim(descripcion) = trim(r_tmp_empleados.proyecto);
+            if not found then
+                insert into pla_proyectos(compania, proyecto, descripcion)
+                values(ai_cia, trim(r_tmp_empleados.codigo_empleado),
+                    trim(r_tmp_empleados.proyecto));
+            end if;
+
+
+            select into r_pla_proyectos *
+            from pla_proyectos
+            where compania = ai_cia
+            and trim(descripcion) = trim(r_tmp_empleados.proyecto);
+        
+        end if;        
+
+        select into r_pla_bancos *
+        from pla_bancos
+        where compania = ai_cia
+        order by id;
+
+            ldc_salario_bruto   =   r_tmp_empleados.salario/2;
+
+        
+        if ldc_salario_bruto <= 0 then
+            ldc_salario_bruto = 0.01;
+        end if;            
+        
+        
+        lc_tipo_de_contrato =   ''P'';
+        ld_fecha_nacimiento =   ''2015-01-01'';
+        lc_forma_de_pago    =   ''T'';
+
+
+        lc_sexo             =   ''M'';
+        lc_dv               =   ''00'';
+        ld_fecha_inicio     =   r_tmp_empleados.fecha_inicio;
+
+        lc_codigo_empleado  =   trim(r_tmp_empleados.codigo_empleado);
+
+            lc_email = trim(r_pla_companias.e_mail);
+
+                lc_estado_civil =   ''S'';
+        
+
+        
+            ldc_tasa_por_hora   =   ldc_salario_bruto/104;
+        
+        lc_grupo        =   ''A'';
+        li_dependientes =   0;
+
+        lc_status       =   ''A'';
+        
+
+            lc_dv = ''00'';
+
+        
+        select into r_pla_empleados *
+        from pla_empleados
+        where compania = r_tmp_empleados.compania
+        and Trim(codigo_empleado) = trim(lc_codigo_empleado);
+        if not found then
+            insert into pla_empleados(compania, codigo_empleado,
+                tipo_de_planilla, grupo, dependientes, nombre, apellido,
+                tipo_contrato, estado_civil, fecha_inicio, 
+                fecha_nacimiento, tipo_de_salario, forma_de_pago, tipo_calculo_ir, status,
+                sexo, cedula, dv, declarante, ss, direccion1, direccion2, tasa_por_hora, salario_bruto, email,
+                cargo, departamento, id_pla_proyectos, telefono_1, telefono_2, direccion4, direccion3,
+                tipo_cta_bco, id_pla_bancos, cta_bco_empleado, fecha_terminacion_real, sindicalizado)
+            values(ai_cia, trim(lc_codigo_empleado), ''2'' , 
+                lc_grupo, li_dependientes, 
+                Trim(r_tmp_empleados.nombre), ''apellido'',
+                lc_tipo_de_contrato, lc_estado_civil, ld_fecha_inicio,
+                ld_fecha_nacimiento, lc_tipo_de_salario, lc_forma_de_pago, ''R'', lc_status,
+                lc_sexo,
+                trim(lc_codigo_empleado), lc_dv, ''1'', trim(lc_codigo_empleado),
+                null, 
+                null, 
+                ldc_tasa_por_hora, ldc_salario_bruto, trim(lc_email), r_pla_cargos.id, r_pla_departamentos.id,
+                r_pla_proyectos.id, ''123'', null, null, null, ''04'',
+                null, null, null, lc_sindicalizado);
+        else
+/*        
+            update pla_empleados
+            set fecha_terminacion_real = ld_fecha_terminacion_real,
+                status = lc_status
+            where compania = r_tmp_empleados.compania
+            and Trim(codigo_empleado) = trim(lc_codigo_empleado);
+*/            
+        end if;            
+    end loop;            
+
+    return 1;
+end;
+' language plpgsql;
+
+
+
 
 create function f_cargar_tmp_empleados_fiesta(int4) returns integer as '
 declare

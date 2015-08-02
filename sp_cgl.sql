@@ -417,6 +417,7 @@ begin
     and cxc_recibo1.fecha >= ld_desde
     and cxc_recibo1.fecha <> cglposteo.fecha_comprobante;
 
+
     delete from rela_factura1_cglposteo
     using factura1, cglposteo, almacen
     where factura1.almacen = rela_factura1_cglposteo.almacen
@@ -464,7 +465,7 @@ begin
     or cglposteo.fecha_comprobante >= ld_desde)
     and bcotransac1.fecha_posteo <> cglposteo.fecha_comprobante;
 
-    
+
     delete from eys1
     using almacen
     where eys1.almacen = almacen.almacen
@@ -472,6 +473,7 @@ begin
     and fecha >= ld_desde
     and almacen.compania = as_compania
     and aplicacion_origen = ''FAC'';
+
 
     
     ldc_work = 0;
