@@ -31,6 +31,171 @@ drop function f_copy_pla_retenciones(int4, int4) cascade;
 drop function f_crear_pla_retenciones(int4) cascade;
 drop function f_crear_pla_retenciones_chong(int4) cascade;
 drop function f_cambiar_fecha_eventos(int4) cascade;
+drop function f_cargar_certificados_medicos(int4, int4) cascade;
+drop function f_update_saldo_pla_retenciones(int4, int4) cascade;
+drop function f_saldo_pla_retenciones_pase(int4) cascade;
+
+
+create function f_update_saldo_pla_retenciones(int4, int4) returns integer as '
+declare
+    ai_cia_1 alias for $1;
+    ai_cia_2 alias for $2;
+    r_pla_cuentas record;
+    r_pla_cuentas_2 record;
+    r_pla_cuentas_conceptos record;
+    r_pla_acreedores record;
+    r_pla_retenciones record;
+    r_pla_retener record;
+    r_work record;
+    li_id int4;
+    ldc_saldo decimal;
+    li_id_pla_cuentas int4;
+    li_id_pla_cuentas_2 int4;
+begin
+    for r_pla_retenciones in
+        select * from pla_retenciones
+        where compania = ai_cia_2
+        order by id
+    loop
+        select into r_work *
+        from pla_retenciones
+        where compania = ai_cia_1
+        and codigo_empleado = r_pla_retenciones.codigo_empleado
+        and acreedor = r_pla_retenciones.acreedor
+        and numero_documento = r_pla_retenciones.numero_documento;
+        if found then
+            ldc_saldo   =   f_saldo_pla_retenciones_pase(r_work.id);
+            
+            if ldc_saldo > 0 then
+                update pla_retenciones
+                set monto_original_deuda = ldc_saldo
+                where id = r_pla_retenciones.id;
+            end if;      
+        end if;
+    end loop;
+
+    
+    return 1;
+end;
+' language plpgsql;
+
+
+create function f_saldo_pla_retenciones_pase(int4) returns decimal as '
+declare
+    ai_id alias for $1;
+    r_pla_retenciones record;
+    r_pla_deducciones record;
+    r_pla_empleados record;
+    ldc_saldo decimal;
+    ldc_pagos decimal;
+begin
+    ldc_saldo = 0;
+    
+    select into r_pla_deducciones * from pla_deducciones
+    where id_pla_dinero = ai_id;
+    if not found then
+        return 0;
+    end if;
+    
+    select into r_pla_retenciones * from pla_retenciones
+    where id = r_pla_deducciones.id_pla_retenciones;
+    if not found then
+        return 0;
+    end if;
+    
+    select into r_pla_empleados * from pla_empleados
+    where compania = r_pla_retenciones.compania
+    and codigo_empleado = r_pla_retenciones.codigo_empleado;
+    if not found then
+        return 0;
+    end if;
+    
+    if r_pla_empleados.status = ''I'' or r_pla_empleados.status = ''E'' then
+        return 0;
+    end if;
+    
+    if r_pla_retenciones.status <> ''A'' then
+        return 0;
+    end if;
+    
+        
+    select into ldc_pagos sum(pla_dinero.monto) 
+    from pla_dinero, pla_deducciones
+    where pla_dinero.id = pla_deducciones.id_pla_dinero
+    and pla_deducciones.id_pla_retenciones = r_pla_retenciones.id;
+    
+    if ldc_pagos is null then
+        ldc_pagos = 0;
+    end if;
+    
+    ldc_saldo = r_pla_retenciones.monto_original_deuda - ldc_pagos;
+    
+    return Round(ldc_saldo,2);
+end;
+' language plpgsql;
+
+
+
+create function f_cargar_certificados_medicos(int4, int4) returns integer as '
+declare
+    ai_cia1 alias for $1;
+    ai_cia2 alias for $2;
+    r_pla_cuentas record;
+    r_pla_cuentas_2 record;
+    r_pla_cuentas_conceptos record;
+    r_pla_acreedores record;
+    r_pla_retenciones record;
+    r_pla_retener record;
+    r_tmp_chong record;
+    r_pla_eventos record;
+    r_pla_certificados_medico record;
+    r_pla_empleados record;
+    r_work record;
+    li_id int4;
+    li_id_pla_cuentas int4;
+    li_id_pla_cuentas_2 int4;
+    ld_fecha date;
+    lt_hora_entrada time;
+    lt_hora_salida time;
+    lt_hora_desde time;
+    lt_hora_hasta time;
+    lts_desde timestamp;
+    lts_hasta timestamp;
+begin
+
+    for r_pla_certificados_medico in select * from pla_certificados_medico
+                            where compania = ai_cia1
+                            order by codigo_empleado, desde
+    loop
+        select into r_pla_empleados *
+        from pla_empleados
+        where compania = ai_cia2
+        and codigo_empleado = r_pla_certificados_medico.codigo_empleado;
+        if found then
+            select into r_work *
+            from pla_certificados_medico
+            where compania = r_pla_empleados.compania
+            and codigo_empleado = r_pla_empleados.codigo_empleado
+            and fecha = r_pla_certificados_medico.fecha;
+            if not found then
+                insert into pla_certificados_medico(compania, codigo_empleado, fecha,
+                    desde, hasta, pagado, observacion, year, numero_planilla, minutos, usuario)
+                values(r_pla_empleados.compania, r_pla_empleados.codigo_empleado,
+                    r_pla_certificados_medico.fecha, r_pla_certificados_medico.desde,
+                    r_pla_certificados_medico.hasta, r_pla_certificados_medico.pagado,
+                    r_pla_certificados_medico.observacion, 0, 0, r_pla_certificados_medico.minutos,
+                    r_pla_certificados_medico.usuario);                    
+            end if;
+        end if;
+
+    end loop;
+    
+    
+    
+    return 1;
+end;
+' language plpgsql;
+
 
 
 create function f_cambiar_fecha_eventos(int4) returns integer as '

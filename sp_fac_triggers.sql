@@ -234,9 +234,11 @@ begin
         from factura1, factmotivos
         where factura1.tipo = factmotivos.tipo
         and factmotivos.devolucion = ''S''
-        and almacen = new.almacen
-        and caja = new.caja
-        and num_factura = old.num_documento;
+        and almacen_aplica = new.almacen
+        and caja_aplica = new.caja
+        and tipo_aplica = new.tipo
+        and num_factura = old.num_documento
+        and fecha_factura >= ''2014-01-01'';
         if found then
             Raise Exception ''Factura % no puede ser modificada...Tiene Devolucion aplicandole'', old.num_documento;
         end if;
@@ -2114,6 +2116,12 @@ declare
     r_almacen record;
     lc_utiliza_fiscal char(1);
 begin
+    select into r_factmotivos * from factmotivos
+    where tipo = old.tipo
+    and cotizacion = ''S'';
+    if found then
+        return old;
+    end if;        
 
     i               =   0;
     ls_documento    =   old.num_documento;

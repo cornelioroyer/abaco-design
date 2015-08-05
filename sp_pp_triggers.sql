@@ -2263,28 +2263,33 @@ begin
     if not found then
         raise exception ''Empleado % no Existe en la cia %'',new.codigo_empleado, new.compania;
     end if;
+
+
+    if new.year <> 0 and new.numero_planilla <> 0 then    
+        select into r_pla_periodos * from pla_periodos
+        where compania = new.compania
+        and tipo_de_planilla = r_pla_empleados.tipo_de_planilla
+        and year = new.year
+        and numero_planilla = new.numero_planilla;
+        if not found then
+            raise exception ''Numero de Planilla % Del Anio % no Existe'',new.numero_planilla,new.year;
+        end if;
     
-    select into r_pla_periodos * from pla_periodos
-    where compania = new.compania
-    and tipo_de_planilla = r_pla_empleados.tipo_de_planilla
-    and year = new.year
-    and numero_planilla = new.numero_planilla;
-    if not found then
-        raise exception ''Numero de Planilla % Del Anio % no Existe'',new.numero_planilla,new.year;
+    
+        if r_pla_periodos.status = ''C'' then
+            raise exception ''Certificado Medico no se puede insertar.  Pertenece a un periodo cerrado'';
+        end if;
+    
+        if new.fecha > r_pla_periodos.hasta then
+            Raise Exception ''Fecha de Certificado Medico % Debe ser anterior o igual a fecha de corte del periodo %'',new.fecha, r_pla_periodos.hasta;
+        end if;
     end if;
     
     if new.minutos > 480 then
         new.minutos = 480;
     end if;
-    
-    if r_pla_periodos.status = ''C'' then
-        raise exception ''Certificado Medico no se puede insertar.  Pertenece a un periodo cerrado'';
-    end if;
-    
-    if new.fecha > r_pla_periodos.hasta then
-        Raise Exception ''Fecha de Certificado Medico % Debe ser anterior o igual a fecha de corte del periodo %'',new.fecha, r_pla_periodos.hasta;
-    end if;
-    
+
+        
     return new;
 end;
 ' language plpgsql;

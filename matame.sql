@@ -1,5 +1,3 @@
-select * from mail_mass_mailing_contact
-where trim(email) like '%arnau%';
-
-select * from mail_mass_mailing_contact
-where opt_out = 1;
+			delete from factura1
+			where factura1.tipo in (select tipo from factmotivos where cotizacion = 'S') 
+			and almacen in (select almacen from almacen where compania = '03')
