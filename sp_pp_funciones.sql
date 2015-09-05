@@ -90,9 +90,11 @@ begin
     and numero_planilla = r_pla_tipos_de_planilla.planilla_actual
     and status = ''A'';
     if not found then
-        Raise Exception ''Tipo de Planilla % Numero de Planilla % no esta abierto'', ac_tipo_de_planilla, r_pla_tipos_de_planilla.planilla_actual;
+        return 0;
+--        Raise Exception ''Tipo de Planilla % Numero de Planilla % no esta abierto'', ac_tipo_de_planilla, r_pla_tipos_de_planilla.planilla_actual;
     end if;
-    
+
+
     return r_pla_periodos.id;
 end;
 ' language plpgsql;

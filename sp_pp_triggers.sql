@@ -688,9 +688,12 @@ begin
     select into r_pla_periodos *
     from pla_periodos
     where id = r_pla_tarjeta_tiempo.id_periodos;
-
+/*
     if r_pla_periodos.compania = 1365 or r_pla_periodos.compania = 1353 or r_pla_periodos.compania = 1316 
          or r_pla_periodos.compania = 754 then    
+*/         
+         
+    if f_pla_parametros(r_pla_tarjeta_tiempo.compania, ''plantilla_web'', ''N'', ''GET'') = ''S'' then
         i = f_pla_marcaciones_horarios(new.id);
     end if;        
 

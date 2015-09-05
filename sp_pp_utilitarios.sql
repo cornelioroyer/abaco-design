@@ -55,16 +55,21 @@ begin
     for r_pla_retenciones in
         select * from pla_retenciones
         where compania = ai_cia_2
+        and codigo_empleado = ''1180''
+        and trim(descripcion_descuento) = ''BOTAS''
         order by id
+        
     loop
         select into r_work *
         from pla_retenciones
         where compania = ai_cia_1
-        and codigo_empleado = r_pla_retenciones.codigo_empleado
-        and acreedor = r_pla_retenciones.acreedor
-        and numero_documento = r_pla_retenciones.numero_documento;
+        and trim(codigo_empleado) = trim(r_pla_retenciones.codigo_empleado)
+        and trim(acreedor) = trim(r_pla_retenciones.acreedor)
+        and (trim(numero_documento) = trim(r_pla_retenciones.numero_documento)
+        or trim(descripcion_descuento) = trim(r_pla_retenciones.descripcion_descuento));
         if found then
             ldc_saldo   =   f_saldo_pla_retenciones_pase(r_work.id);
+            raise exception ''% %'', r_work.id, ldc_saldo;
             
             if ldc_saldo > 0 then
                 update pla_retenciones
@@ -91,11 +96,15 @@ declare
 begin
     ldc_saldo = 0;
     
-    select into r_pla_deducciones * from pla_deducciones
+    select into r_pla_deducciones * 
+    from pla_deducciones
     where id_pla_dinero = ai_id;
     if not found then
         return 0;
     end if;
+
+    raise exception ''pago %'', ldc_pagos;
+
     
     select into r_pla_retenciones * from pla_retenciones
     where id = r_pla_deducciones.id_pla_retenciones;
@@ -123,6 +132,7 @@ begin
     from pla_dinero, pla_deducciones
     where pla_dinero.id = pla_deducciones.id_pla_dinero
     and pla_deducciones.id_pla_retenciones = r_pla_retenciones.id;
+    
     
     if ldc_pagos is null then
         ldc_pagos = 0;

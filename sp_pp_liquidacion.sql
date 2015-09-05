@@ -1391,7 +1391,7 @@ begin
     from pla_xiii
     where compania = r_pla_empleados.compania
     and tipo_de_planilla = r_pla_empleados.tipo_de_planilla
-    and dia_d_pago < ad_fecha;
+    and dia_d_pago < ad_fecha+1;
     if ld_ultimo_xiii is null then
         return ld_desde;
         ld_ultimo_xiii = ld_desde;
@@ -2214,11 +2214,11 @@ begin
     
     li_mes = Mes(r_pla_liquidacion.fecha);
 
-    if r_pla_empleados.retiene_ss = ''S'' then
+--    if r_pla_empleados.retiene_ss = ''S'' then
         i = f_pla_retenciones_liquidacion(''102'',ai_id);
         i = f_pla_retenciones_liquidacion(''103'',ai_id);
         i = f_pla_retenciones_liquidacion(''104'',ai_id);
-    end if;    
+--    end if;    
 
     if r_pla_liquidacion.preliminar then
         return 1;
@@ -2301,6 +2301,7 @@ begin
             
     i = f_pla_seguro_educativo(r_pla_empleados.compania, r_pla_empleados.codigo_empleado, 
             r_pla_periodos.id, ''7'');
+
     
     return 1;
 end;
@@ -2313,25 +2314,41 @@ declare
     ac_concepto alias for $1;
     ai_id_pla_liquidacion alias for $2;
     r_pla_conceptos record;
+    r_pla_liquidacion record;
+    r_pla_empleados record;
     ldc_work decimal;
     ldc_work2 decimal;
     ldc_acumulado decimal;
     i integer;
 begin
+
+    select into r_pla_liquidacion * 
+    from pla_liquidacion
+    where id = ai_id_pla_liquidacion;
+    if not found then
+        raise exception ''Liquidacion no Existe % No Existe'',ai_id;
+    end if;
+    
+    select into r_pla_empleados *
+    from pla_empleados
+    where compania = r_pla_liquidacion.compania
+    and codigo_empleado = r_pla_liquidacion.codigo_empleado;
+    
     select into r_pla_conceptos * from pla_conceptos
     where concepto = ac_concepto;
 
     ldc_acumulado = 0;
-    select into ldc_acumulado sum(pla_liquidacion_calculo.monto*pla_conceptos.signo)
-    from pla_liquidacion_calculo, pla_conceptos, pla_conceptos_acumulan
-    where pla_liquidacion_calculo.concepto = pla_conceptos.concepto
-    and pla_liquidacion_calculo.concepto = pla_conceptos_acumulan.concepto_aplica
-    and pla_liquidacion_calculo.id_pla_liquidacion = ai_id_pla_liquidacion
-    and pla_conceptos_acumulan.concepto = ac_concepto;
-    if ldc_acumulado is null then
-        ldc_acumulado = 0;
+    if r_pla_empleados.retiene_ss = ''S'' then
+        select into ldc_acumulado sum(pla_liquidacion_calculo.monto*pla_conceptos.signo)
+        from pla_liquidacion_calculo, pla_conceptos, pla_conceptos_acumulan
+        where pla_liquidacion_calculo.concepto = pla_conceptos.concepto
+        and pla_liquidacion_calculo.concepto = pla_conceptos_acumulan.concepto_aplica
+        and pla_liquidacion_calculo.id_pla_liquidacion = ai_id_pla_liquidacion
+        and pla_conceptos_acumulan.concepto = ac_concepto;
+        if ldc_acumulado is null then
+            ldc_acumulado = 0;
+        end if;
     end if;
-
 
     if trim(ac_concepto) = ''102'' then
         ldc_work = ldc_acumulado * .0975;
@@ -2341,10 +2358,10 @@ begin
             ldc_work    =   ldc_acumulado * .0125;
     end if;
     
-    if ldc_work is not null and ldc_work <> 0 then    
+--    if ldc_work is not null and ldc_work <> 0 then    
         insert into pla_liquidacion_calculo(id_pla_liquidacion, concepto, forma_de_registro, monto)
         values(ai_id_pla_liquidacion, ac_concepto, ''A'', ldc_work);
-    end if;
+--    end if;
     return 1;
 end;
 ' language plpgsql;

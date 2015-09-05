@@ -238,7 +238,6 @@ begin
         select * from tmp_empleados
         where compania = ai_cia
         and codigo_empleado is not null
-        and salario is not null
         order by codigo_empleado
     loop
         lc_sindicalizado = ''N'';
@@ -250,81 +249,32 @@ begin
         order by id;
 
 
-        if r_tmp_empleados.cargo is null then
-            select into r_pla_cargos *
-            from pla_cargos
-            where compania = ai_cia
-            order by id;
-        else
-            select into r_pla_cargos *
-            from pla_cargos
-            where compania = ai_cia
-            and trim(descripcion) = trim(r_tmp_empleados.cargo);
-            if not found then
-                insert into pla_cargos(compania, cargo, 
-                    descripcion, status, monto)
-                values(ai_cia, substring(trim(r_tmp_empleados.codigo_empleado) from 2 for 3),
-                    trim(r_tmp_empleados.cargo), 1, 0);
-            end if;
+        select into r_pla_cargos *
+        from pla_cargos
+        where compania = ai_cia
+        order by id;
 
-
-            select into r_pla_cargos *
-            from pla_cargos
-            where compania = ai_cia
-            and trim(descripcion) = trim(r_tmp_empleados.cargo);
-
-                            
-        end if;
-
-        if r_tmp_empleados.proyecto is null then
-            select into r_pla_proyectos * 
-            from pla_proyectos
-            where compania = ai_cia
-            order by id;
-        else
-            select into r_pla_proyectos *
-            from pla_proyectos
-            where compania = ai_cia
-            and trim(descripcion) = trim(r_tmp_empleados.proyecto);
-            if not found then
-                insert into pla_proyectos(compania, proyecto, descripcion)
-                values(ai_cia, trim(r_tmp_empleados.codigo_empleado),
-                    trim(r_tmp_empleados.proyecto));
-            end if;
-
-
-            select into r_pla_proyectos *
-            from pla_proyectos
-            where compania = ai_cia
-            and trim(descripcion) = trim(r_tmp_empleados.proyecto);
-        
-        end if;        
+        select into r_pla_proyectos * 
+        from pla_proyectos
+        where compania = ai_cia
+        order by id;
 
         select into r_pla_bancos *
         from pla_bancos
         where compania = ai_cia
         order by id;
 
-            ldc_salario_bruto   =   r_tmp_empleados.salario/2;
-
-        
-        if ldc_salario_bruto <= 0 then
-            ldc_salario_bruto = 0.01;
-        end if;            
-        
-        
+        ldc_salario_bruto   =   244.40;
         lc_tipo_de_contrato =   ''P'';
         ld_fecha_nacimiento =   ''2015-01-01'';
         lc_forma_de_pago    =   ''T'';
-
-
         lc_sexo             =   ''M'';
         lc_dv               =   ''00'';
-        ld_fecha_inicio     =   r_tmp_empleados.fecha_inicio;
+        ld_fecha_inicio     =   ''2014-01-01'';
 
         lc_codigo_empleado  =   trim(r_tmp_empleados.codigo_empleado);
 
-            lc_email = trim(r_pla_companias.e_mail);
+            lc_email = ''cornelioroyer@hotmail.com'';
 
                 lc_estado_civil =   ''S'';
         
@@ -706,9 +656,9 @@ begin
             r_tmp_empleados.tasa_por_hora = 0;
         end if;
         
-        if r_tmp_empleados.dv is null then
+--        if r_tmp_empleados.dv is null then
             r_tmp_empleados.dv = ''00'';
-        end if;
+--        end if;
         
         if r_tmp_empleados.cedula is null then
             r_tmp_empleados.cedula = ''PONER CEDULA'' || trim(r_tmp_empleados.codigo_empleado); 
@@ -789,8 +739,7 @@ begin
 
 --        lc_codigo_empleado  =   trim(to_char(r_tmp_empleados.codigo_empleado, ''99999''));
 
-        lc_codigo_empleado  =   trim(r_tmp_empleados.codigo_empleado);
-
+        lc_codigo_empleado  =   substring(trim(r_tmp_empleados.codigo_empleado) from 1 for 7);
 
         if r_tmp_empleados.email is null then
             lc_email = trim(r_pla_companias.e_mail);
@@ -861,6 +810,12 @@ begin
         if lc_dv is null then
             lc_dv = ''00'';
         end if;            
+        
+        if trim(r_tmp_empleados.tipo_de_planilla) = ''3 Bisemanal'' then
+            lc_tipo_de_planilla = ''3'';
+        else
+            lc_tipo_de_planilla = ''2'';
+        end if;            
 
         
         select into r_pla_empleados *
@@ -877,7 +832,7 @@ begin
                 sexo, cedula, dv, declarante, ss, direccion1, direccion2, tasa_por_hora, salario_bruto, email,
                 cargo, departamento, id_pla_proyectos, telefono_1, telefono_2, direccion4, direccion3,
                 tipo_cta_bco, id_pla_bancos, cta_bco_empleado, fecha_terminacion_real, sindicalizado)
-            values(ai_cia, trim(lc_codigo_empleado), ''2'' , 
+            values(ai_cia, trim(lc_codigo_empleado), lc_tipo_de_planilla , 
                 lc_grupo, li_dependientes, 
                 Trim(r_tmp_empleados.nombre), Trim(r_tmp_empleados.apellido),
                 lc_tipo_de_contrato, lc_estado_civil, ld_fecha_inicio,
@@ -895,7 +850,7 @@ begin
         else
             update pla_empleados
             set fecha_terminacion_real = ld_fecha_terminacion_real,
-                status = lc_status
+                status = lc_status, tipo_de_planilla = lc_tipo_de_planilla
             where compania = r_tmp_empleados.compania
             and Trim(codigo_empleado) = trim(lc_codigo_empleado);
         end if;            

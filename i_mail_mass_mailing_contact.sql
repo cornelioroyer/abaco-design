@@ -1,5 +1,14 @@
 
 
+insert into mail_mass_mailing_contact(opt_out,
+list_id, email, name)
+select false, 126, trim(email), trim(name)
+from tmp_emails
+where not exists
+(select * from mail_mass_mailing_contact
+where trim(mail_mass_mailing_contact.email) = trim(tmp_emails.email))
+
+
 
 
 /*
@@ -36,4 +45,3 @@ where trim(lower(email)) in (select trim(email) from tmp_matame)
 
 
 */
-

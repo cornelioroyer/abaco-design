@@ -9,11 +9,26 @@ begin work;
     where compania in (select compania from tmp_cias_expiradas);
 commit work;
 
-delete from pla_incremento;
+delete from pp_usuario_proyecto;
 
-delete from pla_fondo_d_cesantia;
+delete from pla_horarios_suntracs;
 
-delete from pla_comprobante_contable;
+begin work;
+    delete from pla_otros_ingresos_variables
+    where compania in (select compania from tmp_cias_expiradas);
+commit work;
+
+begin work;
+    delete from pla_otros_ingresos_fijos
+    where compania in (select compania from tmp_cias_expiradas);
+commit work;
+
+
+begin work;
+    delete from pla_incremento;
+    delete from pla_fondo_d_cesantia;
+    delete from pla_comprobante_contable;
+commit work;
 
 
 begin work;
@@ -169,7 +184,6 @@ delete from pla_dias_feriados where compania in (select compania from tmp_cias_e
 
 
 delete from pla_companias where compania in (select compania from tmp_cias_expiradas);
-
 
 
 

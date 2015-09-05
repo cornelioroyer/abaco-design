@@ -61,6 +61,10 @@ begin
                 end if;
             end if;
 
+            if (trim(r_pla_otros_ingresos_fijos.concepto) = ''119'' or trim(r_pla_otros_ingresos_fijos.concepto) = ''81'')
+                    and ldc_dias_vacaciones >= 16 then
+                r_pla_otros_ingresos_fijos.monto = r_pla_otros_ingresos_fijos.monto * 2;
+            end if;
             
             insert into pla_dinero(id_periodos, compania, codigo_empleado, tipo_de_calculo,
                 concepto, forma_de_registro, descripcion, mes, monto)
@@ -169,7 +173,7 @@ begin
         ld_acum_desde           =   r_pla_xiii.acum_desde;
 
         ld_fecha_liquidacion    =   null;
-        select Max(fecha_d_pago) into ld_fecha_liquidacion
+        select Max(fecha) into ld_fecha_liquidacion
         from pla_liquidacion
         where compania = r_pla_xiii.compania
         and codigo_empleado = r_pla_empleados.codigo_empleado
@@ -621,4 +625,3 @@ begin
     return 1;
 end;
 ' language plpgsql;
-

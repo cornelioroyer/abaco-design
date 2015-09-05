@@ -1,5 +1,5 @@
 
-set search_path to dba;
+--set search_path to public;
 
 
 rollback work;
@@ -1209,6 +1209,7 @@ select almacen.compania, factura2.almacen, factura1.fecha_factura, almacen.desc_
          and factura1.almacen = factura2.almacen
          and factura1.tipo = factura2.tipo
          and factura1.num_documento = factura2.num_documento
+         and factura1.caja = factura2.caja
          and factmotivos.tipo = factura1.tipo
          and factura2.articulo = articulos.articulo
          and gralcompanias.compania = almacen.compania

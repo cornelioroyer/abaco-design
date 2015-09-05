@@ -1,5 +1,5 @@
 
-set search_path to 'planilla';
+--set search_path to planilla;
 
 
 drop function f_pp_usuario_after_insert() cascade;
@@ -7,23 +7,65 @@ drop function f_pp_horarios_before_update() cascade;
 drop function f_att_punches_after_insert() cascade;
 drop function f_pp_horarios_before_insert() cascade;
 drop function f_pp_horarios_after_update() cascade;
+drop function f_pp_horarios_pla_marcaciones(int4) cascade;
+drop function f_pla_companias_after_update() cascade;
 
-create function f_pp_horarios_after_update() returns trigger as '
+
+create function f_pla_companias_after_update() returns trigger as '
 declare
     r_pla_periodos record;
     r_pla_marcaciones record;
+    i integer;
 begin
+    if f_pla_parametros(new.compania, ''utilizan_reloj'', ''N'', ''GET'') = ''S'' then
+        i = f_zktime_hr_company(new.compania);
+    end if;        
 
     return new;
+end;
+' language plpgsql;
+
+
+create function f_pp_horarios_pla_marcaciones(int4) returns int4 as '
+declare
+    ai_id alias for $1;
+    r_pla_companias record;
+    r_hr_company record;
+    r_att_punches record;
+    r_att_punches_pla_marcaciones record;
+    r_hr_employee record;
+    r_pla_empleados record;
+    r_hr_department record;
+    r_pla_periodos record;
+    r_pla_tarjeta_tiempo record;
+    r_pla_turnos_reloj record;
+    r_pla_marcaciones record;
+    r_pla_turnos record;
+    r_pp_horarios record;
+    r_pla_eventos record;
+    ld_fecha date;
+    lt_punch_time time;
+    lt_work time;
+    lt_work_min time;
+    i int4;
+    li_turno int4;
+begin
+
+    select into r_pp_horarios *
+    from pp_horarios
+    where id = ai_id;
+    if not found then
+        return 0;
+    end if;
     
     select into r_pla_periodos *
     from pla_periodos
-    where id = new.pla_periodos_id;
+    where id = r_pp_horarios.pla_periodos_id;
     if not found then
-        return new;
+        return 0;
     else
         if r_pla_periodos.status = ''C'' then
-            return new;
+            return 0;
         end if;            
     end if;        
 
@@ -31,18 +73,82 @@ begin
     select into r_pla_marcaciones pla_marcaciones.*
     from pla_tarjeta_tiempo, pla_marcaciones
     where pla_tarjeta_tiempo.id = pla_marcaciones.id_tarjeta_de_tiempo
-    and pla_tarjeta_tiempo.compania = new.compania
-    and pla_tarjeta_tiempo.codigo_empleado = new.codigo_empleado
+    and pla_tarjeta_tiempo.compania = r_pp_horarios.compania
+    and pla_tarjeta_tiempo.codigo_empleado = r_pp_horarios.codigo_empleado
     and pla_tarjeta_tiempo.id_periodos = r_pla_periodos.id
-    and f_to_date(pla_marcaciones.entrada) = new.fecha;
+    and f_to_date(pla_marcaciones.entrada) = r_pp_horarios.fecha;
     if found then
         update pla_marcaciones
-        set entrada = f_timestamp(new.fecha, new.entrada1),salida = f_timestamp(new.fecha, new.salida1),
-            entrada_descanso = f_timestamp(new.fecha, new.descanso_inicio), salida_descanso = f_timestamp(new.fecha, new.descanso_fin)
+        set entrada = f_timestamp(r_pp_horarios.fecha, r_pp_horarios.entrada1),
+            salida = f_timestamp(r_pp_horarios.fecha, r_pp_horarios.salida1),
+            entrada_descanso = f_timestamp(r_pp_horarios.fecha, r_pp_horarios.descanso_inicio), 
+            salida_descanso = f_timestamp(r_pp_horarios.fecha, r_pp_horarios.descanso_fin),
+            status = r_pp_horarios.status, 
+            turno = r_pp_horarios.turno
         where id = r_pla_marcaciones.id;
+
+   
+        if r_pp_horarios.entrada2 is not null and r_pp_horarios.salida2 is not null then
+            select into r_pla_eventos *
+            from pla_eventos
+            where compania = r_pp_horarios.compania
+            and codigo_empleado = r_pp_horarios.codigo_empleado
+            and f_to_date(desde) = r_pp_horarios.fecha
+            and trim(implemento) = ''04'';
+            if not found then
+                select Max(id) into i from pla_eventos;
+            
+                insert into pla_eventos(id, compania, codigo_empleado, implemento, desde, hasta)
+                values(i+1, r_pp_horarios.compania, r_pp_horarios.codigo_empleado, ''04'',
+                    f_timestamp(r_pp_horarios.fecha, r_pp_horarios.entrada2),
+                    f_timestamp(r_pp_horarios.fecha, r_pp_horarios.salida2));
+            else
+                update pla_eventos
+                set desde =  f_timestamp(r_pp_horarios.fecha, r_pp_horarios.entrada2),
+                    hasta =  f_timestamp(r_pp_horarios.fecha, r_pp_horarios.salida2)
+                where id = r_pla_eventos.id;
+            end if;
+        end if;
+
+        if r_pp_horarios.entrada3 is not null and r_pp_horarios.salida3 is not null then
+            select into r_pla_eventos *
+            from pla_eventos
+            where compania = r_pp_horarios.compania
+            and codigo_empleado = r_pp_horarios.codigo_empleado
+            and f_to_date(desde) = r_pp_horarios.fecha
+            and trim(implemento) = ''25'';
+            if not found then
+                select Max(id) into i from pla_eventos;
+
+                insert into pla_eventos(id, compania, codigo_empleado, implemento, desde, hasta)
+                values(i+1, r_pp_horarios.compania, r_pp_horarios.codigo_empleado, ''25'',
+                    f_timestamp(r_pp_horarios.fecha, r_pp_horarios.entrada3),
+                    f_timestamp(r_pp_horarios.fecha, r_pp_horarios.salida3));
+            else
+                update pla_eventos
+                set desde =  f_timestamp(r_pp_horarios.fecha, r_pp_horarios.entrada3),
+                    hasta =  f_timestamp(r_pp_horarios.fecha, r_pp_horarios.salida3)
+                where id = r_pla_eventos.id;
+            end if;                    
+
+        end if;
+
     end if;
+   
     
-    
+    return 1;
+end;
+' language plpgsql;
+
+
+create function f_pp_horarios_after_update() returns trigger as '
+declare
+    r_pla_periodos record;
+    r_pla_marcaciones record;
+    i integer;
+begin
+
+    i = f_pp_horarios_pla_marcaciones(new.id);      
 
     return new;
 end;
@@ -172,3 +278,10 @@ for each row execute procedure f_pp_horarios_before_insert();
 
 create trigger t_pp_horarios_after_update after update on pp_horarios
 for each row execute procedure f_pp_horarios_after_update();
+
+create trigger t_pla_companias_after_update after update on pla_companias
+for each row execute procedure f_pla_companias_after_update();
+
+
+
+

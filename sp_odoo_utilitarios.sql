@@ -3,6 +3,45 @@
 drop function f_agrupar_correos() cascade;
 drop function f_cargar_correos_as() cascade;
 drop function f_cargar_contactos() cascade;
+drop function f_tmp_emails() cascade;
+
+create function f_tmp_emails() returns integer as '
+declare
+    r_mail_mass_mailing_contact record;
+    r_clientes record;
+    r_tmp_emails record;
+    lvc_email varchar(200);
+    lvc_email2 varchar(200);
+    lvc_work varchar(200);
+    lc_caracter char(1);
+    li_largo integer;
+    li_posicion integer;
+    li_contador integer;
+begin
+
+    for r_tmp_emails in select *
+                        from tmp_emails
+                        where email is not null
+                        order by email
+    loop
+        lvc_email   =   Lower(Trim(r_tmp_emails.email));
+
+    
+        select into r_mail_mass_mailing_contact *
+        from mail_mass_mailing_contact
+        where trim(email) = trim(lvc_email);
+        if not found then
+            insert into mail_mass_mailing_contact(opt_out, list_id, email, name)
+            values(false, 126, trim(lvc_email), trim(r_tmp_emails.name));          
+        end if;
+        
+    end loop;
+    
+
+    return 1;
+end;
+' language plpgsql;
+
 
 
 create function f_cargar_contactos() returns integer as '
@@ -203,7 +242,7 @@ begin
             where id  = r_mail_mass_mailing_contact.id;
         end if;
 
-        if Mod(li_contador, 5000) = 0 then
+        if Mod(li_contador, 7000) = 0 then
             li_contador_lista   =   li_contador_lista + 1;
             lvc_name            =   ''news''||trim(to_char(li_contador_lista,''09''));
         end if;

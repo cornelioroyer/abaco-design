@@ -210,7 +210,7 @@ and factura1.tipo = factmotivos.tipo
 and factmotivos.cotizacion <> 'S'
 and factura1.num_documento = factura2.num_documento
 and factura2.articulo = articulos.articulo
-and factura1.fecha_factura >= '2014-01-01'
+and factura1.fecha_factura >= '2015-01-01'
 and factura1.status <> 'A'
 and not exists
     (select * from factura1 a, factmotivos
@@ -219,7 +219,7 @@ and not exists
         and a.almacen = factura1.almacen
         and a.caja = factura1.caja
         and a.num_factura = factura1.num_documento
-        and a.fecha_factura >= '2014-01-01')
+        and a.fecha_factura >= '2015-01-01')
 union
 select trim(factura1.cliente) as cliente, trim(factura1.no_referencia) as no_referencia, 
 trim(factura1.hbl) as hbl, 
@@ -241,7 +241,7 @@ and factura1.tipo = factmotivos.tipo
 and factmotivos.cotizacion = 'S'
 and factura1.num_documento = factura2.num_documento
 and factura2.articulo = articulos.articulo
-and factura1.fecha_factura >= '2014-01-01'
+and factura1.fecha_factura >= '2015-01-01'
 and factura1.status <> 'A';
 
 create view v_adc_notificacion as

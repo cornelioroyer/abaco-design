@@ -45,6 +45,7 @@ drop function f_pla_horas_seceyco(int4, char(7), int4) cascade;
 drop function f_pla_ajustar_salida_seceyco(int4, char(7), int4) cascade;
 drop function f_pla_calculo_viaticos(int4) cascade;
 drop function f_pla_drive_true(int4, char(7), int4, char(2)) cascade;
+drop function f_pla_reasignacion_turno(int4, char(7), int4) cascade;
 
 create function f_pla_horas_certificadas(int4) returns integer as '
 declare
@@ -1466,6 +1467,10 @@ begin
 
     if ai_cia = 1046 then
         i = f_pla_ajustar_salida_seceyco(ai_cia, r_pla_empleados.codigo_empleado, r_pla_periodos.id);
+    end if;
+
+    if ai_cia = 1360 then
+        i = f_pla_reasignacion_turno(ai_cia, r_pla_empleados.codigo_empleado, r_pla_periodos.id);
     end if;
     
     i = f_pla_horas(ai_cia, r_pla_empleados.codigo_empleado, r_pla_periodos.id);
@@ -3916,6 +3921,102 @@ begin
     and pla_horas.forma_de_registro = ''A''
     and pla_horas.minutos = 0
     and pla_periodos.compania not in (1341, 1353);
+
+    return 1;
+end;
+' language plpgsql;
+
+
+create function f_pla_reasignacion_turno(int4, char(7), int4) returns integer as '
+declare
+    ai_cia alias for $1;
+    as_codigo_empleado alias for $2;
+    ai_id_periodos alias for $3;
+    r_pla_marcaciones record;
+    r_pla_empleados record;
+    r_pla_turnos record;
+    r_pla_turnos_rotativos record;
+    r_pla_certificados_medico record;
+    r_pla_permisos record;
+    r_pla_marcaciones_2 record;
+    r_pla_desglose_regulares record;
+    r_pla_periodos record;
+    r_work record;
+    ldt_entrada_turno timestamp;
+    ldt_salida_turno timestamp;
+    ldt_entrada_descanso timestamp;
+    ldt_salida_descanso timestamp;
+    li_minutos_regulares int4;
+    ldc_tiempo_minimo_de_descanso decimal;
+    ldc_descanso decimal;
+    i integer;
+    li_id_marcacion_anterior int4;
+    lc_computa_descanso_en_base_al_turno char(1);
+begin
+    
+    delete from pla_horas using pla_marcaciones, pla_tarjeta_tiempo
+    where pla_horas.id_marcaciones = pla_marcaciones.id
+    and pla_marcaciones.id_tarjeta_de_tiempo = pla_tarjeta_tiempo.id
+    and pla_tarjeta_tiempo.compania = ai_cia
+    and pla_tarjeta_tiempo.codigo_empleado = as_codigo_empleado
+    and pla_tarjeta_tiempo.id_periodos = ai_id_periodos
+    and pla_horas.forma_de_registro = ''A'';
+
+
+    if ai_cia = 1341 or ai_cia = 1353 then
+        delete from pla_dinero
+        where compania = ai_cia
+        and trim(codigo_empleado) = Trim(as_codigo_empleado)
+        and id_periodos = ai_id_periodos
+        and tipo_de_calculo = ''1'' 
+        and concepto = ''119''
+        and forma_de_registro = ''A'';
+    end if;
+
+
+    select into r_pla_empleados * 
+    from pla_empleados
+    where compania = ai_cia
+    and codigo_empleado = as_codigo_empleado;
+    
+    lc_computa_descanso_en_base_al_turno    =   trim(f_pla_parametros(r_pla_empleados.compania, ''computa_descanso_en_base_al_turno'', ''N'', ''GET''));
+    
+    select into r_pla_periodos * from pla_periodos
+    where id = ai_id_periodos;
+    if not found then
+        return 0;
+    end if;
+    
+    if r_pla_periodos.status = ''C'' then
+        return 0;
+    end if;
+
+
+
+    
+    li_id_marcacion_anterior    =   0;
+    for r_pla_marcaciones in select pla_marcaciones.*
+                                from pla_tarjeta_tiempo, pla_marcaciones
+                                where pla_tarjeta_tiempo.id = pla_marcaciones.id_tarjeta_de_tiempo
+                                and pla_tarjeta_tiempo.compania = ai_cia
+                                and pla_tarjeta_tiempo.codigo_empleado = as_codigo_empleado
+                                and pla_tarjeta_tiempo.id_periodos = ai_id_periodos
+                                order by pla_marcaciones.entrada
+    loop
+
+        select into r_pla_turnos_rotativos *
+        from pla_turnos_rotativos
+        where compania = ai_cia
+        and codigo_empleado = as_codigo_empleado
+        and f_to_date(r_pla_marcaciones.entrada) between desde and hasta
+        and turno is not null;
+        if found then
+            update pla_marcaciones
+            set turno = r_pla_turnos_rotativos.turno
+            where id = r_pla_marcaciones.id;
+        end if;
+        
+    end loop;
 
     return 1;
 end;

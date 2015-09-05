@@ -164,6 +164,13 @@ begin
     i           =   f_bitacora(trim(tg_op),  trim(tg_table_name), trim(lt_old_dato), trim(lt_new_dato), null);
 */    
 
+    select into r_factmotivos * from factmotivos
+    where tipo = old.tipo
+    and cotizacion = ''S'';
+    if found then
+        return new;
+    end if;        
+
 
 /*
     delete from factura2_eys2
@@ -238,6 +245,7 @@ begin
         and caja_aplica = new.caja
         and tipo_aplica = new.tipo
         and num_factura = old.num_documento
+        and status <> ''A''
         and fecha_factura >= ''2014-01-01'';
         if found then
             Raise Exception ''Factura % no puede ser modificada...Tiene Devolucion aplicandole'', old.num_documento;
@@ -2120,6 +2128,12 @@ begin
     where tipo = old.tipo
     and cotizacion = ''S'';
     if found then
+        update adc_notas_debito_1
+        set almacen = null, tipo = null, num_documento = null
+        where almacen = old.almacen
+        and tipo = old.tipo
+        and caja = old.caja
+        and num_documento = old.num_documento;
         return old;
     end if;        
 
@@ -2139,12 +2153,6 @@ begin
     
     i   =   f_delete_rela_factura1_cglposteo(old.almacen, old.caja, old.tipo, old.num_documento);
     
-    update adc_notas_debito_1
-    set almacen = null, tipo = null, num_documento = null
-    where almacen = old.almacen
-    and tipo = old.tipo
-    and caja = old.caja
-    and num_documento = old.num_documento;
 
     select into r_factmotivos * from factmotivos
     where tipo = old.tipo

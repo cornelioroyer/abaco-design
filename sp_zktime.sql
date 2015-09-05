@@ -64,6 +64,10 @@ begin
     if not found then
         return 0;
     end if;        
+    
+    if ld_fecha < r_pla_empleados.fecha_inicio then
+        return 0;
+    end if;        
 
     select into r_pla_periodos *
     from pla_periodos
@@ -422,12 +426,14 @@ begin
 
     i = f_zktime_hr_department(r_pla_empleados.departamento);
 
+--    and trim(hr_employee.emp_pin) = trim(r_pla_empleados.codigo_empleado);
 
     select into r_hr_employee *
     from hr_employee, hr_department
     where hr_employee.department_id = hr_department.id
     and hr_department.company_id = ai_cia
-    and trim(hr_employee.emp_pin) = trim(r_pla_empleados.codigo_empleado);
+    and Trim(hr_employee.emp_firstname) = Trim(r_pla_empleados.nombre)
+    and Trim(hr_employee.emp_lastname) = Trim(r_pla_empleados.apellido);
     if not found then
         li_id = 0;
         select Max(id) into li_id
@@ -466,7 +472,8 @@ begin
         end if;
         
         update hr_employee
-        set emp_firstname = trim(r_pla_empleados.nombre),
+        set emp_pin = Trim(r_pla_empleados.codigo_empleado),
+            emp_firstname = trim(r_pla_empleados.nombre),
             emp_lastname = Trim(r_pla_empleados.apellido),
             emp_hiredate = r_pla_empleados.fecha_inicio,
             emp_active = li_emp_active,
@@ -491,10 +498,7 @@ begin
             middleware_id = 0,
             nationalid = '' '',
             emp_email = ''cornelioroyer@hotmail.com''
-        from hr_department
-        where hr_employee.department_id = hr_department.id
-        and hr_department.company_id = ai_cia
-        and trim(hr_employee.emp_pin) = trim(r_pla_empleados.codigo_empleado);
+        where hr_employee.id = r_hr_employee.id;
 
         li_id = r_hr_employee.id;
         
