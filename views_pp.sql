@@ -57,7 +57,7 @@ and pla_dinero.compania = pla_companias.compania
 and pla_estructura.columna = pla_columnas.columna
 and pla_dinero.compania in (1353)
 and pla_estructura.listado = 1
-and pla_periodos.dia_d_pago >= current_date - 40
+and pla_periodos.dia_d_pago >= current_date - 100
 group by 1, 2, 3, 4, 5, 6, 7, 8;
 
 

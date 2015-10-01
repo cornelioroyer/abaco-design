@@ -22,6 +22,8 @@ declare
     r_pla_turnos_reloj record;
     r_pla_marcaciones record;
     r_pla_turnos record;
+    r_att_terminal_zone record;
+    r_att_employee_zone record;
     ld_fecha date;
     lt_punch_time time;
     lt_work time;
@@ -41,6 +43,19 @@ begin
         return 0;
     end if;
     
+    select into r_att_terminal_zone *
+    from att_terminal_zone
+    where terminal_id = r_att_punches.terminal_id;
+
+    select into r_att_employee_zone *
+    from att_employee_zone
+    where employee_id = r_att_punches.employee_id
+    and zone_id = r_att_terminal_zone.zone_id;
+    if not found then
+        return 0;
+    end if;        
+
+    
     ld_fecha = f_to_date(r_att_punches.punch_time);
     
     select into r_hr_employee *
@@ -49,6 +64,8 @@ begin
     if not found then
         return 0;
     end if;
+    
+    
     
     select into r_hr_department *
     from hr_department
@@ -260,7 +277,6 @@ declare
     r_pla_empleados record;
     i integer;
 begin
--- raise exception ''entre'';
 
     select into r_pla_companias *
     from pla_companias
@@ -269,13 +285,19 @@ begin
         return 0;
     end if;
 
+
     if r_pla_companias.att_zone_id is null then
         return 0;
     end if;        
 
+
     if Trim(f_pla_parametros(ai_cia, ''utilizan_reloj'',''N'',''GET'')) <> ''S'' then
+--        raise exception ''%'', Trim(f_pla_parametros(ai_cia, ''utilizan_reloj'',''N'',''GET''));
         return 0;
     end if;
+
+--raise exception ''entre'';
+
 
     select into r_hr_company *
     from hr_company
@@ -428,6 +450,7 @@ begin
 
 --    and trim(hr_employee.emp_pin) = trim(r_pla_empleados.codigo_empleado);
 
+
     select into r_hr_employee *
     from hr_employee, hr_department
     where hr_employee.department_id = hr_department.id
@@ -435,6 +458,7 @@ begin
     and Trim(hr_employee.emp_firstname) = Trim(r_pla_empleados.nombre)
     and Trim(hr_employee.emp_lastname) = Trim(r_pla_empleados.apellido);
     if not found then
+
         li_id = 0;
         select Max(id) into li_id
         from hr_employee;
@@ -501,14 +525,16 @@ begin
         where hr_employee.id = r_hr_employee.id;
 
         li_id = r_hr_employee.id;
+--Raise Exception ''lo encontre'';
         
     end if;
 
 
+--    and zone_id = r_pla_companias.att_zone_id;
+
     select into r_att_employee_zone *
     from att_employee_zone
-    where employee_id = li_id
-    and zone_id = r_pla_companias.att_zone_id;
+    where employee_id = li_id;
     if not found then
 /*
         li_id2 = 0;

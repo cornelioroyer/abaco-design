@@ -1,5 +1,5 @@
 
---set search_path to public;
+--set search_path to dba;
 
 
 rollback work;
@@ -1966,7 +1966,8 @@ and bcotransac1.sec_transacc = bcotransac3.sec_transacc
 and bcotransac1.cod_ctabco = bcoctas.cod_ctabco
 and cxpdocm.compania = bcoctas.compania
 and cxpdocm.proveedor = bcotransac1.proveedor
-and cxpdocm.documento = bcotransac3.aplicar_a and cxpdocm.docmto_aplicar = bcotransac3.aplicar_a
+and trim(cxpdocm.documento) = trim(bcotransac3.aplicar_a)
+and trim(cxpdocm.docmto_aplicar) = trim(bcotransac3.aplicar_a)
 and cxpdocm.motivo_cxp = bcotransac3.motivo_cxp 
 and bcotransac1.proveedor is not null
 and bcotransac1.motivo_bco = bcomotivos.motivo_bco

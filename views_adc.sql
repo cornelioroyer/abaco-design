@@ -1,6 +1,6 @@
 
 
-set search_path to dba;
+--set search_path to dba;
 
 
 
@@ -257,7 +257,7 @@ trim(b.direccion3) as atencion,
 adc_house.pkgs as ctns, adc_house.cbm as cbm, adc_manifiesto.ciudad_destino, 
 trim(fac_ciudades.nombre) as ciudad_origen,
 adc_master.tamanio, adc_manifiesto.confirmado, adc_house.embarcador,
-adc_manifiesto.consecutivo, adc_manifiesto.no_referencia, destinos.descripcion as puerto_descarga,
+adc_manifiesto.consecutivo, trim(adc_manifiesto.no_referencia) as no_referencia, destinos.descripcion as puerto_descarga,
 adc_house.cod_destino, gralcompanias.mensaje, b.mail,
 f_adc_f_notificacion(adc_house.compania, adc_house.consecutivo, adc_house.linea_master, adc_house.linea_house) as fecha_notificacion
 from adc_manifiesto, adc_master, adc_house, gralcompanias, fac_ciudades,
@@ -313,7 +313,7 @@ and adc_manifiesto.consecutivo = adc_master.consecutivo
 and adc_master.compania = adc_house.compania
 and adc_master.consecutivo = adc_house.consecutivo
 and adc_master.linea_master = adc_house.linea_master
-and adc_manifiesto.fecha >= '2013-01-01'
+and adc_manifiesto.fecha >= '2015-01-01'
 and fact_referencias.medio = 'M'
 union
 select adc_house.no_house as hbl, 

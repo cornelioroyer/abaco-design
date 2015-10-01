@@ -1,6 +1,4 @@
 
-drop function f_facturas_en_desbalance(char(2)) cascade;
-
 create function f_facturas_en_desbalance(char(2)) returns integer as '
 declare
     as_compania alias for $1;
@@ -62,7 +60,26 @@ begin
         and caja = r_work.caja
         and num_documento = r_work.num_documento;
     end loop;
-    
+
+    for r_work in select * from factura1, factmotivos, almacen
+        where factura1.tipo = factmotivos.tipo
+        and factura1.almacen = almacen.almacen
+        and factmotivos.devolucion = ''S''
+        and factura1.status <> ''A''
+        and factura1.fecha_factura >= ld_desde
+        and almacen.compania = as_compania
+        and not exists
+        (select * from factura1 a, factmotivos b
+        where a.tipo = b.tipo
+        and b.factura_fiscal = ''S''
+        and a.almacen = factura1.almacen
+        and a.caja = factura1.caja
+        and a.num_documento = factura1.num_factura
+        and a.forma_pago = factura1.forma_pago)
+    loop
+--        Raise Exception ''Devolucion % Factura % deben tener la misma forma de pago'', r_work.num_documento, r_work.num_factura;
+    end loop;
+
     return 1;
 end;
 ' language plpgsql;

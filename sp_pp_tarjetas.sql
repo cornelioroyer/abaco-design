@@ -1234,9 +1234,11 @@ declare
     li_dow integer;
     i integer;
     lvc_crear_tarjetas_hasta_el_corte_en_salario_fijo varchar(50);
+    lvc_utiliza_reloj_zk varchar(1);
 begin
 
     lvc_crear_tarjetas_hasta_el_corte_en_salario_fijo = f_pla_parametros(ai_cia, ''crear_tarjetas_hasta_el_corte_en_salario_fijo'', ''N'',''GET'');
+    lvc_utiliza_reloj_zk = Trim(f_pla_parametros(ai_cia, ''utiliza_reloj_zk'', ''N'',''GET''));
 
     select into r_pla_tipos_de_planilla * 
     from pla_tipos_de_planilla
@@ -1397,7 +1399,7 @@ end if;
         end if;
 
         
-        if r_pla_empleados.reloj is true and ai_cia = 1360 then
+        if r_pla_empleados.reloj is true and Trim(lvc_utiliza_reloj_zk) = ''S'' then
             for r_att_punches in select att_punches.* from hr_employee, hr_department, att_punches
                                     where hr_employee.department_id = hr_department.id
                                     and hr_employee.id = att_punches.employee_id

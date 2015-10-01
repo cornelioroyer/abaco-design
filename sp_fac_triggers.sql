@@ -164,28 +164,50 @@ begin
     i           =   f_bitacora(trim(tg_op),  trim(tg_table_name), trim(lt_old_dato), trim(lt_new_dato), null);
 */    
 
+
+    update invparal
+    set valor = ''N''
+    where parametro = ''valida_existencias'';
+
     select into r_factmotivos * from factmotivos
     where tipo = old.tipo
     and cotizacion = ''S'';
     if found then
         return new;
     end if;        
+    
+    delete from eys2
+    using factura2_eys2
+    where factura2_eys2.almacen = eys2.almacen
+    and factura2_eys2.articulo = eys2.articulo
+    and factura2_eys2.no_transaccion = eys2.no_transaccion
+    and factura2_eys2.eys2_linea = eys2.linea
+    and factura2_eys2.almacen = old.almacen
+    and factura2_eys2.tipo = old.tipo
+    and factura2_eys2.caja = old.caja
+    and factura2_eys2.num_documento = old.num_documento;
+    
 
-
-/*
     delete from factura2_eys2
     where almacen = old.almacen
     and tipo = old.tipo
     and caja = old.caja
     and num_documento = old.num_documento;
 
+
+    delete from cglposteo
+    using rela_factura1_cglposteo
+    where cglposteo.consecutivo = rela_factura1_cglposteo.consecutivo
+    and rela_factura1_cglposteo.almacen = old.almacen
+    and rela_factura1_cglposteo.tipo = old.tipo
+    and rela_factura1_cglposteo.caja = old.caja
+    and rela_factura1_cglposteo.num_documento = old.num_documento;
+    
     delete from rela_factura1_cglposteo
     where almacen = old.almacen
     and tipo = old.tipo
     and caja = old.caja
     and num_documento = old.num_documento;
-*/    
-
 
     i               =   f_delete_rela_factura1_cglposteo(old.almacen, old.caja, old.tipo, old.num_documento);
 
@@ -248,7 +270,7 @@ begin
         and status <> ''A''
         and fecha_factura >= ''2014-01-01'';
         if found then
-            Raise Exception ''Factura % no puede ser modificada...Tiene Devolucion aplicandole'', old.num_documento;
+--            Raise Exception ''Factura % no puede ser modificada...Tiene Devolucion aplicandole'', old.num_documento;
         end if;
     end if;
     
@@ -284,8 +306,7 @@ begin
         end if;
         return new;
     end if;
-    
-    
+
     i := f_valida_fecha(r_almacen.compania, ''CGL'', old.fecha_factura);
     i := f_valida_fecha(r_almacen.compania, ''INV'', old.fecha_factura);
     i := f_valida_fecha(r_almacen.compania, ''CXC'', old.fecha_factura);
@@ -294,7 +315,19 @@ begin
     i := f_valida_fecha(r_almacen.compania, ''INV'', new.fecha_factura);
     i := f_valida_fecha(r_almacen.compania, ''CXC'', new.fecha_factura);
 
-    
+
+    if new.num_factura is null then
+        new.num_factura = 0;
+    end if;        
+
+    select into r_factmotivos * from factmotivos
+    where tipo = old.tipo
+    and cotizacion = ''S'';
+    if found then
+        new.num_factura = 0;
+    end if;
+
+
     if new.num_factura <> 0 then
 
         if new.tipo_aplica is null then    
@@ -319,8 +352,8 @@ begin
             if not found then
                 raise exception ''Factura % No Existe Para aplica DA...Verifique'',new.num_factura;
             end if;
-            
         else
+        
             select into r_factura1 * from factura1
             where almacen = new.almacen_aplica
             and caja = new.caja_aplica
@@ -444,7 +477,6 @@ begin
         i := f_valida_fecha(r_almacen.compania, ''INV'', old.fecha_despacho);
     end if;
 
-    
     return new;
 end;
 ' language plpgsql;
@@ -497,6 +529,7 @@ begin
     i := f_valida_fecha(r_almacen.compania, ''INV'', old.fecha_factura);
     i := f_valida_fecha(r_almacen.compania, ''CXC'', old.fecha_factura);
 */    
+
 
     if new.status = ''A'' then
         delete from adc_house_factura1
@@ -608,6 +641,8 @@ begin
         end if;
     end if;
 
+--raise exception ''after update'';
+
     
     if r_factmotivos.factura_fiscal = ''S'' then
         for r_adc_house_factura1 in select * from adc_house_factura1
@@ -627,6 +662,24 @@ begin
             and linea_manejo = r_adc_house_factura1.linea_manejo;
         end loop;    
     end if;
+
+    
+    if old.num_documento <> new.num_documento then
+--raise exception ''after update final % % % %'', old.almacen_aplica, old.caja_aplica, old.tipo_aplica, old.num_documento;
+
+        update factura1
+        set num_factura = new.num_documento
+        where almacen_aplica = old.almacen_aplica
+        and caja_aplica = old.caja_aplica
+        and tipo_aplica = old.tipo_aplica
+        and num_factura = old.num_documento;
+    end if;
+  
+/*  
+    update invparal
+    set valor = ''S''
+    where parametro = ''valida_existencias'';
+*/
         
     return new;
 end;
@@ -1074,7 +1127,7 @@ declare
     i integer;
 begin
 
-/*
+
     delete from rela_factura1_cglposteo
     where almacen = old.almacen
     and tipo = old.tipo
@@ -1087,7 +1140,7 @@ begin
     and caja = old.caja
     and num_documento = old.num_documento
     and factura2_linea = old.linea;
-*/
+
     
     
     select into r_factura1 *
@@ -1614,7 +1667,6 @@ begin
     and tipo = old.tipo
     and caja = old.caja
     and num_documento = old.num_documento;
-*/
 
 
     delete from rela_factura1_cglposteo
@@ -1622,6 +1674,7 @@ begin
     and tipo = old.tipo
     and caja = old.caja
     and num_documento = old.num_documento;
+*/
 
     
     if Trim(f_invparal(new.almacen, ''update_inventario'')) = ''S'' then
@@ -2068,8 +2121,8 @@ begin
                     end if;
                 end if;
             else
-                if new.cliente <> r_factura1.cliente then
-                    Raise Exception ''Factura Referenciada no tiene el mismo cliente %'',new.num_factura;
+                if trim(new.cliente) <> trim(r_factura1.cliente) then
+                    Raise Exception ''Factura Referenciada no tiene el mismo cliente %  Cliente Factura % Cliente NC %'',new.num_factura, r_factura1.cliente, new.cliente;
                 end if;
             
                 new.forma_pago = r_factura1.forma_pago;

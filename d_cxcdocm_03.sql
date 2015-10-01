@@ -9,14 +9,14 @@ begin work;
     and aplicacion = 'CXC';
 commit work;
 
-
+/*
 begin work;
     delete from cglposteo
     where compania = '03'
     and fecha_comprobante between '2015-06-01' and '2018-10-31'
     and aplicacion_origen in ('CXC','FAC');
 commit work;
-
+*/
 
 
 begin work;
@@ -68,5 +68,4 @@ update gralparaxcia
 set valor = 'S'
 where parametro = 'validar_fecha'
 and aplicacion = 'CXC';
-
 

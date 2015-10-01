@@ -1,3 +1,4 @@
+
 drop function f_validar_balance(char(2)) cascade;
 
 create function f_validar_balance(char(2)) returns integer as '
@@ -18,8 +19,6 @@ declare
     r_cxcdocm record;
     li_retorno integer;
 begin
-    li_retorno = 0;
-    
     select Min(inicio) into ld_desde
     from gralperiodos
     where compania = as_compania
@@ -28,6 +27,63 @@ begin
     if not found then
         Raise Exception ''No existen periodos abiertos'';
     end if;
+
+    delete from rela_cxc_recibo1_cglposteo
+    using cxc_recibo1, cglposteo, almacen
+    where rela_cxc_recibo1_cglposteo.consecutivo = cglposteo.consecutivo
+    and rela_cxc_recibo1_cglposteo.almacen = cxc_recibo1.almacen
+    and rela_cxc_recibo1_cglposteo.caja = cxc_recibo1.caja
+    and rela_cxc_recibo1_cglposteo.cxc_consecutivo = cxc_recibo1.consecutivo
+    and rela_cxc_recibo1_cglposteo.almacen = almacen.almacen
+    and almacen.compania = as_compania
+    and cxc_recibo1.fecha >= ld_desde
+    and cxc_recibo1.fecha <> cglposteo.fecha_comprobante;
+
+    delete from cglposteo
+    using rela_factura1_cglposteo, factura1, almacen
+    where rela_factura1_cglposteo.consecutivo = cglposteo.consecutivo
+    and rela_factura1_cglposteo.almacen = factura1.almacen
+    and rela_factura1_cglposteo.caja = factura1.caja
+    and rela_factura1_cglposteo.tipo = factura1.tipo
+    and rela_factura1_cglposteo.num_documento = factura1.num_documento
+    and rela_factura1_cglposteo.almacen = almacen.almacen
+    and almacen.compania = as_compania
+    and factura1.fecha_factura >= ld_desde
+    and cglposteo.fecha_comprobante <> factura1.fecha_factura;
+
+    delete from rela_factura1_cglposteo
+    using factura1, cglposteo, almacen
+    where factura1.almacen = rela_factura1_cglposteo.almacen
+    and factura1.caja = rela_factura1_cglposteo.caja
+    and factura1.tipo = rela_factura1_cglposteo.tipo
+    and factura1.num_documento = rela_factura1_cglposteo.num_documento
+    and factura1.almacen = almacen.almacen
+    and cglposteo.consecutivo = rela_factura1_cglposteo.consecutivo
+    and cglposteo.fecha_comprobante <> factura1.fecha_factura
+    and almacen.compania = as_compania
+    and factura1.fecha_factura >= ld_desde;
+    
+    delete from rela_adc_cxc_1_cglposteo
+    using cglposteo, adc_cxc_1
+    where rela_adc_cxc_1_cglposteo.compania = adc_cxc_1.compania
+    and rela_adc_cxc_1_cglposteo.consecutivo = adc_cxc_1.consecutivo
+    and rela_adc_cxc_1_cglposteo.secuencia = adc_cxc_1.secuencia
+    and rela_adc_cxc_1_cglposteo.cgl_consecutivo = cglposteo.consecutivo
+    and adc_cxc_1.compania = as_compania
+    and adc_cxc_1.fecha >= ld_desde
+    and adc_cxc_1.fecha <> cglposteo.fecha_comprobante;
+
+
+
+    delete from rela_adc_cxp_1_cglposteo
+    using adc_cxp_1, cglposteo
+    where rela_adc_cxp_1_cglposteo.compania = adc_cxp_1.compania
+    and rela_adc_cxp_1_cglposteo.consecutivo = adc_cxp_1.consecutivo
+    and rela_adc_cxp_1_cglposteo.secuencia = adc_cxp_1.secuencia
+    and rela_adc_cxp_1_cglposteo.cgl_consecutivo = cglposteo.consecutivo
+    and adc_cxp_1.fecha <> cglposteo.fecha_comprobante
+    and adc_cxp_1.compania = as_compania
+    and adc_cxp_1.fecha >= ld_desde;
     
 
     delete from cglposteo
@@ -50,6 +106,7 @@ begin
     and almacen.compania = as_compania
     and aplicacion_origen = ''FAC'';
 
+
     
     ldc_work = 0;
     li_retorno = 1;
@@ -69,6 +126,7 @@ begin
     end loop;    
 
 
+    
     ldc_work = 0;
     li_retorno = 1;
     for r_cglposteo in select * from cglposteo
@@ -85,6 +143,7 @@ begin
             where consecutivo = r_cglposteo.consecutivo;
         end if;
     end loop;    
+
 
     
     for r_adc_master in select adc_master.* 
@@ -123,13 +182,12 @@ begin
     end loop;       
 
 
-
     for r_rela_bcocheck1_cglposteo in 
                         select rela_bcocheck1_cglposteo.cod_ctabco, no_cheque, motivo_bco, sum(cglposteo.debito-cglposteo.credito)
                         from rela_bcocheck1_cglposteo, cglposteo, bcoctas
                         where cglposteo.consecutivo = rela_bcocheck1_cglposteo.consecutivo
-                        and cglposteo.fecha_comprobante >= ld_desde
                         and bcoctas.cod_ctabco = rela_bcocheck1_cglposteo.cod_ctabco
+                        and cglposteo.fecha_comprobante >= ld_desde
                         and bcoctas.compania = as_compania
                         group by 1, 2, 3
                         having sum(cglposteo.debito-cglposteo.credito) <> 0
@@ -140,7 +198,6 @@ begin
         and no_cheque = r_rela_bcocheck1_cglposteo.no_cheque
         and motivo_bco = r_rela_bcocheck1_cglposteo.motivo_bco;
     end loop;       
-
 
     for r_factura1 in select factura1.*
         from almacen, factura1, factmotivos
@@ -174,7 +231,6 @@ begin
         end if;
     end loop;
 
-
     for r_cxc_recibo1 in select cxc_recibo1.*
         from almacen, cxc_recibo1
         where almacen.almacen = cxc_recibo1.almacen
@@ -201,8 +257,9 @@ begin
             end if;
         end loop;                                
     end loop;
-   
+    
     
     return li_retorno;
 end;
 ' language plpgsql;
+

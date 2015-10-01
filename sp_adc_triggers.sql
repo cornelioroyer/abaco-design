@@ -260,8 +260,8 @@ begin
         where factura1.tipo = factmotivos.tipo
         and factmotivos.devolucion = ''S''
         and factura1.status <> ''A''
-        and factura1.almacen = old.almacen
-        and factura1.caja = old.caja
+        and factura1.almacen_aplica = old.almacen
+        and factura1.caja_aplica = old.caja
         and factura1.num_factura = old.num_documento;
         if not found then
             Raise exception ''Registro no puede ser eliminado en adc_house_factura1 tiene factura %'',old.num_documento;
@@ -520,6 +520,7 @@ declare
     li_work integer;
 begin
 
+/*
     select into r_adc_house_factura1 adc_house_factura1.* from adc_house_factura1, factmotivos
     where adc_house_factura1.tipo = factmotivos.tipo
     and (factmotivos.factura = ''S'' or factmotivos.factura_fiscal = ''S'')
@@ -530,6 +531,7 @@ begin
     if found then
         raise exception ''Linea de manejo % no puede ser eliminada...tiene la factura'',old.articulo;
     end if;
+*/    
     
     li_work =   f_adc_manejo_delete(old.compania, old.consecutivo, old.linea_master,
                     old.linea_manejo, old.linea_house);
@@ -1588,8 +1590,8 @@ begin
     if found then
         select into r_factura1 factura1.*
         from factura1
-        where almacen = old.almacen
-        and caja = old.caja
+        where almacen_aplica = old.almacen
+        and caja_aplica = old.caja
         and tipo in (select tipo from factmotivos where devolucion = ''S'')
         and num_factura = old.num_documento;
         if not found then

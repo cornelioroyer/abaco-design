@@ -1130,7 +1130,17 @@ begin
     if trim(new.implemento) = ''25'' then
         return new;
     end if;        
-    
+
+    if new.id is null then
+        select into li_work Max(id) from pla_eventos;
+        if li_work is null then
+            li_work = 0;
+        else
+            li_work = li_work + 1;
+        end if;
+        new.id = li_work;
+   end if;
+
     select into r_pla_eventos *
     from pla_eventos
     where compania = new.compania

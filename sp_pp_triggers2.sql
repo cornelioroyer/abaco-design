@@ -1,5 +1,5 @@
 
---set search_path to planilla;
+set search_path to planilla;
 
 
 drop function f_pp_usuario_after_insert() cascade;
@@ -84,22 +84,24 @@ begin
             entrada_descanso = f_timestamp(r_pp_horarios.fecha, r_pp_horarios.descanso_inicio), 
             salida_descanso = f_timestamp(r_pp_horarios.fecha, r_pp_horarios.descanso_fin),
             status = r_pp_horarios.status, 
-            turno = r_pp_horarios.turno
+            turno = r_pp_horarios.turno,
+            autorizado = r_pp_horarios.autorizado
         where id = r_pla_marcaciones.id;
 
    
-        if r_pp_horarios.entrada2 is not null and r_pp_horarios.salida2 is not null then
+        if r_pp_horarios.entrada2 is not null and r_pp_horarios.salida2 is not null 
+            and r_pp_horarios.implemento is not null then
             select into r_pla_eventos *
             from pla_eventos
             where compania = r_pp_horarios.compania
             and codigo_empleado = r_pp_horarios.codigo_empleado
             and f_to_date(desde) = r_pp_horarios.fecha
-            and trim(implemento) = ''04'';
+            and trim(implemento) = r_pp_horarios.implemento;
             if not found then
                 select Max(id) into i from pla_eventos;
             
                 insert into pla_eventos(id, compania, codigo_empleado, implemento, desde, hasta)
-                values(i+1, r_pp_horarios.compania, r_pp_horarios.codigo_empleado, ''04'',
+                values(i+1, r_pp_horarios.compania, r_pp_horarios.codigo_empleado, r_pp_horarios.implemento,
                     f_timestamp(r_pp_horarios.fecha, r_pp_horarios.entrada2),
                     f_timestamp(r_pp_horarios.fecha, r_pp_horarios.salida2));
             else
@@ -133,6 +135,37 @@ begin
 
         end if;
 
+    else
+
+-- raise exception ''% %'', r_pp_horarios.compania, r_pp_horarios.codigo_empleado;
+
+        i = f_insertar_pla_marcaciones(
+                r_pp_horarios.compania, 
+                r_pp_horarios.codigo_empleado,
+                r_pp_horarios.pla_periodos_id, 
+                r_pp_horarios.pla_proyectos_id,
+                r_pp_horarios.turno, 
+                f_timestamp(r_pp_horarios.fecha, r_pp_horarios.entrada1),
+                f_timestamp(r_pp_horarios.fecha, r_pp_horarios.salida1),
+                f_timestamp(r_pp_horarios.fecha, r_pp_horarios.descanso_inicio),
+                f_timestamp(r_pp_horarios.fecha, r_pp_horarios.descanso_fin), 
+                r_pp_horarios.status);
+
+        select into r_pla_marcaciones pla_marcaciones.*
+        from pla_tarjeta_tiempo, pla_marcaciones
+        where pla_tarjeta_tiempo.id = pla_marcaciones.id_tarjeta_de_tiempo
+        and pla_tarjeta_tiempo.compania = r_pp_horarios.compania
+        and pla_tarjeta_tiempo.codigo_empleado = r_pp_horarios.codigo_empleado
+        and pla_tarjeta_tiempo.id_periodos = r_pla_periodos.id
+        and f_to_date(pla_marcaciones.entrada) = r_pp_horarios.fecha;
+        if found then
+            update pla_marcaciones
+            set status = r_pp_horarios.status,
+                autorizado = r_pp_horarios.autorizado
+            where id = r_pla_marcaciones.id;
+        end if;
+
+                
     end if;
    
     
@@ -158,10 +191,21 @@ end;
 create function f_pp_horarios_before_insert() returns trigger as '
 declare
     r_pla_turnos record;
+    r_pla_empleados record;
 begin
     if new.pp_usuario_id is null then
         new.pp_usuario_id = 1;
     end if;
+    
+    select into r_pla_empleados *
+    from pla_empleados
+    where compania = new.compania
+    and codigo_empleado = new.codigo_empleado;
+    if not found then
+        Raise Exception ''Codigo de Empleado % no Existe'', new.codigo_empleado;
+    else
+        new.pla_periodos_id = f_pla_periodo_actual(new.compania, r_pla_empleados.tipo_de_planilla);
+    end if;        
     
     return new;
 end;
@@ -220,6 +264,14 @@ begin
             new.salida1 = r_pla_turnos.hora_salida;
         end if;            
     end if;
+  
+/*    
+    if (new.entrada2 is not null or new.salida2 is not null) and new.implemento is null then
+        new.implemento = ''04'';
+--        Raise Exception ''El Codigo de Implemento es Obligatorio en la fecha % '', new.fecha;
+    end if;
+*/    
+    
     return new;
 end;
 ' language plpgsql;
@@ -281,7 +333,3 @@ for each row execute procedure f_pp_horarios_after_update();
 
 create trigger t_pla_companias_after_update after update on pla_companias
 for each row execute procedure f_pla_companias_after_update();
-
-
-
-

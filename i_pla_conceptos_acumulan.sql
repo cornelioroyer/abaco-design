@@ -1,7 +1,11 @@
 
 delete from pla_conceptos_acumulan
-where concepto_aplica = '186';
+where concepto_aplica = '295';
 
+insert into pla_conceptos_acumulan(concepto, concepto_aplica)
+select concepto, '295' 
+from pla_conceptos_acumulan
+where concepto_aplica = '03'
 
 /*
 and not exists 

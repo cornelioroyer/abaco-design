@@ -102,7 +102,9 @@ begin
     loop
         if trim(lvc_metodo_calculo) = ''coolhouse'' 
             and (r_nom_conceptos_para_calculo.cod_concepto_planilla = ''420'' 
-            or r_nom_conceptos_para_calculo.cod_concepto_planilla = ''430'')  then
+            or r_nom_conceptos_para_calculo.cod_concepto_planilla = ''430''
+            or r_nom_conceptos_para_calculo.cod_concepto_planilla = ''408''
+            or r_nom_conceptos_para_calculo.cod_concepto_planilla = ''409'')  then
             continue;
         end if;
                     

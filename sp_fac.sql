@@ -669,6 +669,23 @@ begin
     
     i := f_valida_fecha(r_almacen.compania, ''CGL'', r_factura1.fecha_factura);
 
+    delete from eys2
+    using factura2_eys2
+    where factura2_eys2.almacen = eys2.almacen
+    and factura2_eys2.articulo = eys2.articulo
+    and factura2_eys2.no_transaccion = eys2.no_transaccion
+    and factura2_eys2.eys2_linea = eys2.linea
+    and factura2_eys2.almacen = as_almacen
+    and factura2_eys2.tipo = as_tipo
+    and factura2_eys2.caja = as_caja
+    and factura2_eys2.num_documento = ai_num_documento;
+
+    delete from factura2_eys2
+    where almacen = as_almacen
+    and tipo = as_tipo
+    and caja = as_caja
+    and num_documento = ai_num_documento;
+
     delete from cglposteo
     where consecutivo in 
     (select consecutivo from rela_factura1_cglposteo
@@ -683,17 +700,26 @@ begin
     and num_documento = ai_num_documento
     and caja = as_caja;
     
-    select into r_factmotivos * from factmotivos
-    where tipo = as_tipo;
+    delete from cglposteo
+    using rela_factura1_cglposteo
+    where cglposteo.consecutivo = rela_factura1_cglposteo.consecutivo
+    and rela_factura1_cglposteo.almacen = as_almacen
+    and rela_factura1_cglposteo.tipo = as_tipo
+    and rela_factura1_cglposteo.caja = as_caja
+    and rela_factura1_cglposteo.num_documento = ai_num_documento;
     
     delete from cxcdocm
     where almacen = r_factura1.almacen
-    and caja = r_factura1.caja
-    and motivo_cxc = r_factura1.tipo
     and cliente = r_factura1.cliente
-    and trim(documento) = trim(lc_documento)
-    and fecha_posteo = r_factura1.fecha_factura;
-    
+    and documento <> docmto_aplicar
+    and fecha_posteo >= r_factura1.fecha_factura;
+
+    delete from cxcdocm
+    where almacen = r_factura1.almacen
+    and caja = r_factura1.caja
+    and cliente = r_factura1.cliente
+    and fecha_posteo >= r_factura1.fecha_factura;
+
     return 1;
 end;
 ' language plpgsql;

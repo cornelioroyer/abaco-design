@@ -1,4 +1,6 @@
 
+-- set search_path to dba;
+
 drop function f_articulos_after_insert() cascade;
 drop function f_articulos_before_insert() cascade;
 
@@ -29,6 +31,39 @@ drop function f_articulos_agrupados_before_insert() cascade;
 drop function f_articulos_por_almacen_before_insert() cascade;
 drop function f_articulos_por_almacen_after_insert() cascade;
 drop function f_articulos_por_almacen_after_update() cascade;
+drop function f_invparal_before_update() cascade;
+drop function f_eys3_before_insert() cascade;
+
+
+create function f_eys3_before_insert() returns trigger as '
+declare
+    r_eys1 record;
+    r_almacen record;
+    ld_uif date;
+    i integer;
+begin
+
+    i   =   f_valida_cuenta(new.cuenta, ''INV'');
+    
+    return new;
+end;
+' language plpgsql;
+
+
+
+create function f_invparal_before_update() returns trigger as '
+declare
+    r_articulos record;
+begin
+
+    if trim(new.parametro) = ''valida_secuencia_fac'' then
+        new.valor = ''S'';
+    end if;
+
+    return new;
+end;
+' language plpgsql;
+
 
 
 create function f_articulos_before_insert() returns trigger as '
@@ -280,11 +315,11 @@ begin
         
     end if;
     
-/*
+
     delete from rela_eys1_cglposteo
     where almacen = old.almacen
     and no_transaccion = old.no_transaccion;
-*/
+
     
     if old.proveedor is not null and f_invparal(old.almacen, ''valida_existencias'') = ''S'' then    
         select into r_work * from eys1, eys2, invmotivos
@@ -307,11 +342,11 @@ end;
 
 create function f_eys2_before_update() returns trigger as '
 begin
-/*
+
     delete from rela_eys1_cglposteo
     where almacen = old.almacen
     and no_transaccion = old.no_transaccion;
-*/    
+    
     return new;
 end;
 ' language plpgsql;
@@ -890,7 +925,8 @@ create trigger t_eys2_eys6 after insert or update on eys2
 for each row execute procedure f_eys2_eys6();
 
 
-
+create trigger t_eys3_before_insert before insert on eys3
+for each row execute procedure f_eys3_before_insert();
 create trigger t_eys3_before_delete before delete on eys3
 for each row execute procedure f_eys3_before_delete();
 create trigger t_eys3_before_update before update on eys3
@@ -928,3 +964,6 @@ for each row execute procedure f_articulos_before_insert();
 
 create trigger t_articulos_agrupados_before_insert before insert on articulos_agrupados
 for each row execute procedure f_articulos_agrupados_before_insert();
+
+create trigger t_invparal_before_update before update on invparal
+for each row execute procedure f_invparal_before_update();

@@ -166,9 +166,11 @@ begin
     end if;
     
 
+/*
     if trim(as_tipo_de_calculo) = ''7'' then
         r_pla_empleados.tipo_calculo_ir = ''E'';
     end if;
+*/    
 
     if Mes(r_pla_periodos.dia_d_pago) <= 3 and r_pla_empleados.tipo_calculo_ir = ''E'' then
         if r_pla_empleados.compania = 1199 then

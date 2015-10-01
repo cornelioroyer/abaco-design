@@ -525,13 +525,14 @@ begin
         where trim(compania) = trim(r_bcoctas.compania)
         and trim(proveedor) = trim(r_bcocheck1.proveedor)
         and trim(documento) = trim(to_char(r_bcocheck1.no_cheque, ''9999999999''))
+        and fecha_posteo = r_bcocheck1.fecha_cheque
         and trim(motivo_cxp) = trim(r_bcomotivos.motivo_cxp);
         if ldc_work is null then
             ldc_work = 0;
         end if;
         
-        if ldc_work <> ldc_sum_bcocheck3 then
-            Raise Exception ''Cheque % de Cuenta % tiene inconsistencia con cxpdocm'', ai_no_cheque, as_cod_ctabco;
+        if ldc_work <> ldc_sum_bcocheck3 and ldc_work <> 0 then
+            Raise Exception ''Cheque % de Cuenta % tiene inconsistencia con cxpdocm v_cxpdocm % bcocheck3 %'', ai_no_cheque, as_cod_ctabco, ldc_work, ldc_sum_bcocheck3;
         end if;
     end if;
 

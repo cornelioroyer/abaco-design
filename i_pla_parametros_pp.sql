@@ -1,10 +1,10 @@
 
 
 insert into pla_parametros_pp(parametro, descripcion)
-values ('plantilla_web','PLANTILLA WEB PARA MARCACIONES');
+values ('utiliza_reloj_zk','UTILIZA RELOJ ZK');
 
 insert into pla_parametros(compania, parametro, valor)
-select compania, 'plantilla_web','N'
+select compania, 'utiliza_reloj_zk','N'
 from pla_companias;
 
 

@@ -195,11 +195,19 @@ begin
         return 0;
     end if;
 
-
-
+    lt_work             =   f_extract_time(r_pla_marcaciones.entrada);
     ls_tipo_de_dia      =   ''R'';
     ls_exceso_9horas    =   ''N'';
     ls_tipo_de_jornada  =   r_pla_desglose_regulares.tipo_de_jornada;
+    
+    if r_pla_marcaciones.turno is null and ls_tipo_de_jornada = ''M'' then
+        if lt_work >= ''03:00'' and lt_work <= ''06:00'' then
+            ls_tipo_de_jornada = ''N'';
+        else
+            ls_tipo_de_jornada = ''D'';
+        end if;            
+    end if;        
+    
     lts_hora_actual     =   r_pla_desglose_regulares.salida_regular;
     li_loop             =   0;
 
@@ -380,7 +388,7 @@ begin
         end if;
     end if;
 
--- raise exception ''% %'', lts_hora_actual, r_pla_marcaciones.salida;
+-- raise exception ''% % %'', lts_hora_actual, r_pla_marcaciones.salida, ls_tipo_de_jornada;
 
 
     lts_hora_actual_anterior = lts_hora_actual;
@@ -473,9 +481,9 @@ begin
             ls_tipo_de_jornada = ''D'';
         end if;
 
---Raise Exception ''Tipo de jornada %'', ls_tipo_de_jornada;
+-- Raise Exception ''Tipo de jornada %'', ls_tipo_de_jornada;
 
-/*
+
         if ls_tipo_de_jornada = ''M'' then
             lt_entrada  =   r_pla_marcaciones.entrada;
             lt_salida   =   r_pla_marcaciones.salida;
@@ -485,9 +493,9 @@ begin
                 ls_tipo_de_jornada = ''N'';
             end if;
         end if;
-*/        
 
---Raise Exception ''%'', ls_tipo_de_jornada;
+
+-- Raise Exception ''%'', ls_tipo_de_jornada;
               
         select into r_pla_tipos_de_horas * from pla_tipos_de_horas
         where tipo_d_dia = ls_tipo_de_dia

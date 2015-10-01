@@ -2,6 +2,14 @@
 
 rollback work;
 
+    update cglcuentas
+    set status = 'X'
+    where status = 'I';
+
+
+
+/*
+
 begin work;
     update cglcuentas
     set tipo_cuenta = 'B'
@@ -9,14 +17,8 @@ begin work;
 commit work;
 
 
-/*
-
-
 begin work;
 
-    update cglcuentas
-    set status = 'X'
-    where status = 'I';
 
 commit work;
 
@@ -41,3 +43,4 @@ set status_articulo = 'X'
 where status_articulo = 'I';
 
 */
+

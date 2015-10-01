@@ -20,6 +20,29 @@ drop function f_string_to_decimal(varchar(100)) cascade;
 drop function f_string_to_integer(varchar(100)) cascade;
 drop function f_caja_default(char(2)) cascade;
 drop function f_abaco_control_de_cierre(char(2), char(30), date) cascade;
+drop function f_valida_cuenta(char(24), char(3)) cascade;
+
+create function f_valida_cuenta(char(24), char(3)) returns integer as '
+declare
+    ac_cuenta alias for $1;
+    ac_aplicacion alias for $2;
+    r_cglctasxaplicacion record;
+    
+begin
+    select into r_cglctasxaplicacion *
+    from cglctasxaplicacion
+    where trim(cuenta) = trim(ac_cuenta)
+    and aplicacion = trim(ac_aplicacion);
+    if found then
+        Raise Exception ''Cuenta % no puede ser utilizada directamente en aplicacion'', ac_cuenta, ac_aplicacion;
+    end if;
+
+    return 1;
+end;
+' language plpgsql;
+
+
+
 
 create function f_abaco_control_de_cierre(char(2), char(30), date) returns integer as '
 declare

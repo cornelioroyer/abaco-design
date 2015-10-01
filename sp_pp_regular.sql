@@ -46,6 +46,66 @@ drop function f_pla_ajustar_salida_seceyco(int4, char(7), int4) cascade;
 drop function f_pla_calculo_viaticos(int4) cascade;
 drop function f_pla_drive_true(int4, char(7), int4, char(2)) cascade;
 drop function f_pla_reasignacion_turno(int4, char(7), int4) cascade;
+drop function f_update_pla_marcaciones_with_pla_reloj_python(int4, char(7), int4) cascade;
+
+create function f_update_pla_marcaciones_with_pla_reloj_python(int4, char(7), int4) returns integer as '
+declare
+    ai_cia alias for $1;
+    as_codigo_empleado alias for $2;
+    ai_id_periodos alias for $3;
+    r_pla_marcaciones record;
+    r_pla_empleados record;
+    r_pla_turnos record;
+    r_pla_turnos_rotativos record;
+    r_pla_certificados_medico record;
+    r_pla_permisos record;
+    r_pla_marcaciones_2 record;
+    r_pla_desglose_regulares record;
+    r_pla_periodos record;
+    r_work record;
+    ldt_entrada_turno timestamp;
+    ldt_salida_turno timestamp;
+    ldt_entrada_descanso timestamp;
+    ldt_salida_descanso timestamp;
+    li_minutos_regulares int4;
+    ldc_tiempo_minimo_de_descanso decimal;
+    ldc_descanso decimal;
+    i integer;
+    li_id_marcacion_anterior int4;
+    lc_computa_descanso_en_base_al_turno char(1);
+begin
+
+    select into r_pla_empleados * 
+    from pla_empleados
+    where compania = ai_cia
+    and codigo_empleado = as_codigo_empleado;
+    
+    select into r_pla_periodos * from pla_periodos
+    where id = ai_id_periodos;
+    if not found then
+        return 0;
+    end if;
+    
+    if r_pla_periodos.status = ''C'' then
+        return 0;
+    end if;
+
+    for r_pla_marcaciones in select pla_marcaciones.*
+                                from pla_tarjeta_tiempo, pla_marcaciones
+                                where pla_tarjeta_tiempo.id = pla_marcaciones.id_tarjeta_de_tiempo
+                                and pla_tarjeta_tiempo.compania = ai_cia
+                                and pla_tarjeta_tiempo.codigo_empleado = as_codigo_empleado
+                                and pla_tarjeta_tiempo.id_periodos = ai_id_periodos
+                                order by pla_marcaciones.entrada
+    loop
+        i   =   f_update_pla_marcaciones_with_pla_reloj_python(r_pla_marcaciones.id);
+    end loop;
+
+    return 1;
+end;
+' language plpgsql;
+
+
 
 create function f_pla_horas_certificadas(int4) returns integer as '
 declare
@@ -1472,6 +1532,11 @@ begin
     if ai_cia = 1360 then
         i = f_pla_reasignacion_turno(ai_cia, r_pla_empleados.codigo_empleado, r_pla_periodos.id);
     end if;
+
+    if ai_cia = 1383 then
+        i = f_update_pla_marcaciones_with_pla_reloj_python(ai_cia, r_pla_empleados.codigo_empleado, r_pla_periodos.id);
+    end if;
+
     
     i = f_pla_horas(ai_cia, r_pla_empleados.codigo_empleado, r_pla_periodos.id);
     i = f_pla_dinero(ai_cia, r_pla_empleados.codigo_empleado, r_pla_periodos.id);
@@ -1902,8 +1967,10 @@ begin
 
             
         if ls_tipo_de_jornada = ''M'' and li_minutos_regulares < 450 then
+/*        
             ldc_work                =   480 * li_minutos_regulares / 450;
             li_minutos_adicionales  =   ldc_work - li_minutos_regulares;
+*/
         elsif ls_tipo_de_jornada = ''N'' and li_minutos_trabajados >= 420 then
             li_minutos_adicionales  =   60;
             li_minutos_regulares    =   420;

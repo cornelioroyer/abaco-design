@@ -1,3 +1,8 @@
+
+
+-- set search_path to dba;
+
+
 drop function f_adc_manejo_delete() cascade;
 drop function f_adc_manejo_update() cascade;
 drop function f_adc_manejo_delete(char(2), int4, int4, int4, int4);
@@ -72,7 +77,6 @@ begin
         return 0;
     end if;
     
-    
     select into r_adc_manejo * from adc_manejo
     where compania = as_compania
     and consecutivo = ai_consecutivo
@@ -82,7 +86,9 @@ begin
         return 0;
     end if;
 
-
+    if r_adc_manejo.cargo = 0 then
+        return 0;
+    end if;
     
     select into r_adc_house * from adc_house
     where compania = as_compania

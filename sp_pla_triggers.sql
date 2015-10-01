@@ -1,5 +1,5 @@
 
-set search_path to dba;
+--set search_path to dba;
 
 drop function f_rela_nomctrac_cglposteo_delete() cascade;
 drop function f_rela_pla_reservas_cglposteo_delete() cascade;
@@ -672,5 +672,3 @@ for each row execute procedure f_rhuacre_before_insert();
 
 create trigger t_rhuacre_before_update before update on rhuacre
 for each row execute procedure f_rhuacre_before_update();
-
-
